@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 
 const plans = [
+    { id: "", label: "Sin plan / Por definir", price: "", desc: "El admin te asignará un plan" },
     { id: "renting_basico", label: "Renting Básico", price: "$299k/mes", desc: "Sitio profesional + hosting" },
     { id: "renting_pro", label: "Renting Pro", price: "$499k/mes", desc: "Sitio pro + CRM + SEO" },
     { id: "renting_elite", label: "Renting Élite", price: "$899k/mes", desc: "Suite digital completa" },
@@ -29,7 +30,7 @@ export default function RegistroPage() {
         confirmPassword: "",
         whatsapp: "",
         domain: "",
-        plan: "renting_basico",
+        plan: "",
     });
     const [showPw, setShowPw] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
@@ -173,7 +174,10 @@ export default function RegistroPage() {
                         <div>
                             <p className="text-blue-400 text-[10px] font-black uppercase tracking-widest">Plan seleccionado</p>
                             <p className="text-white text-sm font-bold">
-                                {plans.find(p => p.id === form.plan)?.label} — {plans.find(p => p.id === form.plan)?.price}
+                                {form.plan
+                                    ? `${plans.find(p => p.id === form.plan)?.label} — ${plans.find(p => p.id === form.plan)?.price}`
+                                    : <span className="text-gray-400 font-normal">Sin plan asignado — el admin te contactará</span>
+                                }
                             </p>
                         </div>
                     </div>
@@ -184,7 +188,7 @@ export default function RegistroPage() {
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Plan */}
                         <div>
-                            <label className="block text-xs font-bold text-gray-400 mb-1.5 uppercase tracking-wider">Plan *</label>
+                            <label className="block text-xs font-bold text-gray-400 mb-1.5 uppercase tracking-wider">Plan <span className="text-gray-600 normal-case font-normal">(opcional)</span></label>
                             <select
                                 name="plan"
                                 value={form.plan}
@@ -193,10 +197,11 @@ export default function RegistroPage() {
                             >
                                 {plans.map(p => (
                                     <option key={p.id} value={p.id} className="bg-[#0a0a0a]">
-                                        {p.label} — {p.price}
+                                        {p.label}{p.price ? ` — ${p.price}` : ""}
                                     </option>
                                 ))}
                             </select>
+                            <p className="text-gray-600 text-xs mt-1.5">Puedes elegir un plan ahora o el administrador te lo asignará más adelante.</p>
                         </div>
 
                         {/* Nombre del Negocio */}
