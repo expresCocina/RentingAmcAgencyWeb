@@ -7,7 +7,6 @@ import { Resend } from 'resend'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 // POST /api/auth/register
-// Registra usuario en Supabase Auth + inserta en waas_clients + envía email de bienvenida
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json()
@@ -23,12 +22,13 @@ export async function POST(req: NextRequest) {
         const { data: authData, error: authError } = await supabase.auth.admin.createUser({
             email,
             password,
-            email_confirm: true, // Confirmar email automáticamente
+            email_confirm: true,
         })
 
         if (authError || !authData.user) {
             const msg = authError?.message ?? 'Error al crear cuenta'
-            if (msg.includes('already registered')) {
+            console.error('[register] Auth error:', authError)
+            if (msg.toLowerCase().includes('already registered') || msg.toLowerCase().includes('already exists')) {
                 return NextResponse.json({ error: 'Este email ya está registrado' }, { status: 400 })
             }
             return NextResponse.json({ error: msg }, { status: 400 })
@@ -44,6 +44,9 @@ export async function POST(req: NextRequest) {
 
         // 3. Insertar en waas_clients
         const cleanDomain = domain.replace(/^https?:\/\//, '').replace(/\/$/, '')
+        // plan vacío o ausente se guarda como null
+        const planValue = (plan && plan.trim() !== '') ? plan.trim() : null
+
         const { data: clientData, error: clientError } = await supabase
             .from('waas_clients')
             .insert({
@@ -53,7 +56,7 @@ export async function POST(req: NextRequest) {
                 email,
                 whatsapp: whatsapp ?? null,
                 domain: cleanDomain,
-                plan: plan ?? 'renting_basico',
+                plan: planValue,
                 billing_day: day,
                 next_payment_date: nextPayment.toISOString().split('T')[0],
             })
@@ -61,42 +64,38 @@ export async function POST(req: NextRequest) {
             .single()
 
         if (clientError) {
-            // Si el dominio ya existe, dar error claro
-            if (clientError.message?.includes('duplicate') || clientError.code === '23505') {
-                return NextResponse.json({ error: 'Este dominio ya está registrado' }, { status: 400 })
-            }
+            console.error('[register] Client insert error:', clientError)
             // Rollback: eliminar el usuario creado
             await supabase.auth.admin.deleteUser(authData.user.id)
-            return NextResponse.json({ error: 'Error al crear perfil de cliente' }, { status: 500 })
+            if (clientError.code === '23505') {
+                return NextResponse.json({ error: 'Este dominio ya está registrado' }, { status: 400 })
+            }
+            if (clientError.code === '42P01') {
+                return NextResponse.json({ error: 'Base de datos no configurada. El administrador debe ejecutar el schema SQL.' }, { status: 500 })
+            }
+            return NextResponse.json({ error: `Error al crear perfil: ${clientError.message}` }, { status: 500 })
         }
 
-        // 4. Enviar email de bienvenida
+        // 4. Enviar email de bienvenida (no bloquea el registro si falla)
         try {
+            const planLabel = planValue
+                ? planValue.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+                : 'Por asignar'
             const { error: emailError } = await resend.emails.send({
                 from: 'AMC Agency <noreply@amcagencyweb.com>',
                 to: email,
                 subject: `¡Bienvenido a AMC Agency, ${repName}! 🚀`,
-                html: welcomeEmail({
-                    businessName,
-                    repName,
-                    domain: cleanDomain,
-                    plan: plan ?? 'Renting Básico',
-                }),
+                html: welcomeEmail({ businessName, repName, domain: cleanDomain, plan: planLabel }),
             })
-
-            await waasService.logEmail(
-                clientData.id,
-                'welcome',
-                email,
-                emailError ? 'failed' : 'sent'
-            )
-        } catch {
-            // Email falla → no bloquear el registro
+            await waasService.logEmail(clientData.id, 'welcome', email, emailError ? 'failed' : 'sent')
+        } catch (emailErr) {
+            console.warn('[register] Email send failed (non-blocking):', emailErr)
         }
 
         return NextResponse.json({ success: true, userId: authData.user.id }, { status: 201 })
     } catch (err) {
-        console.error('[register]', err)
+        console.error('[register] Unexpected error:', err)
         return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 })
     }
 }
+
