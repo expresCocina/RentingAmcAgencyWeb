@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
         // 4. Enviar email de bienvenida (no bloquea el registro si falla)
         try {
             const planLabel = planValue
-                ? planValue.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+                ? planValue.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase())
                 : 'Por asignar'
             const { error: emailError } = await resend.emails.send({
                 from: 'AMC Agency <noreply@amcagencyweb.com>',
