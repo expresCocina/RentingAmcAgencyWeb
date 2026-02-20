@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/* CONFIGURACIÓN DE FONDO CORPORATIVO */
+@layer base {
+  :root {
+    /* Un fondo más rico y profundo, no solo negro plano */
+    --background-start: 10 10 15; /* Tono azul marino casi negro */
+    --background-end: 5 5 5;      /* Negro puro */
+  }
+
+  body {
+    @apply antialiased text-white;
+    /* Gradiente radial sutil para dar profundidad */
+    background: radial-gradient(circle at top center, rgb(var(--background-start)), rgb(var(--background-end)));
+    min-height: 100vh;
+  }
+
+  /* Textura de Grano Cinematográfico (Mantenemos el toque premium) */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    opacity: 0.04; /* Un poco más sutil */
+    pointer-events: none;
+    z-index: 9999;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    mix-blend-mode: overlay;
+  }
+}
+
+/* Asegura scroll suave en todo el sitio */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+/* Color de selección de texto */
+::selection {
+  background-color: rgba(59, 130, 246, 0.3); /* Azul sutil */
+  color: white;
+}

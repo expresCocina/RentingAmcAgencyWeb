@@ -1,0 +1,158 @@
+// ── Plantillas de email para AMC Agency WaaS ──────────────────────────────
+
+const BASE_STYLE = `
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #050505;
+  color: #ffffff;
+  margin: 0; padding: 0;
+`
+
+const containerStyle = `
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 40px 24px;
+`
+
+const logoHtml = `
+  <div style="text-align:center;margin-bottom:32px;">
+    <span style="font-size:22px;font-weight:900;letter-spacing:4px;color:#fff;">
+      AMC <span style="color:#3b82f6;">®</span>
+    </span>
+  </div>
+`
+
+const footerHtml = `
+  <div style="margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);text-align:center;">
+    <p style="color:#4b5563;font-size:11px;margin:0;">
+      AMC Agency · amcagencyweb.com · contact@amcagency.com
+    </p>
+    <p style="color:#4b5563;font-size:10px;margin:6px 0 0;">
+      Este email fue enviado automáticamente. No responder.
+    </p>
+  </div>
+`
+
+export function welcomeEmail(data: { businessName: string; repName: string; domain: string; plan: string }): string {
+    return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="${BASE_STYLE}">
+  <div style="${containerStyle}">
+    ${logoHtml}
+    <div style="background:linear-gradient(135deg,rgba(59,130,246,0.15),rgba(99,102,241,0.08));border:1px solid rgba(59,130,246,0.25);border-radius:20px;padding:32px;">
+      <p style="font-size:12px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#3b82f6;margin:0 0 12px;">Bienvenido a AMC Agency</p>
+      <h1 style="font-size:28px;font-weight:900;color:#fff;margin:0 0 16px;line-height:1.2;">
+        ¡Tu sitio web está <span style="color:#3b82f6;">en marcha!</span> 🚀
+      </h1>
+      <p style="color:#9ca3af;font-size:15px;line-height:1.6;margin:0 0 24px;">
+        Hola <strong style="color:#fff;">${data.repName}</strong>, tu cuenta para <strong style="color:#fff;">${data.businessName}</strong> ha sido creada exitosamente.
+      </p>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;margin-bottom:24px;">
+        <p style="margin:0 0 8px;font-size:12px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">Detalles de tu cuenta</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">📌 <strong>Negocio:</strong> ${data.businessName}</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">🌐 <strong>Dominio:</strong> ${data.domain}</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">📦 <strong>Plan:</strong> ${data.plan}</p>
+      </div>
+      <a href="https://amcagencyweb.com/dashboard" style="display:block;text-align:center;background:#3b82f6;color:#fff;font-weight:800;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;padding:16px 32px;border-radius:100px;text-decoration:none;transition:all 0.2s;">
+        Ver mi Dashboard →
+      </a>
+    </div>
+    <div style="margin-top:20px;text-align:center;">
+      <p style="color:#6b7280;font-size:13px;">¿Necesitas ayuda? <a href="https://wa.me/573001234567" style="color:#3b82f6;text-decoration:none;">Escríbenos por WhatsApp</a></p>
+    </div>
+    ${footerHtml}
+  </div>
+</body>
+</html>`
+}
+
+export function paymentReminderEmail(data: { businessName: string; repName: string; domain: string; paymentDate: string; daysLeft: number }): string {
+    return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="${BASE_STYLE}">
+  <div style="${containerStyle}">
+    ${logoHtml}
+    <div style="background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(234,88,12,0.08));border:1px solid rgba(245,158,11,0.3);border-radius:20px;padding:32px;">
+      <p style="font-size:12px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#f59e0b;margin:0 0 12px;">Recordatorio de Pago</p>
+      <h1 style="font-size:26px;font-weight:900;color:#fff;margin:0 0 16px;line-height:1.2;">
+        Tu pago vence en <span style="color:#f59e0b;">${data.daysLeft} días</span> ⏰
+      </h1>
+      <p style="color:#9ca3af;font-size:15px;line-height:1.6;margin:0 0 24px;">
+        Hola <strong style="color:#fff;">${data.repName}</strong>, te recordamos que el servicio de <strong style="color:#fff;">${data.businessName}</strong> vence el <strong style="color:#f59e0b;">${data.paymentDate}</strong>.
+      </p>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;margin-bottom:24px;">
+        <p style="margin:0 0 8px;font-size:12px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">Recuerda que si no pagas a tiempo</p>
+        <p style="margin:4px 0;color:#fbbf24;font-size:14px;">⚠️ Tu sitio web será suspendido automáticamente</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">🌐 Dominio: ${data.domain}</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">📅 Fecha de corte: ${data.paymentDate}</p>
+      </div>
+      <a href="https://amcagencyweb.com/dashboard" style="display:block;text-align:center;background:#f59e0b;color:#000;font-weight:900;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;padding:16px 32px;border-radius:100px;text-decoration:none;">
+        Realizar Pago →
+      </a>
+    </div>
+    ${footerHtml}
+  </div>
+</body>
+</html>`
+}
+
+export function siteBlockedEmail(data: { businessName: string; repName: string; domain: string }): string {
+    return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="${BASE_STYLE}">
+  <div style="${containerStyle}">
+    ${logoHtml}
+    <div style="background:linear-gradient(135deg,rgba(239,68,68,0.15),rgba(220,38,38,0.08));border:1px solid rgba(239,68,68,0.3);border-radius:20px;padding:32px;">
+      <p style="font-size:12px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#ef4444;margin:0 0 12px;">Sitio Suspendido</p>
+      <h1 style="font-size:26px;font-weight:900;color:#fff;margin:0 0 16px;line-height:1.2;">
+        Tu sitio ha sido <span style="color:#ef4444;">suspendido</span> 🔒
+      </h1>
+      <p style="color:#9ca3af;font-size:15px;line-height:1.6;margin:0 0 24px;">
+        Hola <strong style="color:#fff;">${data.repName}</strong>, lamentamos informarte que el sitio web de <strong style="color:#fff;">${data.businessName}</strong> ha sido suspendido por falta de pago.
+      </p>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;margin-bottom:24px;">
+        <p style="margin:0 0 8px;font-size:12px;color:#6b7280;font-weight:700;text-transform:uppercase;">Para reactivar tu sitio</p>
+        <p style="margin:4px 0;color:#fca5a5;font-size:14px;">🌐 Dominio afectado: ${data.domain}</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">✅ Realiza tu pago pendiente</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">📞 Contáctanos y reactivamos en minutos</p>
+      </div>
+      <a href="https://wa.me/573001234567?text=Hola%2C%20quiero%20reactivar%20mi%20sitio%20${data.domain}" style="display:block;text-align:center;background:#ef4444;color:#fff;font-weight:900;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;padding:16px 32px;border-radius:100px;text-decoration:none;">
+        Reactivar Ahora →
+      </a>
+    </div>
+    ${footerHtml}
+  </div>
+</body>
+</html>`
+}
+
+export function siteUnblockedEmail(data: { businessName: string; repName: string; domain: string }): string {
+    return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="${BASE_STYLE}">
+  <div style="${containerStyle}">
+    ${logoHtml}
+    <div style="background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(5,150,105,0.08));border:1px solid rgba(16,185,129,0.3);border-radius:20px;padding:32px;">
+      <p style="font-size:12px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#10b981;margin:0 0 12px;">Sitio Reactivado</p>
+      <h1 style="font-size:26px;font-weight:900;color:#fff;margin:0 0 16px;line-height:1.2;">
+        ¡Tu sitio está <span style="color:#10b981;">activo</span> nuevamente! 🎉
+      </h1>
+      <p style="color:#9ca3af;font-size:15px;line-height:1.6;margin:0 0 24px;">
+        Hola <strong style="color:#fff;">${data.repName}</strong>, el sitio web de <strong style="color:#fff;">${data.businessName}</strong> ha sido reactivado exitosamente. ¡Ya está visible para todos!
+      </p>
+      <a href="https://${data.domain}" style="display:block;text-align:center;background:#10b981;color:#fff;font-weight:900;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;padding:16px 32px;border-radius:100px;text-decoration:none;">
+        Ver mi sitio web →
+      </a>
+    </div>
+    ${footerHtml}
+  </div>
+</body>
+</html>`
+}
