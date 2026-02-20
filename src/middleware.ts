@@ -21,80 +21,55 @@ export async function middleware(request: NextRequest) {
                     return request.cookies.get(name)?.value
                 },
                 set(name: string, value: string, options: CookieOptions) {
-                    // Actualizamos tanto la request (para que Supabase lo lea ahora)
-                    // como la response (para que el navegador lo guarde)
                     request.cookies.set({ name, value, ...options })
                     response.cookies.set({ name, value, ...options })
                 },
                 remove(name: string, options: CookieOptions) {
                     request.cookies.set({ name, value: '', ...options })
-                    export async function middleware(req: NextRequest) {
-                        let res = NextResponse.next({
-                            request: {
-                                headers: req.headers,
-                            },
-                        })
+                    response.cookies.set({ name, value: '', ...options })
+                },
+            },
+        }
+    )
 
-                        const pathname = req.nextUrl.pathname
+    // 3. Obtenemos el usuario (Esto puede disparar los métodos set/remove de arriba)
+    const { data: { user } } = await supabase.auth.getUser()
+    const pathname = request.nextUrl.pathname
 
-                        const supabase = createServerClient(
-                            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-                            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                            {
-                                cookies: {
-                                    get(name: string) {
-                                        return req.cookies.get(name)?.value
-                                    },
-                                    set(name: string, value: string, options: CookieOptions) {
-                                        req.cookies.set({ name, value, ...options })
-                                        res = NextResponse.next({
-                                            request: {
-                                                headers: req.headers,
-                                            },
-                                        })
-                                        res.cookies.set({ name, value, ...options })
-                                    },
-                                    remove(name: string, options: CookieOptions) {
-                                        req.cookies.set({ name, value: '', ...options })
-                                        res = NextResponse.next({
-                                            request: {
-                                                headers: req.headers,
-                                            },
-                                        })
-                                        res.cookies.set({ name, value: '', ...options })
-                                    },
-                                },
-                            }
-                        )
+    // 4. FUNCIÓN CLAVE: Redirigir SIN perder las cookies de sesión
+    const redirectWithCookies = (url: URL) => {
+        const redirectResponse = NextResponse.redirect(url)
+        response.cookies.getAll().forEach((cookie) => {
+            redirectResponse.cookies.set(cookie.name, cookie.value)
+        })
+        return redirectResponse
+    }
 
-                        const { data: { user } } = await supabase.auth.getUser()
+    // ── Proteger /dashboard/* (Para los Clientes) ──────────────────────────
+    if (pathname.startsWith('/dashboard')) {
+        if (!user) {
+            return redirectWithCookies(new URL('/login?from=dashboard', request.url))
+        }
+    }
 
-                        // ── Proteger /dashboard/* ──────────────────────────────────────────────
-                        if (pathname.startsWith('/dashboard')) {
-                            if (!user) {
-                                return NextResponse.redirect(new URL('/login?from=dashboard', req.url))
-                            }
-                        }
+    // ── Proteger /admin/* o /crm/* (Para ti, el Administrador) ─────────────
+    if (pathname.startsWith('/admin') || pathname.startsWith('/crm')) {
+        if (!user || user.email !== ADMIN_EMAIL) {
+            return redirectWithCookies(new URL('/login?from=admin', request.url))
+        }
+    }
 
-                        // ── Proteger /admin/* ──────────────────────────────────────────────────
-                        if (pathname.startsWith('/admin')) {
-                            if (!user || user.email !== ADMIN_EMAIL) {
-                                return NextResponse.redirect(new URL('/login?from=admin', req.url))
-                            }
-                        }
+    // ── Redirigir si ya está logueado y va a /login o /registro ───────────
+    if ((pathname === '/login' || pathname === '/registro') && user) {
+        if (user.email === ADMIN_EMAIL) {
+            return redirectWithCookies(new URL('/crm', request.url)) // Te enviamos al panel WaaS
+        }
+        return redirectWithCookies(new URL('/dashboard', request.url)) // Enviamos al cliente a su panel
+    }
 
-                        // ── Redirigir si ya está logueado y va a /login o /registro ───────────
-                        if ((pathname === '/login' || pathname === '/registro') && user) {
-                            if (user.email === ADMIN_EMAIL) {
-                                return NextResponse.redirect(new URL('/admin/clientes', req.url))
-                            }
-                            return NextResponse.redirect(new URL('/dashboard', req.url))
-                        }
+    return response
+}
 
-                        return res
-                    }
-
-                    export const config = {
-                        // Asegúrate de incluir aquí las rutas que quieres proteger
-                        matcher: ['/dashboard/:path*', '/admin/:path*', '/crm/:path*', '/login', '/registro'],
-                    }
+export const config = {
+    matcher: ['/dashboard/:path*', '/admin/:path*', '/crm/:path*', '/login', '/registro'],
+}
