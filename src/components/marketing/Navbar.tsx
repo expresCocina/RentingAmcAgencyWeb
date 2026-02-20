@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, LayoutDashboard, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 export const Navbar = () => {
@@ -73,6 +73,15 @@ export const Navbar = () => {
             </button>
           </div>
 
+          {/* BOTÓN ACCESO CLIENTES */}
+          <Link
+            href="/login"
+            className="hidden md:flex items-center gap-1.5 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600 text-white text-[9px] md:text-[10px] font-black tracking-widest uppercase rounded-full hover:bg-blue-500 transition-all shadow-lg hover:shadow-blue-500/40 whitespace-nowrap flex-shrink-0"
+          >
+            <LayoutDashboard size={12} />
+            Mis Sitios
+          </Link>
+
           {/* BOTÓN COTIZAR */}
           <button
             onClick={() => {
@@ -86,6 +95,15 @@ export const Navbar = () => {
           >
             {t.nav.quote}
           </button>
+
+          {/* BOTÓN ADMIN DISCRETO */}
+          <Link
+            href="/login"
+            title="Acceso Administrador"
+            className="hidden lg:flex items-center gap-1 text-gray-600 hover:text-gray-300 transition-colors flex-shrink-0"
+          >
+            <ShieldCheck size={14} />
+          </Link>
 
           {/* BOTÓN HAMBURGUESA */}
           <button
@@ -117,6 +135,26 @@ export const Navbar = () => {
                 {link.name}
               </Link>
             ))}
+
+            {/* ACCESOS MOBILE */}
+            <div className="flex flex-col gap-2 pt-3 mt-1 border-t border-white/10">
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 text-xs font-black tracking-widest uppercase bg-blue-600 text-white py-3 px-4 rounded-xl hover:bg-blue-500 transition-all"
+              >
+                <LayoutDashboard size={14} />
+                Mis Sitios — Acceso Clientes
+              </Link>
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-gray-500 hover:text-white py-2 px-4 rounded-xl hover:bg-white/5 transition-all"
+              >
+                <ShieldCheck size={14} />
+                Admin
+              </Link>
+            </div>
 
             {/* IDIOMA EN MOBILE */}
             <div className="flex items-center gap-3 pt-3 mt-1 border-t border-white/10 px-4">
