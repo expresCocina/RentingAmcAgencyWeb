@@ -20,8 +20,10 @@ export default function LoginPage() {
             if (authError) {
                 setError("Correo o contraseña incorrectos. Verifica tus datos.");
             } else {
-                const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? "";
-                if (email === adminEmail) {
+                // Consultar al servidor qué rol tiene el usuario
+                const roleRes = await fetch("/api/auth/role");
+                const { role } = await roleRes.json();
+                if (role === "admin") {
                     window.location.href = "/admin/clientes";
                 } else {
                     window.location.href = "/dashboard";
