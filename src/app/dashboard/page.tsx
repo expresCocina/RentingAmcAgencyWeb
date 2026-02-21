@@ -6,7 +6,7 @@ import {
     LogOut, Headphones, Bell, Copy, Check, AlertTriangle
 } from "lucide-react";
 import { authService } from "@/services/auth";
-import { waasService, type WaasClient } from "@/services/waas";
+import { type WaasClient } from "@/services/waas";
 
 function StatCard({ icon, label, value, accent = false }: { icon: React.ReactNode; label: string; value: string; accent?: boolean }) {
     return (
@@ -29,11 +29,23 @@ export default function DashboardPage() {
 
     useEffect(() => {
         (async () => {
-            const user = await authService.getUser();
-            if (!user) { window.location.href = "/login"; return; }
-            const c = await waasService.getMyClient(user.id);
-            setClient(c);
-            setLoading(false);
+            try {
+                // Llamamos la API route segura en lugar de usar waasService directamente
+                const res = await fetch("/api/waas/my-client");
+                if (res.status === 401) {
+                    window.location.href = "/login";
+                    return;
+                }
+                if (res.ok) {
+                    const data = await res.json();
+                    setClient(data);
+                }
+            } catch {
+                // Si hay error de red, redirigir al login
+                window.location.href = "/login";
+            } finally {
+                setLoading(false);
+            }
         })();
     }, []);
 
@@ -117,8 +129,8 @@ export default function DashboardPage() {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
                     className={`mb-6 p-6 rounded-[24px] border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${client.is_blocked
-                            ? "bg-red-500/8 border-red-500/25"
-                            : "bg-emerald-500/8 border-emerald-500/25"
+                        ? "bg-red-500/8 border-red-500/25"
+                        : "bg-emerald-500/8 border-emerald-500/25"
                         }`}
                 >
                     <div className="flex items-center gap-4">
