@@ -2,26 +2,27 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { createAdminClient } from '@/lib/supabase/admin'
 
-// GET /api/waas/admin/client/[id] — obtiene un cliente por ID (solo admin)
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-    try {
-        const res = NextResponse.next()
-        const supabaseAuth = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            {
-                cookies: {
-                    getAll: () => req.cookies.getAll(),
-                    setAll: (cookiesToSet) => {
-                        cookiesToSet.forEach(({ name, value, options }) =>
-                            res.cookies.set(name, value, options)
-                        )
-                    },
-                },
-            }
-        )
+// Helpers para autenticar al admin
+async function getAdminUser(req: NextRequest) {
+    const supabaseAuth = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+            cookies: {
+                getAll: () => req.cookies.getAll(),
+                setAll: () => { },
+            },
+        }
+    )
+    const { data: { user } } = await supabaseAuth.auth.getUser()
+    return user
+}
 
-        const { data: { user } } = await supabaseAuth.auth.getUser()
+// GET /api/waas/admin/client/[id] — obtiene un cliente por ID (solo admin)
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+    try {
+        const { id } = await context.params
+        const user = await getAdminUser(req)
         const adminEmail = process.env.ADMIN_EMAIL
 
         if (!user || user.email !== adminEmail) {
@@ -30,52 +31,35 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
         const supabase = createAdminClient()
 
-        // Cliente
         const { data: client, error: clientError } = await supabase
             .from('waas_clients')
             .select('*')
-            .eq('id', params.id)
+            .eq('id', id)
             .single()
 
         if (clientError || !client) {
             return NextResponse.json({ error: 'Cliente no encontrado' }, { status: 404 })
         }
 
-        // Logs de email
         const { data: logs } = await supabase
             .from('waas_email_logs')
             .select('*')
-            .eq('client_id', params.id)
+            .eq('client_id', id)
             .order('sent_at', { ascending: false })
             .limit(10)
 
         return NextResponse.json({ client, logs: logs ?? [] })
     } catch (err) {
-        console.error('[admin/client/id]', err)
+        console.error('[admin/client/id GET]', err)
         return NextResponse.json({ error: 'Error interno' }, { status: 500 })
     }
 }
 
 // PATCH /api/waas/admin/client/[id] — actualiza un cliente (solo admin)
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
-        const res = NextResponse.next()
-        const supabaseAuth = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            {
-                cookies: {
-                    getAll: () => req.cookies.getAll(),
-                    setAll: (cookiesToSet) => {
-                        cookiesToSet.forEach(({ name, value, options }) =>
-                            res.cookies.set(name, value, options)
-                        )
-                    },
-                },
-            }
-        )
-
-        const { data: { user } } = await supabaseAuth.auth.getUser()
+        const { id } = await context.params
+        const user = await getAdminUser(req)
         const adminEmail = process.env.ADMIN_EMAIL
 
         if (!user || user.email !== adminEmail) {
@@ -88,7 +72,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         const { error } = await supabase
             .from('waas_clients')
             .update(body)
-            .eq('id', params.id)
+            .eq('id', id)
 
         if (error) throw error
 
