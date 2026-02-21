@@ -15,6 +15,33 @@ export type WaasClient = {
     notes: string | null
     created_at: string
     blocked_at: string | null
+    monthly_price: number
+    payment_status: 'pending' | 'active' | 'overdue'
+}
+
+export type WaasLead = {
+    id: string
+    name: string
+    email: string | null
+    phone: string | null
+    service: string | null
+    message: string | null
+    source: string
+    status: 'new' | 'contacted' | 'converted' | 'lost'
+    created_at: string
+}
+
+export type WaasMetrics = {
+    total_clients: number
+    active_clients: number
+    suspended_clients: number
+    paying_clients: number
+    pending_clients: number
+    overdue_clients: number
+    new_this_month: number
+    mrr: number
+    total_leads: number
+    new_leads: number
 }
 
 export type EmailLog = {
@@ -96,6 +123,70 @@ export const waasService = {
             .single()
         if (error || !data) return null
         return { blocked: data.is_blocked }
+    },
+
+    // ── ADMIN: métricas del negocio ────────────────────────────────────────
+    async getMetrics(): Promise<WaasMetrics> {
+        const supabase = createAdminClient()
+
+        const { data: clients } = await supabase
+            .from('waas_clients')
+            .select('is_blocked, payment_status, monthly_price, created_at')
+
+        const { data: leads } = await supabase
+            .from('waas_leads')
+            .select('status, created_at')
+
+        const allClients = clients ?? []
+        const allLeads = leads ?? []
+
+        const now = new Date()
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+
+        return {
+            total_clients: allClients.length,
+            active_clients: allClients.filter(c => !c.is_blocked).length,
+            suspended_clients: allClients.filter(c => c.is_blocked).length,
+            paying_clients: allClients.filter(c => c.payment_status === 'active').length,
+            pending_clients: allClients.filter(c => c.payment_status === 'pending').length,
+            overdue_clients: allClients.filter(c => c.payment_status === 'overdue').length,
+            new_this_month: allClients.filter(c => c.created_at >= startOfMonth).length,
+            mrr: allClients
+                .filter(c => c.payment_status === 'active')
+                .reduce((sum, c) => sum + (c.monthly_price ?? 0), 0),
+            total_leads: allLeads.length,
+            new_leads: allLeads.filter(l => l.status === 'new').length,
+        }
+    },
+
+    // ── ADMIN: obtener todos los leads ─────────────────────────────────────
+    async getLeads(): Promise<WaasLead[]> {
+        const supabase = createAdminClient()
+        const { data, error } = await supabase
+            .from('waas_leads')
+            .select('*')
+            .order('created_at', { ascending: false })
+        if (error) throw error
+        return (data ?? []) as WaasLead[]
+    },
+
+    // ── ADMIN: actualizar un lead ──────────────────────────────────────────
+    async updateLead(id: string, data: Partial<WaasLead>): Promise<void> {
+        const supabase = createAdminClient()
+        const { error } = await supabase
+            .from('waas_leads')
+            .update(data)
+            .eq('id', id)
+        if (error) throw error
+    },
+
+    // ── PÚBLICO: crear un lead desde formulario web ────────────────────────
+    async createLead(data: Omit<WaasLead, 'id' | 'created_at' | 'status' | 'source'>): Promise<void> {
+        const supabase = createAdminClient()
+        const { error } = await supabase
+            .from('waas_leads')
+            .insert({ ...data, source: 'website_form', status: 'new' })
+        if (error) throw error
     },
 
     // ── LOG de email ──────────────────────────────────────────────────────

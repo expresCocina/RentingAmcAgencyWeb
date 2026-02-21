@@ -3,7 +3,8 @@ import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Users, Globe, ShieldOff, ShieldCheck, LogOut,
-    Search, RefreshCw, ExternalLink, Calendar, Phone, Plus, X
+    Search, RefreshCw, ExternalLink, Calendar, Phone, Plus, X,
+    MessageCircle, DollarSign, TrendingUp, Filter, Edit2, Check
 } from "lucide-react";
 import { type WaasClient } from "@/services/waas";
 import { getAuthHeaders } from "@/lib/auth-headers";
@@ -22,19 +23,40 @@ const planColors: Record<string, string> = {
     sin_plan: "text-gray-500 bg-white/5 border-white/10",
 };
 
+const paymentStatusConfig = {
+    active: { label: "Pagando ✅", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
+    pending: { label: "Pendiente ⚠️", color: "text-amber-400 bg-amber-500/10 border-amber-500/20" },
+    overdue: { label: "Vencido 🔴", color: "text-red-400 bg-red-500/10 border-red-500/20" },
+};
+
+type FilterType = "all" | "active" | "blocked" | "overdue";
+
 export default function AdminClientesPage() {
     const [clients, setClients] = useState<WaasClient[]>([]);
     const [filtered, setFiltered] = useState<WaasClient[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
+    const [filterTab, setFilterTab] = useState<FilterType>("all");
     const [blocking, setBlocking] = useState<string | null>(null);
     const [showCreate, setShowCreate] = useState(false);
     const [creating, setCreating] = useState(false);
     const [createError, setCreateError] = useState("");
+
+    // Estado para edición de precio
+    const [editingPrice, setEditingPrice] = useState<string | null>(null);
+    const [priceInput, setPriceInput] = useState("");
+    const [savingPrice, setSavingPrice] = useState(false);
+
+    // Estado para modal WhatsApp
+    const [waModal, setWaModal] = useState<WaasClient | null>(null);
+    const [waMessage, setWaMessage] = useState("");
+    const [sendingWa, setSendingWa] = useState(false);
+
     const [form, setForm] = useState({
         businessName: "", repName: "", email: "",
         domain: "", whatsapp: "", plan: "sin_plan",
         billingDay: new Date().getDate(), notes: "",
+        monthlyPrice: 0,
     });
 
     const fetchClients = useCallback(async () => {
@@ -55,15 +77,21 @@ export default function AdminClientesPage() {
     useEffect(() => { fetchClients(); }, [fetchClients]);
 
     useEffect(() => {
+        let base = clients;
+        if (filterTab === "active") base = base.filter(c => !c.is_blocked);
+        else if (filterTab === "blocked") base = base.filter(c => c.is_blocked);
+        else if (filterTab === "overdue") base = base.filter(c => c.payment_status === "overdue");
+
         const q = search.toLowerCase();
-        setFiltered(
-            clients.filter(c =>
+        if (q) {
+            base = base.filter(c =>
                 c.business_name.toLowerCase().includes(q) ||
                 c.email.toLowerCase().includes(q) ||
                 c.domain.toLowerCase().includes(q)
-            )
-        );
-    }, [search, clients]);
+            );
+        }
+        setFiltered(base);
+    }, [search, clients, filterTab]);
 
     const handleBlock = async (client: WaasClient) => {
         setBlocking(client.id);
@@ -89,6 +117,57 @@ export default function AdminClientesPage() {
         window.location.href = "/login";
     };
 
+    // Guardar precio mensual
+    const savePrice = async (clientId: string) => {
+        setSavingPrice(true);
+        try {
+            const headers = await getAuthHeaders();
+            const price = parseInt(priceInput.replace(/\D/g, "")) || 0;
+            await fetch("/api/waas/admin/update-client", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json", ...headers },
+                body: JSON.stringify({ id: clientId, monthly_price: price }),
+            });
+            setClients(prev => prev.map(c => c.id === clientId ? { ...c, monthly_price: price } : c));
+            setEditingPrice(null);
+        } finally {
+            setSavingPrice(false);
+        }
+    };
+
+    // Cambiar estado de pago
+    const updatePaymentStatus = async (clientId: string, status: WaasClient["payment_status"]) => {
+        const headers = await getAuthHeaders();
+        await fetch("/api/waas/admin/update-client", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json", ...headers },
+            body: JSON.stringify({ id: clientId, payment_status: status }),
+        });
+        setClients(prev => prev.map(c => c.id === clientId ? { ...c, payment_status: status } : c));
+    };
+
+    // Enviar WhatsApp
+    const handleSendWhatsApp = async () => {
+        if (!waModal || !waMessage.trim()) return;
+        setSendingWa(true);
+        try {
+            const headers = await getAuthHeaders();
+            const res = await fetch("/api/waas/admin/whatsapp-notify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", ...headers },
+                body: JSON.stringify({ clientId: waModal.id, message: waMessage }),
+            });
+            if (res.ok) {
+                const { url } = await res.json();
+                window.open(url, "_blank");
+                setWaModal(null);
+                setWaMessage("");
+            }
+        } finally {
+            setSendingWa(false);
+        }
+    };
+
     const handleCreateClient = async () => {
         if (!form.businessName || !form.repName || !form.email || !form.domain) {
             setCreateError("Completa los campos requeridos"); return;
@@ -102,7 +181,7 @@ export default function AdminClientesPage() {
         });
         if (res.ok) {
             setShowCreate(false);
-            setForm({ businessName: "", repName: "", email: "", domain: "", whatsapp: "", plan: "sin_plan", billingDay: new Date().getDate(), notes: "" });
+            setForm({ businessName: "", repName: "", email: "", domain: "", whatsapp: "", plan: "sin_plan", billingDay: new Date().getDate(), notes: "", monthlyPrice: 0 });
             await fetchClients();
         } else {
             const d = await res.json();
@@ -113,11 +192,23 @@ export default function AdminClientesPage() {
 
     const activeCount = clients.filter(c => !c.is_blocked).length;
     const blockedCount = clients.filter(c => c.is_blocked).length;
+    const payingCount = clients.filter(c => c.payment_status === "active").length;
+    const mrr = clients.filter(c => c.payment_status === "active").reduce((s, c) => s + (c.monthly_price ?? 0), 0);
+
+    const tabs: { id: FilterType; label: string; count: number }[] = [
+        { id: "all", label: "Todos", count: clients.length },
+        { id: "active", label: "Activos", count: activeCount },
+        { id: "blocked", label: "Suspendidos", count: blockedCount },
+        { id: "overdue", label: "Vencidos", count: clients.filter(c => c.payment_status === "overdue").length },
+    ];
+
+    const formatCOP = (n: number) =>
+        n ? new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n) : "—";
 
     return (
         <>
             <main className="min-h-screen bg-[#050505] text-white">
-                {/* NAVBAR ADMIN */}
+                {/* NAVBAR */}
                 <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 py-3 bg-[#050505]/95 border-b border-white/5 backdrop-blur-md">
                     <div className="flex items-center gap-4">
                         <a href="/" className="text-sm font-black tracking-widest text-white">
@@ -126,9 +217,15 @@ export default function AdminClientesPage() {
                         <span className="text-gray-800 text-sm hidden sm:block">|</span>
                         <span className="text-gray-400 text-xs font-bold uppercase tracking-wider hidden sm:block">Panel Admin</span>
                     </div>
-                    <nav className="flex items-center gap-1">
+                    <div className="flex items-center gap-1">
                         <a href="/admin/clientes" className="px-3 py-1.5 rounded-full text-xs font-bold text-blue-400 bg-blue-500/10">
                             Clientes
+                        </a>
+                        <a href="/admin/metricas" className="px-3 py-1.5 rounded-full text-xs font-bold text-gray-500 hover:text-white transition-colors">
+                            Métricas
+                        </a>
+                        <a href="/admin/leads" className="px-3 py-1.5 rounded-full text-xs font-bold text-gray-500 hover:text-white transition-colors">
+                            Leads
                         </a>
                         <a href="/admin/integraciones" className="px-3 py-1.5 rounded-full text-xs font-bold text-gray-500 hover:text-white transition-colors">
                             Integraciones
@@ -139,7 +236,7 @@ export default function AdminClientesPage() {
                         >
                             <LogOut className="w-3.5 h-3.5" />
                         </button>
-                    </nav>
+                    </div>
                 </nav>
 
                 <div className="pt-16 max-w-7xl mx-auto px-4 sm:px-6 pb-20">
@@ -160,22 +257,18 @@ export default function AdminClientesPage() {
                     {/* STATS CARDS */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                         {[
-                            { label: "Total Clientes", value: clients.length, icon: <Users className="w-5 h-5 text-blue-400" />, color: "blue" },
-                            { label: "Sitios Activos", value: activeCount, icon: <ShieldCheck className="w-5 h-5 text-emerald-400" />, color: "emerald" },
-                            { label: "Suspendidos", value: blockedCount, icon: <ShieldOff className="w-5 h-5 text-red-400" />, color: "red" },
-                            { label: "Dominios", value: clients.length, icon: <Globe className="w-5 h-5 text-violet-400" />, color: "violet" },
+                            { label: "Total Clientes", value: clients.length, icon: <Users className="w-5 h-5 text-blue-400" /> },
+                            { label: "Sitios Activos", value: activeCount, icon: <ShieldCheck className="w-5 h-5 text-emerald-400" /> },
+                            { label: "Suspendidos", value: blockedCount, icon: <ShieldOff className="w-5 h-5 text-red-400" /> },
+                            { label: "Clientes Pagando", value: payingCount, icon: <DollarSign className="w-5 h-5 text-violet-400" /> },
                         ].map((stat, i) => (
                             <motion.div
-                                key={i}
-                                initial={{ opacity: 0, y: 16 }}
-                                animate={{ opacity: 1, y: 0 }}
+                                key={i} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: i * 0.04 }}
                                 className="p-5 rounded-[20px] bg-white/[0.03] border border-white/8"
                             >
                                 <div className="flex items-center gap-2 mb-3">
-                                    <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center">
-                                        {stat.icon}
-                                    </div>
+                                    <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center">{stat.icon}</div>
                                     <p className="text-xs text-gray-500 font-bold uppercase tracking-wide">{stat.label}</p>
                                 </div>
                                 <p className="text-3xl font-black text-white">{stat.value}</p>
@@ -183,28 +276,61 @@ export default function AdminClientesPage() {
                         ))}
                     </div>
 
+                    {/* MRR banner */}
+                    {mrr > 0 && (
+                        <motion.div
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                            className="mb-6 flex items-center gap-3 bg-emerald-500/5 border border-emerald-500/15 rounded-2xl px-5 py-3"
+                        >
+                            <TrendingUp className="w-4 h-4 text-emerald-400" />
+                            <span className="text-emerald-400 text-sm font-bold">MRR actual:</span>
+                            <span className="text-white font-black">{formatCOP(mrr)}</span>
+                            <span className="text-gray-600 text-xs">/ mes de clientes activos</span>
+                            <a href="/admin/metricas" className="ml-auto text-xs text-emerald-500 hover:text-emerald-400 transition">Ver métricas →</a>
+                        </motion.div>
+                    )}
+
                     {/* TABLA */}
                     <div className="rounded-[24px] bg-white/[0.02] border border-white/8 overflow-hidden">
                         {/* Toolbar */}
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 border-b border-white/5">
-                            <div className="relative w-full sm:w-72">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
-                                <input
-                                    type="text" value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    placeholder="Buscar negocio, email o dominio..."
-                                    className="w-full pl-9 pr-4 py-2.5 bg-white/[0.04] border border-white/8 rounded-xl text-white text-sm placeholder:text-gray-700 focus:outline-none focus:border-blue-500/50 transition-colors"
-                                />
+                            <div className="flex items-center gap-2 flex-wrap">
+                                {/* Tabs filtro */}
+                                {tabs.map(tab => (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => setFilterTab(tab.id)}
+                                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${filterTab === tab.id
+                                            ? "bg-white/10 text-white"
+                                            : "text-gray-600 hover:text-white hover:bg-white/5"
+                                            }`}
+                                    >
+                                        <Filter className="w-3 h-3" />
+                                        {tab.label}
+                                        <span className="text-[10px] opacity-60">{tab.count}</span>
+                                    </button>
+                                ))}
                             </div>
-                            <button
-                                onClick={fetchClients}
-                                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/5 border border-white/8 text-gray-400 hover:text-white text-xs font-bold transition-all"
-                            >
-                                <RefreshCw className="w-3.5 h-3.5" /> Actualizar
-                            </button>
+                            <div className="flex items-center gap-2 w-full sm:w-auto">
+                                <div className="relative flex-1 sm:w-64">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                                    <input
+                                        type="text" value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        placeholder="Buscar negocio, email o dominio..."
+                                        className="w-full pl-9 pr-4 py-2.5 bg-white/[0.04] border border-white/8 rounded-xl text-white text-sm placeholder:text-gray-700 focus:outline-none focus:border-blue-500/50 transition-colors"
+                                    />
+                                </div>
+                                <button
+                                    onClick={fetchClients}
+                                    className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-white/5 border border-white/8 text-gray-400 hover:text-white text-xs font-bold transition-all"
+                                >
+                                    <RefreshCw className="w-3.5 h-3.5" />
+                                </button>
+                            </div>
                         </div>
 
-                        {/* Tabla desktop */}
+                        {/* Tabla */}
                         <div className="overflow-x-auto">
                             {loading ? (
                                 <div className="flex items-center justify-center py-16">
@@ -222,7 +348,9 @@ export default function AdminClientesPage() {
                                             <th className="text-left px-5 py-3 text-xs font-black text-gray-600 uppercase tracking-wider">Negocio</th>
                                             <th className="text-left px-5 py-3 text-xs font-black text-gray-600 uppercase tracking-wider hidden md:table-cell">Dominio</th>
                                             <th className="text-left px-5 py-3 text-xs font-black text-gray-600 uppercase tracking-wider hidden lg:table-cell">Plan</th>
-                                            <th className="text-left px-5 py-3 text-xs font-black text-gray-600 uppercase tracking-wider hidden lg:table-cell">Próx. Pago</th>
+                                            <th className="text-left px-5 py-3 text-xs font-black text-gray-600 uppercase tracking-wider hidden lg:table-cell">Precio/mes</th>
+                                            <th className="text-left px-5 py-3 text-xs font-black text-gray-600 uppercase tracking-wider hidden xl:table-cell">Próx. Pago</th>
+                                            <th className="text-left px-5 py-3 text-xs font-black text-gray-600 uppercase tracking-wider hidden md:table-cell">Pago</th>
                                             <th className="text-center px-5 py-3 text-xs font-black text-gray-600 uppercase tracking-wider">Estado</th>
                                             <th className="text-right px-5 py-3 text-xs font-black text-gray-600 uppercase tracking-wider">Acciones</th>
                                         </tr>
@@ -231,8 +359,7 @@ export default function AdminClientesPage() {
                                         {filtered.map((client, i) => (
                                             <motion.tr
                                                 key={client.id}
-                                                initial={{ opacity: 0 }}
-                                                animate={{ opacity: 1 }}
+                                                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                                                 transition={{ delay: i * 0.03 }}
                                                 className="hover:bg-white/[0.02] transition-colors"
                                             >
@@ -264,8 +391,40 @@ export default function AdminClientesPage() {
                                                     </span>
                                                 </td>
 
-                                                {/* Fecha pago */}
+                                                {/* Precio editable */}
                                                 <td className="px-5 py-4 hidden lg:table-cell">
+                                                    {editingPrice === client.id ? (
+                                                        <div className="flex items-center gap-1">
+                                                            <input
+                                                                autoFocus
+                                                                type="text"
+                                                                value={priceInput}
+                                                                onChange={e => setPriceInput(e.target.value)}
+                                                                onKeyDown={e => { if (e.key === "Enter") savePrice(client.id); if (e.key === "Escape") setEditingPrice(null); }}
+                                                                className="w-24 px-2 py-1 bg-white/10 border border-blue-500/40 rounded-lg text-white text-xs focus:outline-none"
+                                                                placeholder="0"
+                                                            />
+                                                            <button
+                                                                onClick={() => savePrice(client.id)}
+                                                                disabled={savingPrice}
+                                                                className="w-6 h-6 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 rounded-md flex items-center justify-center text-emerald-400 transition"
+                                                            >
+                                                                {savingPrice ? <div className="w-3 h-3 border border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin" /> : <Check className="w-3 h-3" />}
+                                                            </button>
+                                                        </div>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => { setEditingPrice(client.id); setPriceInput(String(client.monthly_price ?? 0)); }}
+                                                            className="flex items-center gap-1.5 text-gray-400 hover:text-white text-xs group transition"
+                                                        >
+                                                            <span className="font-mono">{client.monthly_price ? formatCOP(client.monthly_price) : "—"}</span>
+                                                            <Edit2 className="w-3 h-3 opacity-0 group-hover:opacity-60 transition" />
+                                                        </button>
+                                                    )}
+                                                </td>
+
+                                                {/* Fecha pago */}
+                                                <td className="px-5 py-4 hidden xl:table-cell">
                                                     <div className="flex items-center gap-1.5 text-gray-400 text-xs">
                                                         <Calendar className="w-3 h-3" />
                                                         {client.next_payment_date
@@ -274,7 +433,20 @@ export default function AdminClientesPage() {
                                                     </div>
                                                 </td>
 
-                                                {/* Estado */}
+                                                {/* Estado de pago (editable) */}
+                                                <td className="px-5 py-4 hidden md:table-cell">
+                                                    <select
+                                                        value={client.payment_status ?? "pending"}
+                                                        onChange={e => updatePaymentStatus(client.id, e.target.value as WaasClient["payment_status"])}
+                                                        className={`text-[10px] font-black px-2 py-1 rounded-full border appearance-none cursor-pointer bg-transparent transition ${paymentStatusConfig[client.payment_status as keyof typeof paymentStatusConfig]?.color ?? paymentStatusConfig.pending.color}`}
+                                                    >
+                                                        <option value="active">Pagando ✅</option>
+                                                        <option value="pending">Pendiente ⚠️</option>
+                                                        <option value="overdue">Vencido 🔴</option>
+                                                    </select>
+                                                </td>
+
+                                                {/* Estado activo/suspendido */}
                                                 <td className="px-5 py-4 text-center">
                                                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black border ${client.is_blocked
                                                         ? "text-red-400 bg-red-500/10 border-red-500/20"
@@ -288,6 +460,19 @@ export default function AdminClientesPage() {
                                                 {/* Acciones */}
                                                 <td className="px-5 py-4">
                                                     <div className="flex items-center justify-end gap-2">
+                                                        {/* WhatsApp */}
+                                                        {client.whatsapp && (
+                                                            <button
+                                                                onClick={() => {
+                                                                    setWaModal(client);
+                                                                    setWaMessage(`Hola ${client.business_name}, te escribimos desde AMC Agency.`);
+                                                                }}
+                                                                className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 hover:bg-emerald-500/20 transition"
+                                                                title="Enviar WhatsApp"
+                                                            >
+                                                                <MessageCircle className="w-3.5 h-3.5" />
+                                                            </button>
+                                                        )}
                                                         <a
                                                             href={`/admin/clientes/${client.id}`}
                                                             className="px-3 py-1.5 rounded-full text-xs font-bold text-gray-400 border border-white/10 hover:border-white/20 hover:text-white transition-all"
@@ -317,6 +502,61 @@ export default function AdminClientesPage() {
                     </div>
                 </div>
             </main>
+
+            {/* MODAL WHATSAPP */}
+            <AnimatePresence>
+                {waModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                        onClick={(e) => { if (e.target === e.currentTarget) setWaModal(null); }}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-[28px] shadow-2xl overflow-hidden"
+                        >
+                            <div className="flex items-center justify-between px-6 py-4 border-b border-white/5">
+                                <div>
+                                    <p className="text-[10px] text-emerald-500 font-black uppercase tracking-widest">WhatsApp</p>
+                                    <h2 className="text-white font-black text-lg">Notificar a {waModal.business_name}</h2>
+                                </div>
+                                <button onClick={() => setWaModal(null)} className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all">
+                                    <X className="w-4 h-4 text-gray-400" />
+                                </button>
+                            </div>
+                            <div className="p-6 space-y-4">
+                                <div className="flex items-center gap-2 text-xs text-gray-500 bg-white/3 rounded-xl px-4 py-3 border border-white/5">
+                                    <Phone className="w-3.5 h-3.5 text-emerald-500" />
+                                    <span>Para:</span>
+                                    <span className="text-white font-mono">{waModal.whatsapp}</span>
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest block mb-2">Mensaje</label>
+                                    <textarea
+                                        value={waMessage}
+                                        onChange={e => setWaMessage(e.target.value)}
+                                        rows={4}
+                                        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm placeholder:text-gray-700 focus:outline-none focus:border-emerald-500/60 transition resize-none"
+                                        placeholder="Escribe tu mensaje..."
+                                    />
+                                </div>
+                                <p className="text-[10px] text-gray-600">Se abrirá WhatsApp Web con el mensaje prellenado.</p>
+                            </div>
+                            <div className="px-6 py-4 border-t border-white/5 flex justify-end gap-3">
+                                <button onClick={() => setWaModal(null)} className="px-4 py-2 text-gray-500 text-xs font-bold hover:text-white transition">Cancelar</button>
+                                <button
+                                    onClick={handleSendWhatsApp}
+                                    disabled={sendingWa || !waMessage.trim()}
+                                    className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black uppercase tracking-widest transition-all disabled:opacity-50"
+                                >
+                                    {sendingWa ? <span className="w-3.5 h-3.5 border border-white/40 border-t-white rounded-full animate-spin" /> : <MessageCircle className="w-3.5 h-3.5" />}
+                                    Abrir WhatsApp
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* MODAL CREAR CLIENTE */}
             <AnimatePresence>
@@ -375,14 +615,24 @@ export default function AdminClientesPage() {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest block mb-1.5">Día de facturación</label>
+                                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest block mb-1.5">Precio/mes (COP)</label>
                                         <input
-                                            type="number" min={1} max={28}
-                                            value={form.billingDay}
-                                            onChange={e => setForm(prev => ({ ...prev, billingDay: Number(e.target.value) }))}
+                                            type="number" min={0}
+                                            value={form.monthlyPrice}
+                                            onChange={e => setForm(prev => ({ ...prev, monthlyPrice: Number(e.target.value) }))}
+                                            placeholder="150000"
                                             className="w-full px-3.5 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/60 transition-colors"
                                         />
                                     </div>
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest block mb-1.5">Día de facturación (1-28)</label>
+                                    <input
+                                        type="number" min={1} max={28}
+                                        value={form.billingDay}
+                                        onChange={e => setForm(prev => ({ ...prev, billingDay: Number(e.target.value) }))}
+                                        className="w-full px-3.5 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/60 transition-colors"
+                                    />
                                 </div>
                                 <div>
                                     <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest block mb-1.5">Notas (opcional)</label>
