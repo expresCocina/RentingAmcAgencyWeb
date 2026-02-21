@@ -61,8 +61,11 @@ export const metadata: Metadata = {
     canonical: "https://amcagencyweb.com",
   },
   icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "32x32" },
+    ],
+    apple: "/favicon.svg",
   },
   verification: {
     google: "google-site-verification",

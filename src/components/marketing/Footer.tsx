@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { Mail, Facebook, Instagram } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { AMCLogo } from "./AMCLogo";
 
 /* ── Deep Links para abrir la app nativa en móvil ── */
 const SOCIAL = {
@@ -45,10 +46,9 @@ export const Footer = () => {
             viewport={{ once: true }}
             className="col-span-2 md:col-span-1"
           >
-            <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
-              {t.footer.branding.brand}{" "}
-              <span className="text-blue-500">{t.footer.branding.highlight}</span>
-            </h3>
+            <div className="mb-3">
+              <AMCLogo size="md" withLink={true} />
+            </div>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
               {t.footer.branding.desc}
             </p>

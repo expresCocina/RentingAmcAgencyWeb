@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, LayoutDashboard, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { AMCLogo } from "./AMCLogo";
 
 export const Navbar = () => {
   const { language, setLanguage, t } = useLanguage();
@@ -41,9 +42,7 @@ export const Navbar = () => {
           }`}
       >
         {/* LOGO */}
-        <Link href="/" className="text-base md:text-lg font-black tracking-widest text-white hover:text-blue-500 transition-colors flex-shrink-0">
-          AMC <span className="text-blue-500 text-[8px] md:text-[10px] tracking-normal">®</span>
-        </Link>
+        <AMCLogo size="sm" withLink={true} />
 
         {/* MENÚ DESKTOP */}
         <div className="hidden lg:flex items-center gap-8">
