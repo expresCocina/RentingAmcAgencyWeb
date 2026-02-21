@@ -1,48 +1,49 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 
 /**
  * captureLead: Recibe los datos del formulario de contacto
- * y los inserta en la tabla 'leads' de Supabase.
+ * y los inserta en la tabla 'waas_leads' del admin.
  */
 export async function captureLead(formData: FormData) {
-  const supabase = await createClient();
-  
-  // Extraemos los valores del FormData con seguridad
-  const name = formData.get("name") as string;
-  const email = formData.get("email") as string;
-  const serviceInterest = formData.get("service") as string;
-  const message = formData.get("message") as string;
+  const name = (formData.get("name") as string)?.trim();
+  const email = (formData.get("email") as string)?.trim();
+  const service = (formData.get("service") as string)?.trim();
+  const message = (formData.get("message") as string)?.trim();
 
-  // Validación básica del lado del servidor
   if (!name || !email) {
     return { success: false, message: "Nombre y Email son obligatorios." };
   }
 
-  // Insertamos en la base de datos
-  const { error } = await supabase.from("leads").insert([
-    {
-      name: name,
-      email: email,
-      service_interest: serviceInterest,
-      message: message,
-      source: "web_principal_v1",
-      status: "NEW"
+  try {
+    const supabase = createAdminClient();
+
+    const { error } = await supabase.from("waas_leads").insert({
+      name,
+      email,
+      phone: null,
+      service: service ?? null,
+      message: message ?? null,
+      source: "website_form",
+      status: "new",
+    });
+
+    if (error) {
+      console.error("[captureLead] Supabase error:", error.message);
+      return { success: false, message: "Error técnico al guardar el lead." };
     }
-  ]);
 
-  if (error) {
-    console.error("Supabase Error:", error.message);
-    return { success: false, message: "Error técnico al guardar el lead." };
+    // Revalidar la página de leads del admin
+    revalidatePath("/admin/leads");
+
+    return {
+      success: true,
+      message: "¡Visión recibida! Un estratega de AMC se pondrá en contacto contigo.",
+    };
+  } catch (err) {
+    console.error("[captureLead] Error:", err);
+    return { success: false, message: "Error de conexión. Intenta de nuevo." };
   }
-
-  // Revalidamos el dashboard para que el admin vea el lead nuevo al entrar
-  revalidatePath("/dashboard");
-
-  return { 
-    success: true, 
-    message: "¡Visión recibida! Un estratega de AMC se pondrá en contacto contigo." 
-  };
 }
