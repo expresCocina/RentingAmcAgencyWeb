@@ -109,7 +109,7 @@ export default function ClientDetailClient({
         setBlocking(false);
     };
 
-    const installScript = `<!-- AMC Agency Web Protection -->\n<script src="https://renting-amc-agency-web.vercel.app/api/protect?domain=${client.domain}"></script>`;
+    const installScript = `<!-- AMC Agency Web Protection -->\n<script src="https://amcagencyweb.com/api/protect?domain=${client.domain}"></script>`;
 
     const copyScript = () => {
         navigator.clipboard.writeText(installScript);

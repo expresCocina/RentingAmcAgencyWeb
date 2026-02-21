@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
                     <p>Datos de acceso a tu panel:</p>
                     <p><strong>Email:</strong> ${email}<br/>
                     <strong>Contraseña temporal:</strong> <code>${userPassword}</code></p>
-                    <p>Ingresa en: <a href="https://renting-amc-agency-web.vercel.app/login" style="color:#3b82f6;">Panel de Clientes</a></p>
+                    <p>Ingresa en: <a href="https://amcagencyweb.com/login" style="color:#3b82f6;">Panel de Clientes</a></p>
                     <p style="color:#666;font-size:12px;">Cambia tu contraseña al ingresar.</p>
                 </div>
             `,

@@ -73,7 +73,7 @@ export const Footer = () => {
               <a href="#" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-blue-500 hover:text-blue-500 transition group">
                 <Twitter className="w-4 h-4 opacity-60 group-hover:opacity-100" />
               </a>
-              <a href="mailto:contact@amcagency.com" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-blue-500 hover:text-blue-500 transition group">
+              <a href="mailto:contact@amcagencyweb.com" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-blue-500 hover:text-blue-500 transition group">
                 <Mail className="w-4 h-4 opacity-60 group-hover:opacity-100" />
               </a>
             </div>

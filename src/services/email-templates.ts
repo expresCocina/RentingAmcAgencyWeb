@@ -24,7 +24,7 @@ const logoHtml = `
 const footerHtml = `
   <div style="margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);text-align:center;">
     <p style="color:#4b5563;font-size:11px;margin:0;">
-      AMC Agency · amcagencyweb.com · contact@amcagency.com
+      AMC Agency · amcagencyweb.com · contact@amcagencyweb.com
     </p>
     <p style="color:#4b5563;font-size:10px;margin:6px 0 0;">
       Este email fue enviado automáticamente. No responder.
@@ -33,7 +33,7 @@ const footerHtml = `
 `
 
 export function welcomeEmail(data: { businessName: string; repName: string; domain: string; plan: string }): string {
-    return `
+  return `
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
@@ -68,7 +68,7 @@ export function welcomeEmail(data: { businessName: string; repName: string; doma
 }
 
 export function paymentReminderEmail(data: { businessName: string; repName: string; domain: string; paymentDate: string; daysLeft: number }): string {
-    return `
+  return `
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
@@ -100,7 +100,7 @@ export function paymentReminderEmail(data: { businessName: string; repName: stri
 }
 
 export function siteBlockedEmail(data: { businessName: string; repName: string; domain: string }): string {
-    return `
+  return `
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
@@ -132,7 +132,7 @@ export function siteBlockedEmail(data: { businessName: string; repName: string; 
 }
 
 export function siteUnblockedEmail(data: { businessName: string; repName: string; domain: string }): string {
-    return `
+  return `
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>

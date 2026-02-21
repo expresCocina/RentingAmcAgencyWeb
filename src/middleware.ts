@@ -1,7 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? 'contact@amcagency.com'
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? 'contact@amcagencyweb.com'
 
 export async function middleware(request: NextRequest) {
     // 1. Creamos una respuesta base que podremos modificar

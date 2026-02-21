@@ -12,7 +12,7 @@ const sections = [
         content: [
             {
                 subtitle: "Acuerdo de uso",
-                text: "Al acceder y utilizar el sitio web de AMC Agency (amcagency.com), así como al contratar cualquiera de nuestros servicios de desarrollo web, infraestructura cloud o renting tecnológico, aceptas expresamente estos Términos y Condiciones en su totalidad. Si no estás de acuerdo con alguno de los términos aquí establecidos, debes abstenerte de usar nuestros servicios.",
+                text: "Al acceder y utilizar el sitio web de AMC Agency (amcagencyweb.com), así como al contratar cualquiera de nuestros servicios de desarrollo web, infraestructura cloud o renting tecnológico, aceptas expresamente estos Términos y Condiciones en su totalidad. Si no estás de acuerdo con alguno de los términos aquí establecidos, debes abstenerte de usar nuestros servicios.",
             },
             {
                 subtitle: "Capacidad legal",
@@ -208,11 +208,11 @@ export default function TermsPage() {
                                     Nuestro equipo legal responde consultas específicas sobre contratos en menos de 24 horas.
                                 </p>
                                 <a
-                                    href="mailto:contact@amcagency.com"
+                                    href="mailto:contact@amcagencyweb.com"
                                     className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-full transition-all text-xs uppercase tracking-widest shadow-lg shadow-emerald-500/20"
                                 >
                                     <Mail className="w-3.5 h-3.5" />
-                                    contact@amcagency.com
+                                    contact@amcagencyweb.com
                                 </a>
                             </div>
                         </Reveal>
@@ -224,3 +224,4 @@ export default function TermsPage() {
         </main>
     );
 }
+

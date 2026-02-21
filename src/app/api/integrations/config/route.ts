@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? 'contact@amcagency.com'
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? 'contact@amcagencyweb.com'
 
 // GET — cargar configuración de integraciones
 export async function GET() {

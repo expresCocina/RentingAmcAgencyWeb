@@ -72,7 +72,7 @@ const sections = [
         content: [
             {
                 subtitle: "Derechos ARCO (Acceso, Rectificación, Cancelación, Oposición)",
-                text: "Tienes derecho a acceder a los datos personales que tenemos sobre ti, solicitar su corrección si son inexactos, pedir su eliminación en cualquier momento y oponerte a ciertos usos de tu información. Para ejercer cualquiera de estos derechos, envíanos un correo a contact@amcagency.com con el asunto 'Derechos ARCO' y procesaremos tu solicitud en un máximo de 10 días hábiles.",
+                text: "Tienes derecho a acceder a los datos personales que tenemos sobre ti, solicitar su corrección si son inexactos, pedir su eliminación en cualquier momento y oponerte a ciertos usos de tu información. Para ejercer cualquiera de estos derechos, envíanos un correo a contact@amcagencyweb.com con el asunto 'Derechos ARCO' y procesaremos tu solicitud en un máximo de 10 días hábiles.",
             },
             {
                 subtitle: "Portabilidad de datos",
@@ -87,7 +87,7 @@ const sections = [
         content: [
             {
                 subtitle: "Responsable del tratamiento de datos",
-                text: "AMC Agency es responsable del tratamiento de tus datos personales. Si tienes preguntas, inquietudes o deseas ejercer tus derechos de privacidad, puedes contactarnos en: contact@amcagency.com. Responderemos a todas las consultas relacionadas con privacidad en un plazo máximo de 5 días hábiles.",
+                text: "AMC Agency es responsable del tratamiento de tus datos personales. Si tienes preguntas, inquietudes o deseas ejercer tus derechos de privacidad, puedes contactarnos en: contact@amcagencyweb.com. Responderemos a todas las consultas relacionadas con privacidad en un plazo máximo de 5 días hábiles.",
             },
             {
                 subtitle: "Cambios en esta política",
@@ -192,11 +192,11 @@ export default function PrivacyPolicy() {
                                     Nuestro equipo responde todas las consultas en menos de 24 horas hábiles.
                                 </p>
                                 <a
-                                    href="mailto:contact@amcagency.com"
+                                    href="mailto:contact@amcagencyweb.com"
                                     className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full transition-all text-xs uppercase tracking-widest shadow-lg shadow-blue-500/20"
                                 >
                                     <Mail className="w-3.5 h-3.5" />
-                                    contact@amcagency.com
+                                    contact@amcagencyweb.com
                                 </a>
                             </div>
                         </Reveal>
@@ -208,3 +208,4 @@ export default function PrivacyPolicy() {
         </main>
     );
 }
+

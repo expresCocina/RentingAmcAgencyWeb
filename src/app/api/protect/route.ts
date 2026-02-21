@@ -124,7 +124,7 @@ function buildBlockScript(waUrl: string): string {
     '    // Footer',
     '    var footer=document.createElement("p");',
     '    footer.setAttribute("style","color:#374151;font-size:12px;margin:28px 0 0");',
-    '    footer.textContent="amcagency.com · Soporte 24/7";',
+    '    footer.textContent="amcagencyweb.com · Soporte 24/7";',
     '',
     '    // Ensamblar',
     '    d.appendChild(icon);',
