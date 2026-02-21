@@ -66,6 +66,7 @@ export default function DashboardPage() {
         renting_basico: "Renting Básico",
         renting_pro: "Renting Pro",
         renting_elite: "Renting Élite",
+        sin_plan: "Sin plan asignado",
     };
 
     if (loading) {
@@ -183,36 +184,9 @@ export default function DashboardPage() {
                     />
                 </div>
 
-                {/* SCRIPT DE INSTALACIÓN */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-                    className="mb-6 p-6 rounded-[24px] bg-white/[0.02] border border-white/8"
-                >
-                    <div className="flex items-center justify-between mb-4">
-                        <div>
-                            <p className="text-xs text-gray-500 font-black uppercase tracking-[0.25em] mb-0.5">Script de Protección</p>
-                            <p className="text-white font-bold">Instala este código en tu sitio web</p>
-                        </div>
-                        <button
-                            onClick={copyScript}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${copied ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30 border" : "bg-white/5 text-gray-400 border border-white/10 hover:border-white/20"
-                                }`}
-                        >
-                            {copied ? <><Check className="w-3 h-3" /> Copiado</> : <><Copy className="w-3 h-3" /> Copiar</>}
-                        </button>
-                    </div>
-                    <div className="p-4 rounded-xl bg-black/40 border border-white/5 font-mono text-xs text-green-400 overflow-x-auto">
-                        {`<!-- AMC Agency WaaS Lock -->`}<br />
-                        {`<script src="https://amcagencyweb.com/waas-lock.js?domain=https://${client.domain}/"></script>`}
-                    </div>
-                    <p className="text-gray-600 text-xs mt-3">
-                        Agrega este script antes del cierre de la etiqueta <code className="text-gray-500">&lt;/body&gt;</code> en tu sitio web.
-                    </p>
-                </motion.div>
-
                 {/* SOPORTE */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
                     className="p-6 rounded-[24px] bg-gradient-to-br from-blue-500/10 to-indigo-500/5 border border-blue-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
                 >
                     <div className="flex items-center gap-4">

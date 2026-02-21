@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
     ArrowLeft, Globe, Mail, Phone, Calendar, Package2,
-    ShieldCheck, ShieldOff, Clock3, FileText, Save
+    ShieldCheck, ShieldOff, Clock3, FileText, Save, Copy, Check
 } from "lucide-react";
 import { waasService, type WaasClient, type EmailLog } from "@/services/waas";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 const planLabels: Record<string, string> = {
     renting_basico: "Renting Básico", renting_pro: "Renting Pro", renting_elite: "Renting Élite",
+    sin_plan: "Sin plan asignado",
 };
 
 export default function ClientDetailPage({ params }: { params: { id: string } }) {
@@ -22,6 +23,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
     const [saving, setSaving] = useState(false);
     const [blocking, setBlocking] = useState(false);
     const [saved, setSaved] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -107,8 +109,8 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                     <button
                         onClick={handleBlock} disabled={blocking}
                         className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all disabled:opacity-40 ${client.is_blocked
-                                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 hover:bg-emerald-500/25"
-                                : "bg-red-500/15 text-red-400 border border-red-500/25 hover:bg-red-500/25"
+                            ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 hover:bg-emerald-500/25"
+                            : "bg-red-500/15 text-red-400 border border-red-500/25 hover:bg-red-500/25"
                             }`}
                     >
                         {blocking ? <span className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin inline-block" /> :
@@ -148,6 +150,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                                 value={plan} onChange={(e) => setPlan(e.target.value)}
                                 className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500 transition-colors appearance-none"
                             >
+                                <option value="sin_plan" className="bg-[#0a0a0a]">Sin plan asignado</option>
                                 <option value="renting_basico" className="bg-[#0a0a0a]">Renting Básico — $299k/mes</option>
                                 <option value="renting_pro" className="bg-[#0a0a0a]">Renting Pro — $499k/mes</option>
                                 <option value="renting_elite" className="bg-[#0a0a0a]">Renting Élite — $899k/mes</option>
@@ -176,6 +179,34 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                         >
                             <Save className="w-4 h-4" /> {saved ? "¡Guardado!" : saving ? "Guardando..." : "Guardar Cambios"}
                         </button>
+                    </div>
+
+                    {/* SCRIPT DE INSTALACIÓN */}
+                    <div className="lg:col-span-2 p-6 rounded-[24px] bg-white/[0.02] border border-white/8">
+                        <div className="flex items-center justify-between mb-4">
+                            <div>
+                                <p className="text-xs font-black text-gray-500 uppercase tracking-[0.25em] mb-0.5">Script de Protección</p>
+                                <p className="text-white font-bold">Código a instalar en el sitio del cliente</p>
+                            </div>
+                            <button
+                                onClick={() => {
+                                    navigator.clipboard.writeText(`<!-- AMC Agency WaaS Lock -->\n<script src="https://amcagencyweb.com/waas-lock.js?domain=https://${client.domain}/"></script>`);
+                                    setCopied(true);
+                                    setTimeout(() => setCopied(false), 2000);
+                                }}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${copied ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30 border" : "bg-white/5 text-gray-400 border border-white/10 hover:border-white/20"
+                                    }`}
+                            >
+                                {copied ? <><Check className="w-3 h-3" /> Copiado</> : <><Copy className="w-3 h-3" /> Copiar</>}
+                            </button>
+                        </div>
+                        <div className="p-4 rounded-xl bg-black/40 border border-white/5 font-mono text-xs text-green-400 overflow-x-auto">
+                            {`<!-- AMC Agency WaaS Lock -->`}<br />
+                            {`<script src="https://amcagencyweb.com/waas-lock.js?domain=https://${client.domain}/"></script>`}
+                        </div>
+                        <p className="text-gray-600 text-xs mt-3">
+                            Agrega este script antes del cierre de <code className="text-gray-500">&lt;/body&gt;</code> en el sitio web del cliente.
+                        </p>
                     </div>
 
                     {/* HISTORIAL DE EMAILS */}
