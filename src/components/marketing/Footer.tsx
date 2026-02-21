@@ -1,7 +1,34 @@
 "use client";
 import { motion } from "framer-motion";
-import { Mail, Linkedin, Github, Twitter } from "lucide-react";
+import { Mail, Facebook, Instagram } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+
+/* ── Deep Links para abrir la app nativa en móvil ── */
+const SOCIAL = {
+  facebook: {
+    /* intent para Android / universal link iOS */
+    app: "fb://page/Amcagencycol",
+    web: "https://www.facebook.com/Amcagencycol/?locale=es_LA",
+  },
+  instagram: {
+    app: "instagram://user?username=amcagencycol",
+    web: "https://www.instagram.com/amcagencycol/",
+  },
+};
+
+/**
+ * Intenta abrir la app nativa; si falla en 300ms abre la web.
+ */
+function openSocial(appUrl: string, webUrl: string) {
+  const start = Date.now();
+  window.location.href = appUrl;
+  setTimeout(() => {
+    // Si pasaron menos de 800ms la app no abrió → fallback al navegador
+    if (Date.now() - start < 800) {
+      window.open(webUrl, "_blank", "noopener,noreferrer");
+    }
+  }, 300);
+}
 
 export const Footer = () => {
   const { t } = useLanguage();
@@ -10,7 +37,8 @@ export const Footer = () => {
     <footer className="bg-black border-t border-white/5 py-12 md:py-16 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-10 md:mb-12">
-          {/* Branding — ocupa toda la fila en mobile */}
+
+          {/* Branding */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -18,7 +46,8 @@ export const Footer = () => {
             className="col-span-2 md:col-span-1"
           >
             <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
-              {t.footer.branding.brand} <span className="text-blue-500">{t.footer.branding.highlight}</span>
+              {t.footer.branding.brand}{" "}
+              <span className="text-blue-500">{t.footer.branding.highlight}</span>
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
               {t.footer.branding.desc}
@@ -64,17 +93,52 @@ export const Footer = () => {
           >
             <h4 className="text-white font-bold mb-3 text-sm">{t.footer.connect.title}</h4>
             <div className="flex flex-wrap gap-3">
-              <a href="#" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-blue-500 hover:text-blue-500 transition group">
-                <Linkedin className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-              </a>
-              <a href="#" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-blue-500 hover:text-blue-500 transition group">
-                <Github className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-              </a>
-              <a href="#" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-blue-500 hover:text-blue-500 transition group">
-                <Twitter className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-              </a>
-              <a href="mailto:contact@amcagencyweb.com" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-blue-500 hover:text-blue-500 transition group">
+
+              {/* Facebook → abre app nativa */}
+              <button
+                onClick={() => openSocial(SOCIAL.facebook.app, SOCIAL.facebook.web)}
+                aria-label="Síguenos en Facebook"
+                className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-blue-500 hover:text-blue-500 transition group"
+              >
+                <Facebook className="w-4 h-4 opacity-60 group-hover:opacity-100" />
+              </button>
+
+              {/* Instagram → abre app nativa */}
+              <button
+                onClick={() => openSocial(SOCIAL.instagram.app, SOCIAL.instagram.web)}
+                aria-label="Síguenos en Instagram"
+                className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-pink-500 hover:text-pink-500 transition group"
+              >
+                <Instagram className="w-4 h-4 opacity-60 group-hover:opacity-100" />
+              </button>
+
+              {/* Email directo */}
+              <a
+                href="mailto:contacto@amcagencyweb.com"
+                aria-label="Envíanos un email"
+                className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-blue-500 hover:text-blue-500 transition group"
+              >
                 <Mail className="w-4 h-4 opacity-60 group-hover:opacity-100" />
+              </a>
+            </div>
+
+            {/* Links de texto para SEO */}
+            <div className="mt-3 space-y-1">
+              <a
+                href={SOCIAL.facebook.web}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-xs text-gray-600 hover:text-blue-400 transition"
+              >
+                facebook.com/Amcagencycol
+              </a>
+              <a
+                href={SOCIAL.instagram.web}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-xs text-gray-600 hover:text-pink-400 transition"
+              >
+                instagram.com/amcagencycol
               </a>
             </div>
           </motion.div>
