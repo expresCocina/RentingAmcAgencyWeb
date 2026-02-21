@@ -1,31 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { isAdmin } from '@/lib/supabase/server-auth'
 
-// Helpers para autenticar al admin
-async function getAdminUser(req: NextRequest) {
-    const supabaseAuth = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-            cookies: {
-                getAll: () => req.cookies.getAll(),
-                setAll: () => { },
-            },
-        }
-    )
-    const { data: { user } } = await supabaseAuth.auth.getUser()
-    return user
-}
-
-// GET /api/waas/admin/client/[id] — obtiene un cliente por ID (solo admin)
-export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+// GET /api/waas/admin/client/[id]
+export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await context.params
-        const user = await getAdminUser(req)
-        const adminEmail = process.env.ADMIN_EMAIL
 
-        if (!user || user.email !== adminEmail) {
+        if (!(await isAdmin())) {
             return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
         }
 
@@ -55,14 +37,12 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     }
 }
 
-// PATCH /api/waas/admin/client/[id] — actualiza un cliente (solo admin)
+// PATCH /api/waas/admin/client/[id]
 export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await context.params
-        const user = await getAdminUser(req)
-        const adminEmail = process.env.ADMIN_EMAIL
 
-        if (!user || user.email !== adminEmail) {
+        if (!(await isAdmin())) {
             return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
         }
 

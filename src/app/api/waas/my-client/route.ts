@@ -1,37 +1,19 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
-import { createAdminClient } from '@/lib/supabase/admin'
+import { NextResponse } from 'next/server'
+import { getSessionUser } from '@/lib/supabase/server-auth'
 
-// GET /api/waas/my-client
-// Devuelve el registro waas_clients del usuario autenticado (se llama desde el dashboard)
-export async function GET(req: NextRequest) {
+// GET /api/waas/my-client — devuelve el registro waas_clients del usuario autenticado
+export async function GET() {
     try {
-        // 1. Obtener sesión del usuario desde cookies
-        const res = NextResponse.next()
-        const supabaseAuth = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            {
-                cookies: {
-                    getAll: () => req.cookies.getAll(),
-                    setAll: (cookiesToSet) => {
-                        cookiesToSet.forEach(({ name, value, options }) =>
-                            res.cookies.set(name, value, options)
-                        )
-                    },
-                },
-            }
-        )
+        const user = await getSessionUser()
 
-        const { data: { user }, error: userError } = await supabaseAuth.auth.getUser()
-
-        if (userError || !user) {
+        if (!user) {
             return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
         }
 
-        // 2. Buscar su registro en waas_clients usando el admin client (server-side)
-        const adminSupabase = createAdminClient()
-        const { data, error } = await adminSupabase
+        const { createAdminClient } = await import('@/lib/supabase/admin')
+        const supabase = createAdminClient()
+
+        const { data, error } = await supabase
             .from('waas_clients')
             .select('*')
             .eq('user_id', user.id)

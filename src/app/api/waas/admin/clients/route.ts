@@ -1,30 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
+import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { isAdmin } from '@/lib/supabase/server-auth'
 
 // GET /api/waas/admin/clients — lista todos los clientes (solo admin)
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
-        const res = NextResponse.next()
-        const supabaseAuth = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            {
-                cookies: {
-                    getAll: () => req.cookies.getAll(),
-                    setAll: (cookiesToSet) => {
-                        cookiesToSet.forEach(({ name, value, options }) =>
-                            res.cookies.set(name, value, options)
-                        )
-                    },
-                },
-            }
-        )
-
-        const { data: { user } } = await supabaseAuth.auth.getUser()
-        const adminEmail = process.env.ADMIN_EMAIL
-
-        if (!user || user.email !== adminEmail) {
+        if (!(await isAdmin())) {
             return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
         }
 
