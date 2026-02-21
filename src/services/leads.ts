@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
  */
 function extractPhone(text: string): string | null {
   const match = text.match(/(\+?\d[\d\s\-().]{7,}\d)/);
-  return match ? match[1].replace(/\s+/g, " ").trim() : null;
+  return match?.[1] ? match[1].replace(/\s+/g, " ").trim() : null;
 }
 
 /**
