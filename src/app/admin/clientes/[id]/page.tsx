@@ -6,7 +6,6 @@ import {
     ShieldCheck, ShieldOff, Clock3, FileText, Save, Copy, Check
 } from "lucide-react";
 import { waasService, type WaasClient, type EmailLog } from "@/services/waas";
-import { createAdminClient } from "@/lib/supabase/admin";
 
 const planLabels: Record<string, string> = {
     renting_basico: "Renting Básico", renting_pro: "Renting Pro", renting_elite: "Renting Élite",
@@ -27,22 +26,14 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
 
     useEffect(() => {
         (async () => {
-            const c = await waasService.getClientById(params.id);
-            if (!c) { setLoading(false); return; }
+            const res = await fetch(`/api/waas/admin/client/${params.id}`);
+            if (!res.ok) { setLoading(false); return; }
+            const { client: c, logs: l } = await res.json();
             setClient(c);
             setNotes(c.notes ?? "");
             setBillingDay(c.billing_day);
             setPlan(c.plan);
-
-            // Obtener logs de email con admin client
-            const supabase = createAdminClient();
-            const { data } = await supabase
-                .from("waas_email_logs")
-                .select("*")
-                .eq("client_id", params.id)
-                .order("sent_at", { ascending: false })
-                .limit(10);
-            setLogs((data ?? []) as EmailLog[]);
+            setLogs(l);
             setLoading(false);
         })();
     }, [params.id]);
@@ -50,9 +41,12 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
     const handleSave = async () => {
         if (!client) return;
         setSaving(true);
-        await waasService.updateClient(client.id, { notes, billing_day: billingDay, plan });
-        setSaved(true);
-        setTimeout(() => setSaved(false), 2000);
+        const res = await fetch(`/api/waas/admin/client/${client.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ notes, billing_day: billingDay, plan }),
+        });
+        if (res.ok) { setSaved(true); setTimeout(() => setSaved(false), 2000); }
         setSaving(false);
     };
 

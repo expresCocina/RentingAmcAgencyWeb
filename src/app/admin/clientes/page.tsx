@@ -5,19 +5,20 @@ import {
     Users, Globe, ShieldOff, ShieldCheck, LogOut,
     Search, RefreshCw, ExternalLink, Calendar, Phone
 } from "lucide-react";
-import { authService } from "@/services/auth";
-import { waasService, type WaasClient } from "@/services/waas";
+import { type WaasClient } from "@/services/waas";
 
 const planLabels: Record<string, string> = {
     renting_basico: "Básico",
     renting_pro: "Pro",
     renting_elite: "Élite",
+    sin_plan: "Sin plan",
 };
 
 const planColors: Record<string, string> = {
     renting_basico: "text-blue-400 bg-blue-500/10 border-blue-500/20",
     renting_pro: "text-violet-400 bg-violet-500/10 border-violet-500/20",
     renting_elite: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+    sin_plan: "text-gray-500 bg-white/5 border-white/10",
 };
 
 export default function AdminClientesPage() {
@@ -29,10 +30,16 @@ export default function AdminClientesPage() {
 
     const fetchClients = useCallback(async () => {
         setLoading(true);
-        const data = await waasService.getAllClients();
-        setClients(data);
-        setFiltered(data);
-        setLoading(false);
+        try {
+            const res = await fetch("/api/waas/admin/clients");
+            if (res.ok) {
+                const data = await res.json();
+                setClients(data);
+                setFiltered(data);
+            }
+        } finally {
+            setLoading(false);
+        }
     }, []);
 
     useEffect(() => { fetchClients(); }, [fetchClients]);
@@ -67,7 +74,7 @@ export default function AdminClientesPage() {
     };
 
     const handleSignOut = async () => {
-        await authService.signOut();
+        await fetch("/api/auth/logout", { method: "POST" }).catch(() => { });
         window.location.href = "/login";
     };
 
@@ -228,8 +235,8 @@ export default function AdminClientesPage() {
                                             {/* Estado */}
                                             <td className="px-5 py-4 text-center">
                                                 <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black border ${client.is_blocked
-                                                        ? "text-red-400 bg-red-500/10 border-red-500/20"
-                                                        : "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+                                                    ? "text-red-400 bg-red-500/10 border-red-500/20"
+                                                    : "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
                                                     }`}>
                                                     <span className={`w-1.5 h-1.5 rounded-full ${client.is_blocked ? "bg-red-400" : "bg-emerald-400 animate-pulse"}`} />
                                                     {client.is_blocked ? "Suspendido" : "Activo"}
@@ -249,8 +256,8 @@ export default function AdminClientesPage() {
                                                         onClick={() => handleBlock(client)}
                                                         disabled={blocking === client.id}
                                                         className={`px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition-all disabled:opacity-40 ${client.is_blocked
-                                                                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 hover:bg-emerald-500/25"
-                                                                : "bg-red-500/15 text-red-400 border border-red-500/25 hover:bg-red-500/25"
+                                                            ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 hover:bg-emerald-500/25"
+                                                            : "bg-red-500/15 text-red-400 border border-red-500/25 hover:bg-red-500/25"
                                                             }`}
                                                     >
                                                         {blocking === client.id ? (
