@@ -6,6 +6,7 @@ import {
     Search, RefreshCw, ExternalLink, Calendar, Phone
 } from "lucide-react";
 import { type WaasClient } from "@/services/waas";
+import { getAuthHeaders } from "@/lib/auth-headers";
 
 const planLabels: Record<string, string> = {
     renting_basico: "Básico",
@@ -31,7 +32,8 @@ export default function AdminClientesPage() {
     const fetchClients = useCallback(async () => {
         setLoading(true);
         try {
-            const res = await fetch("/api/waas/admin/clients");
+            const headers = await getAuthHeaders();
+            const res = await fetch("/api/waas/admin/clients", { headers });
             if (res.ok) {
                 const data = await res.json();
                 setClients(data);
@@ -58,9 +60,10 @@ export default function AdminClientesPage() {
     const handleBlock = async (client: WaasClient) => {
         setBlocking(client.id);
         try {
+            const headers = await getAuthHeaders();
             const res = await fetch("/api/waas/admin/block", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", ...headers },
                 body: JSON.stringify({ clientId: client.id, block: !client.is_blocked }),
             });
             if (res.ok) {

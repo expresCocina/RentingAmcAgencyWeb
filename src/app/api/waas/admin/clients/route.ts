@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { isAdmin } from '@/lib/supabase/server-auth'
+import { verifyAdminToken } from '@/lib/supabase/server-auth'
 
 // GET /api/waas/admin/clients — lista todos los clientes (solo admin)
-export async function GET() {
+export async function GET(req: NextRequest) {
     try {
-        if (!(await isAdmin())) {
+        if (!(await verifyAdminToken(req))) {
             return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
         }
 

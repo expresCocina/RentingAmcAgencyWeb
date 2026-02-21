@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { isAdmin } from '@/lib/supabase/server-auth'
+import { verifyAdminToken } from '@/lib/supabase/server-auth'
 
 // GET /api/waas/admin/client/[id]
-export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await context.params
 
-        if (!(await isAdmin())) {
+        if (!(await verifyAdminToken(req))) {
             return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
         }
 
@@ -42,7 +42,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
     try {
         const { id } = await context.params
 
-        if (!(await isAdmin())) {
+        if (!(await verifyAdminToken(req))) {
             return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
         }
 

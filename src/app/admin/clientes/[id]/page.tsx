@@ -6,6 +6,7 @@ import {
     ShieldCheck, ShieldOff, Clock3, FileText, Save, Copy, Check
 } from "lucide-react";
 import { waasService, type WaasClient, type EmailLog } from "@/services/waas";
+import { getAuthHeaders } from "@/lib/auth-headers";
 
 const planLabels: Record<string, string> = {
     renting_basico: "Renting Básico", renting_pro: "Renting Pro", renting_elite: "Renting Élite",
@@ -26,7 +27,8 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
 
     useEffect(() => {
         (async () => {
-            const res = await fetch(`/api/waas/admin/client/${params.id}`);
+            const headers = await getAuthHeaders();
+            const res = await fetch(`/api/waas/admin/client/${params.id}`, { headers });
             if (!res.ok) { setLoading(false); return; }
             const { client: c, logs: l } = await res.json();
             setClient(c);
@@ -41,9 +43,10 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
     const handleSave = async () => {
         if (!client) return;
         setSaving(true);
+        const headers = await getAuthHeaders();
         const res = await fetch(`/api/waas/admin/client/${client.id}`, {
             method: "PATCH",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", ...headers },
             body: JSON.stringify({ notes, billing_day: billingDay, plan }),
         });
         if (res.ok) { setSaved(true); setTimeout(() => setSaved(false), 2000); }
@@ -53,9 +56,10 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
     const handleBlock = async () => {
         if (!client) return;
         setBlocking(true);
+        const headers = await getAuthHeaders();
         const res = await fetch("/api/waas/admin/block", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", ...headers },
             body: JSON.stringify({ clientId: client.id, block: !client.is_blocked }),
         });
         if (res.ok) {

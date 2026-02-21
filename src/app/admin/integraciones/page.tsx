@@ -247,6 +247,8 @@ export default function IntegracionesPage() {
                                                 [activeTab]: { ...prev[activeTab], [field.key]: e.target.value }
                                             }))}
                                             placeholder={field.placeholder}
+                                            autoComplete="off"
+                                            name={`${activeTab}_${String(field.key)}`}
                                             className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm placeholder:text-gray-700 focus:outline-none focus:border-blue-500 transition-colors font-mono"
                                         />
                                     </div>
@@ -259,7 +261,7 @@ export default function IntegracionesPage() {
                                 onClick={() => handleSave(activeTab)}
                                 disabled={saving === activeTab}
                                 className={`flex items-center gap-2 px-6 py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all ${saved === activeTab ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" :
-                                        "bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20"
+                                    "bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20"
                                     }`}
                             >
                                 {saving === activeTab ? (

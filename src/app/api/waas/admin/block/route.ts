@@ -1,21 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { waasService } from '@/services/waas';
 import { siteBlockedEmail, siteUnblockedEmail } from '@/services/email-templates';
 import { Resend } from 'resend';
+import { verifyAdminToken } from '@/lib/supabase/server-auth';
 
-// 1. Aseguramos que Resend tenga la API Key (evita crasheos si la variable no carga a tiempo)
 const resend = new Resend(process.env.RESEND_API_KEY || '');
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'contact@amcagency.com';
 
 export async function POST(req: NextRequest) {
     try {
-        // 2. Autenticación robusta (añadimos la captura del 'error' de Supabase)
-        const supabase = await createClient();
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-        if (authError || !user || user.email !== ADMIN_EMAIL) {
-            return NextResponse.json({ error: 'No autorizado o sesión expirada' }, { status: 401 });
+        if (!(await verifyAdminToken(req))) {
+            return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
         }
 
         // 3. Extracción de body con protección contra JSON vacíos
