@@ -12,8 +12,8 @@ const SOCIAL = {
     web: "https://www.facebook.com/Amcagencycol/?locale=es_LA",
   },
   instagram: {
-    app: "instagram://user?username=amcagencycol",
-    web: "https://www.instagram.com/amcagencycol/",
+    app: "instagram://user?username=amc_agencycol",
+    web: "https://www.instagram.com/amc_agencycol?igsh=MWlrNWZhb2dzdXk4Yw%3D%3D&utm_source=qr",
   },
 };
 
@@ -122,25 +122,7 @@ export const Footer = () => {
               </a>
             </div>
 
-            {/* Links de texto para SEO */}
-            <div className="mt-3 space-y-1">
-              <a
-                href={SOCIAL.facebook.web}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-xs text-gray-600 hover:text-blue-400 transition"
-              >
-                facebook.com/Amcagencycol
-              </a>
-              <a
-                href={SOCIAL.instagram.web}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-xs text-gray-600 hover:text-pink-400 transition"
-              >
-                instagram.com/amcagencycol
-              </a>
-            </div>
+
           </motion.div>
         </div>
 

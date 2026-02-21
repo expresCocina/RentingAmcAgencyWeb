@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Script from "next/script";
+import { ScrollToTop } from "@/components/marketing/ScrollToTop";
 
 const GA_ID = "G-EWKT9CG3FZ";
 const FB_PIXEL_ID = "780457111253195";
@@ -124,7 +125,10 @@ export default function RootLayout({
         className="bg-[#050505] text-white antialiased selection:bg-blue-500/30"
         suppressHydrationWarning
       >
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          {children}
+          <ScrollToTop />
+        </LanguageProvider>
       </body>
     </html>
   );
