@@ -62,9 +62,9 @@ export async function middleware(request: NextRequest) {
     // ── Redirigir si ya está logueado y va a /login o /registro ───────────
     if ((pathname === '/login' || pathname === '/registro') && user) {
         if (user.email === ADMIN_EMAIL) {
-            return redirectWithCookies(new URL('/crm', request.url)) // Te enviamos al panel WaaS
+            return redirectWithCookies(new URL('/admin', request.url)) // Admin → panel WaaS
         }
-        return redirectWithCookies(new URL('/dashboard', request.url)) // Enviamos al cliente a su panel
+        return redirectWithCookies(new URL('/dashboard', request.url)) // Cliente → su panel
     }
 
     return response
