@@ -1,16 +1,16 @@
-import { NextResponse } from 'next/server'
-import { getSessionUser } from '@/lib/supabase/server-auth'
+import { NextRequest, NextResponse } from 'next/server'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { verifyAuthToken } from '@/lib/supabase/server-auth'
 
 // GET /api/waas/my-client — devuelve el registro waas_clients del usuario autenticado
-export async function GET() {
+export async function GET(req: NextRequest) {
     try {
-        const user = await getSessionUser()
+        const user = await verifyAuthToken(req)
 
         if (!user) {
             return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
         }
 
-        const { createAdminClient } = await import('@/lib/supabase/admin')
         const supabase = createAdminClient()
 
         const { data, error } = await supabase

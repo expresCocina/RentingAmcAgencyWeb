@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { authService } from "@/services/auth";
 import { type WaasClient } from "@/services/waas";
+import { getAuthHeaders } from "@/lib/auth-headers";
 
 function StatCard({ icon, label, value, accent = false }: { icon: React.ReactNode; label: string; value: string; accent?: boolean }) {
     return (
@@ -30,8 +31,8 @@ export default function DashboardPage() {
     useEffect(() => {
         (async () => {
             try {
-                // Llamamos la API route segura en lugar de usar waasService directamente
-                const res = await fetch("/api/waas/my-client");
+                const headers = await getAuthHeaders();
+                const res = await fetch("/api/waas/my-client", { headers });
                 if (res.status === 401) {
                     window.location.href = "/login";
                     return;
