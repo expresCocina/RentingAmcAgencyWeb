@@ -3,32 +3,31 @@
 /* CONFIGURACIÓN DE FONDO CORPORATIVO */
 @layer base {
   :root {
-    /* Un fondo más rico y profundo, no solo negro plano */
-    --background-start: 10 10 15; /* Tono azul marino casi negro */
-    --background-end: 5 5 5;      /* Negro puro */
+    --background-start: 10 10 15;
+    --background-end: 5 5 5;
   }
 
   body {
     @apply antialiased text-white;
-    /* Gradiente radial sutil para dar profundidad */
     background: radial-gradient(circle at top center, rgb(var(--background-start)), rgb(var(--background-end)));
     min-height: 100vh;
   }
 
-  /* Textura de Grano Cinematográfico (Mantenemos el toque premium) */
+  /* Textura de grano cinematográfico — inline base64, sin petición HTTP externa */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
-    opacity: 0.04; /* Un poco más sutil */
+    opacity: 0.035;
     pointer-events: none;
     z-index: 9999;
-    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
     mix-blend-mode: overlay;
   }
 }
 
-/* Asegura scroll suave en todo el sitio */
+/* Scroll suave en todo el sitio */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 100px;
@@ -36,6 +35,6 @@ html {
 
 /* Color de selección de texto */
 ::selection {
-  background-color: rgba(59, 130, 246, 0.3); /* Azul sutil */
+  background-color: rgba(59, 130, 246, 0.3);
   color: white;
 }

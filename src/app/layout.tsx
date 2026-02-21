@@ -81,6 +81,15 @@ export default function RootLayout({
   return (
     <html lang="es" className="dark">
       <head>
+        {/* ─── Preconnect — Dominios externos críticos ─── */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="preconnect" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+
         {/* ─── Google Analytics ─── */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
