@@ -49,6 +49,9 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  const waMsg = encodeURIComponent('Hola, quisiera obtener información para reactivar mi sitio web. 🙏')
+  const waLink = `https://wa.me/573138537261?text=${waMsg}`
+
   const js = isBlocked
     ? `
 (function(){
@@ -63,30 +66,53 @@ export async function GET(req: NextRequest) {
   /* 2. Overlay visual — se renderiza en cuanto el DOM está listo */
   function render(){
     if(document.getElementById('__amc_block'))return;
-    /* Restaurar visibilidad para mostrar el overlay */
     var prev=document.getElementById('__amc_block_style');
     if(prev)prev.remove();
 
     var d=document.createElement('div');
     d.id='__amc_block';
-    d.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;'
-      +'background:#050505;z-index:2147483647;display:flex;flex-direction:column;'
-      +'align-items:center;justify-content:center;font-family:system-ui,sans-serif;'
-      +'color:#fff;text-align:center;padding:24px;box-sizing:border-box;visibility:visible';
-    d.innerHTML='<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#ef4444"'
-      +' stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"'
-      +' style="margin-bottom:20px;flex-shrink:0">'
-      +'<circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>'
-      +'<h1 style="font-size:22px;font-weight:900;letter-spacing:-0.5px;margin:0 0 8px">Sitio Suspendido</h1>'
-      +'<p style="color:#6b7280;font-size:14px;margin:0 0 24px;max-width:340px;line-height:1.5">'
-      +'Este sitio ha sido suspendido temporalmente por falta de pago.<br>'
-      +'Contacta con tu proveedor para reactivarlo.</p>'
-      +'<a href="mailto:contact@amcagency.com"'
-      +' style="background:#3b82f6;color:#fff;text-decoration:none;padding:10px 22px;'
-      +'border-radius:999px;font-size:13px;font-weight:700">Contactar AMC Agency</a>';
+    d.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:2147483647;'
+      +'background:linear-gradient(135deg,#0a0a0f 0%,#0f0f1a 50%,#0a0a0f 100%);'
+      +'display:flex;flex-direction:column;align-items:center;justify-content:center;'
+      +'font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;'
+      +'color:#fff;text-align:center;padding:32px;box-sizing:border-box;visibility:visible';
+    d.innerHTML=''
+      /* Logo / icono */
+      +'<div style="width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,#1e40af,#3b82f6);'
+      +'display:flex;align-items:center;justify-content:center;margin-bottom:24px;'
+      +'box-shadow:0 20px 60px rgba(59,130,246,0.3)">'
+      +'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+      +'<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>'
+      +'<path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
+      +'</div>'
+      /* Eyebrow */
+      +'<p style="font-size:11px;font-weight:700;letter-spacing:0.2em;color:#6b7280;'
+      +'text-transform:uppercase;margin:0 0 10px">AMC Agency Web</p>'
+      /* Título */
+      +'<h1 style="font-size:28px;font-weight:900;letter-spacing:-0.5px;margin:0 0 14px;'
+      +'background:linear-gradient(135deg,#fff 60%,#93c5fd);-webkit-background-clip:text;'
+      +'-webkit-text-fill-color:transparent;background-clip:text">Sitio en Pausa 🔒</h1>'
+      /* Descripción */
+      +'<p style="color:#9ca3af;font-size:15px;margin:0 0 10px;max-width:360px;line-height:1.7">'
+      +'Hola 👋 Notamos que hay un pendiente con tu plan de sitio web.<br>'
+      +'¡No te preocupes! Podemos solucionarlo muy rápido.</p>'
+      +'<p style="color:#6b7280;font-size:13px;margin:0 0 32px;max-width:320px;line-height:1.6">'
+      +'Contáctanos por WhatsApp y en minutos te reactivamos el sitio.</p>'
+      /* Botón WhatsApp */
+      +'<a href="${waLink}" target="_blank" rel="noopener"'
+      +' style="display:inline-flex;align-items:center;gap:10px;background:#25d366;color:#fff;'
+      +'text-decoration:none;padding:14px 28px;border-radius:999px;font-size:15px;font-weight:700;'
+      +'box-shadow:0 10px 40px rgba(37,211,102,0.35);letter-spacing:0.01em;'
+      +'transition:transform 0.2s"'
+      +' onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">'
+      +'<svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.304-1.654a11.882 11.882 0 0 0 5.684 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0 0 23.878 3.6 11.815 11.815 0 0 0 12.05 0zm0 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884z"/></svg>'
+      +'Hablar por WhatsApp</a>'
+      /* Footer */
+      +'<p style="color:#374151;font-size:12px;margin:28px 0 0">amcagency.com · Soporte 24/7</p>';
+
     (document.body||document.documentElement).appendChild(d);
     document.documentElement.style.overflow='hidden';
-    document.body&&(document.body.style.overflow='hidden');
+    if(document.body)document.body.style.overflow='hidden';
   }
 
   if(document.readyState==='loading'){
