@@ -44,8 +44,8 @@ export async function POST(req: NextRequest) {
 
         // 3. Insertar en waas_clients
         const cleanDomain = domain.replace(/^https?:\/\//, '').replace(/\/$/, '')
-        // plan vacío o ausente se guarda como null
-        const planValue = (plan && plan.trim() !== '') ? plan.trim() : null
+        // plan vacío o ausente se guarda como 'sin_plan' (la BD no permite null)
+        const planValue = (plan && plan.trim() !== '') ? plan.trim() : 'sin_plan'
 
         const { data: clientData, error: clientError } = await supabase
             .from('waas_clients')
