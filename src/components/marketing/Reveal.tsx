@@ -7,20 +7,21 @@ interface Props {
 }
 
 /**
- * Componente Reveal: Crea un efecto de "fade-in" y "slide-up" 
+ * Componente Reveal: Crea un efecto de "fade-in" y "slide-up"
  * cuando el elemento entra en el campo de visión del usuario.
+ * Funciona correctamente en móvil y desktop.
  */
 export const Reveal = ({ children, width = "fit-content" }: Props) => {
   return (
-    <div style={{ position: "relative", width, overflow: "hidden" }}>
+    <div style={{ position: "relative", width }}>
       <motion.div
-        initial={{ opacity: 0, y: 75 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }} // La animación solo ocurre una vez al bajar
-        transition={{ 
-          duration: 0.5, 
-          delay: 0.25,
-          ease: "easeOut" 
+        viewport={{ once: true, amount: 0.05 }}
+        transition={{
+          duration: 0.5,
+          delay: 0.1,
+          ease: "easeOut"
         }}
       >
         {children}
