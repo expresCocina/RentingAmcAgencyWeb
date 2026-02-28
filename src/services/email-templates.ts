@@ -24,7 +24,7 @@ const logoHtml = `
 const footerHtml = `
   <div style="margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);text-align:center;">
     <p style="color:#4b5563;font-size:11px;margin:0;">
-      AMC Agency · amcagencyweb.com · contact@amcagencyweb.com
+      AMC Agency · amcagencyweb.com · contacto@amcagencyweb.com
     </p>
     <p style="color:#4b5563;font-size:10px;margin:6px 0 0;">
       Este email fue enviado automáticamente. No responder.
@@ -54,12 +54,12 @@ export function welcomeEmail(data: { businessName: string; repName: string; doma
         <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">🌐 <strong>Dominio:</strong> ${data.domain}</p>
         <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">📦 <strong>Plan:</strong> ${data.plan}</p>
       </div>
-      <a href="https://amcagencyweb.com/dashboard" style="display:block;text-align:center;background:#3b82f6;color:#fff;font-weight:800;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;padding:16px 32px;border-radius:100px;text-decoration:none;transition:all 0.2s;">
+      <a href="https://amcagencyweb.com/dashboard" style="display:block;text-align:center;background:#3b82f6;color:#fff;font-weight:800;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;padding:16px 32px;border-radius:100px;text-decoration:none;">
         Ver mi Dashboard →
       </a>
     </div>
     <div style="margin-top:20px;text-align:center;">
-      <p style="color:#6b7280;font-size:13px;">¿Necesitas ayuda? <a href="https://wa.me/573001234567" style="color:#3b82f6;text-decoration:none;">Escríbenos por WhatsApp</a></p>
+      <p style="color:#6b7280;font-size:13px;">¿Necesitas ayuda? <a href="https://wa.me/573138537261" style="color:#3b82f6;">Escríbenos por WhatsApp</a></p>
     </div>
     ${footerHtml}
   </div>
@@ -121,7 +121,7 @@ export function siteBlockedEmail(data: { businessName: string; repName: string; 
         <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">✅ Realiza tu pago pendiente</p>
         <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">📞 Contáctanos y reactivamos en minutos</p>
       </div>
-      <a href="https://wa.me/573001234567?text=Hola%2C%20quiero%20reactivar%20mi%20sitio%20${data.domain}" style="display:block;text-align:center;background:#ef4444;color:#fff;font-weight:900;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;padding:16px 32px;border-radius:100px;text-decoration:none;">
+      <a href="https://wa.me/573138537261?text=Hola%2C%20quiero%20reactivar%20mi%20sitio%20${data.domain}" style="display:block;text-align:center;background:#ef4444;color:#fff;font-weight:900;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;padding:16px 32px;border-radius:100px;text-decoration:none;">
         Reactivar Ahora →
       </a>
     </div>
@@ -150,6 +150,90 @@ export function siteUnblockedEmail(data: { businessName: string; repName: string
       <a href="https://${data.domain}" style="display:block;text-align:center;background:#10b981;color:#fff;font-weight:900;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;padding:16px 32px;border-radius:100px;text-decoration:none;">
         Ver mi sitio web →
       </a>
+    </div>
+    ${footerHtml}
+  </div>
+</body>
+</html>`
+}
+
+// ─── PLANTILLA: Notificación al ADMIN cuando llega un nuevo lead ─────────────
+export function newLeadAdminEmail(data: {
+  name: string
+  email: string | null
+  phone: string | null
+  service: string | null
+  message: string | null
+  source: string
+}): string {
+  const fecha = new Date().toLocaleString('es-CO', {
+    timeZone: 'America/Bogota',
+    dateStyle: 'full',
+    timeStyle: 'short',
+  })
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="${BASE_STYLE}">
+  <div style="${containerStyle}">
+    ${logoHtml}
+    <div style="background:linear-gradient(135deg,rgba(59,130,246,0.15),rgba(99,102,241,0.08));border:1px solid rgba(59,130,246,0.3);border-radius:20px;padding:32px;">
+      <p style="font-size:11px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#3b82f6;margin:0 0 10px;">🔔 Nuevo Lead Recibido</p>
+      <h1 style="font-size:24px;font-weight:900;color:#fff;margin:0 0 20px;line-height:1.2;">${data.name} quiere saber más</h1>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;margin-bottom:20px;">
+        <p style="margin:0 0 8px;font-size:11px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">Datos del prospecto</p>
+        <p style="margin:6px 0;color:#e5e7eb;font-size:14px;">👤 <strong>Nombre:</strong> ${data.name}</p>
+        ${data.email ? `<p style="margin:6px 0;color:#e5e7eb;font-size:14px;">📧 <strong>Email:</strong> <a href="mailto:${data.email}" style="color:#3b82f6;">${data.email}</a></p>` : ''}
+        ${data.phone ? `<p style="margin:6px 0;color:#e5e7eb;font-size:14px;">📱 <strong>WhatsApp:</strong> <a href="https://wa.me/${data.phone.replace(/\D/g, '')}" style="color:#25d366;">${data.phone}</a></p>` : ''}
+        ${data.service ? `<p style="margin:6px 0;color:#e5e7eb;font-size:14px;">📦 <strong>Servicio:</strong> ${data.service}</p>` : ''}
+        ${data.message ? `<p style="margin:6px 0;color:#e5e7eb;font-size:14px;">💬 <strong>Mensaje:</strong><br><span style="color:#9ca3af;">${data.message}</span></p>` : ''}
+        <p style="margin:10px 0 0;color:#6b7280;font-size:11px;">🕐 ${fecha} · Origen: ${data.source}</p>
+      </div>
+      <a href="https://amcagencyweb.com/admin/leads" style="display:block;text-align:center;background:#3b82f6;color:#fff;font-weight:800;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;padding:14px 28px;border-radius:100px;text-decoration:none;">Ver en Panel Admin →</a>
+    </div>
+    ${footerHtml}
+  </div>
+</body>
+</html>`
+}
+
+// ─── PLANTILLA: Confirmación al PROSPECTO que envió el formulario ─────────────
+export function leadConfirmationEmail(data: {
+  name: string
+  service: string | null
+  message: string | null
+}): string {
+  const servicioTexto = data.service
+    ? `Hemos recibido tu solicitud sobre <strong style="color:#fff;">${data.service}</strong>.`
+    : 'Hemos recibido tu mensaje con éxito.'
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="${BASE_STYLE}">
+  <div style="${containerStyle}">
+    ${logoHtml}
+    <div style="background:linear-gradient(135deg,rgba(59,130,246,0.12),rgba(99,102,241,0.06));border:1px solid rgba(59,130,246,0.2);border-radius:20px;padding:32px;">
+      <p style="font-size:11px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#3b82f6;margin:0 0 10px;">✅ Solicitud Recibida</p>
+      <h1 style="font-size:26px;font-weight:900;color:#fff;margin:0 0 16px;line-height:1.2;">
+        ¡Gracias, <span style="color:#3b82f6;">${data.name}!</span> 🚀
+      </h1>
+      <p style="color:#9ca3af;font-size:15px;line-height:1.7;margin:0 0 20px;">
+        ${servicioTexto} Un estratega de <strong style="color:#fff;">AMC Agency</strong> revisará tu caso y se pondrá en contacto contigo en las próximas <strong style="color:#fff;">24 horas hábiles</strong>.
+      </p>
+      ${data.message ? `
+      <div style="background:rgba(255,255,255,0.04);border-left:3px solid #3b82f6;border-radius:0 10px 10px 0;padding:16px 20px;margin-bottom:24px;">
+        <p style="margin:0;font-size:11px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;">Tu mensaje</p>
+        <p style="margin:8px 0 0;color:#d1d5db;font-size:14px;line-height:1.6;">${data.message}</p>
+      </div>` : ''}
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px;margin-bottom:24px;">
+        <p style="margin:0 0 10px;font-size:12px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;">¿Necesitas respuesta inmediata?</p>
+        <a href="https://wa.me/573138537261?text=Hola!%20Acabo%20de%20enviar%20mi%20solicitud%20en%20amcagencyweb.com%20y%20quisiera%20m%C3%A1s%20informaci%C3%B3n." style="display:inline-flex;align-items:center;gap:8px;background:#25d366;color:#fff;font-weight:800;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:12px 24px;border-radius:100px;text-decoration:none;">💬 Escríbenos por WhatsApp</a>
+      </div>
+    </div>
+    <div style="margin-top:20px;text-align:center;">
+      <p style="color:#6b7280;font-size:12px;">Conoce más en <a href="https://amcagencyweb.com" style="color:#3b82f6;">amcagencyweb.com</a></p>
     </div>
     ${footerHtml}
   </div>

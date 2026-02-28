@@ -1,13 +1,14 @@
 "use server";
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
+import { Resend } from "resend";
+import { newLeadAdminEmail, leadConfirmationEmail } from "./email-templates";
 
-/**
- * Extrae un número de teléfono de un texto si existe.
- * Funciona con formatos como +57 300..., 300..., (300)..., etc.
- */
+const resend = new Resend(process.env.RESEND_API_KEY);
+const ADMIN_EMAIL = "salcristhi5411@gmail.com";
+const FROM_EMAIL = "AMC Agency <notificaciones@amcagencyweb.com>";
+
 function extractPhone(text: string): string | null {
   const match = text.match(/(\+?\d[\d\s\-().]{7,}\d)/);
   return match?.[1] ? match[1].replace(/\s+/g, " ").trim() : null;
@@ -15,28 +16,26 @@ function extractPhone(text: string): string | null {
 
 /**
  * captureLead: Server Action que captura leads del sitio web.
- * Todos los formularios (ContactForm, Pricing, renting-tecnologico, etc.)
- * llaman a esta función → los datos llegan a /admin/leads
+ * 1. Guarda en Supabase waas_leads
+ * 2. Envía email al admin con todos los datos
+ * 3. Envía email de confirmación al prospecto
  */
 export async function captureLead(formData: FormData) {
   const name = (formData.get("name") as string)?.trim();
   const email = (formData.get("email") as string)?.trim();
   const service = (formData.get("service") as string)?.trim() || null;
   const message = (formData.get("message") as string)?.trim() || null;
-  // Algunos formularios pasan el teléfono en un campo separado
   const phoneField = (formData.get("phone") as string)?.trim() || null;
 
   if (!name || !email) {
     return { success: false, message: "Nombre y Email son obligatorios." };
   }
 
-  // Si no viene phone explícito, intentamos extraerlo del mensaje
   const phone = phoneField ?? (message ? extractPhone(message) : null);
 
-  // Identificar el origen según el servicio
   let source = "website_form";
   if (service?.includes("[VIP APP]")) source = "pricing_vip";
-  else if (service?.includes("renting") || service?.toLowerCase().includes("renting")) source = "renting_page";
+  else if (service?.toLowerCase().includes("renting")) source = "renting_page";
 
   try {
     const supabase = createAdminClient();
@@ -52,11 +51,34 @@ export async function captureLead(formData: FormData) {
     });
 
     if (error) {
-      console.error("[captureLead] Supabase error:", error.message, error.details);
+      console.error("[captureLead] Supabase error:", error.message);
       return { success: false, message: "Error técnico al guardar el lead." };
     }
 
-    // Actualizar el panel de admin
+    // ── Emails en paralelo (no bloqueamos la respuesta si fallan) ──
+    Promise.allSettled([
+      // 1. Notificación al admin
+      resend.emails.send({
+        from: FROM_EMAIL,
+        to: ADMIN_EMAIL,
+        subject: `🔔 Nuevo Lead: ${name}`,
+        html: newLeadAdminEmail({ name, email, phone, service, message, source }),
+      }),
+      // 2. Confirmación al prospecto
+      resend.emails.send({
+        from: FROM_EMAIL,
+        to: email,
+        subject: "Recibimos tu solicitud — AMC Agency",
+        html: leadConfirmationEmail({ name, service, message }),
+      }),
+    ]).then((results) => {
+      results.forEach((r, i) => {
+        if (r.status === "rejected") {
+          console.error(`[captureLead] Email ${i} falló:`, r.reason);
+        }
+      });
+    });
+
     revalidatePath("/admin/leads");
     revalidatePath("/admin/metricas");
 
