@@ -15,6 +15,29 @@ const nextConfig = {
     minimumCacheTTL: 86400, // 24h caché de imágenes procesadas
   },
 
+  // ── Redirects para rutas del proyecto anterior ─────────────────────────
+  async redirects() {
+    return [
+      // El redirect de email de Supabase del proyecto viejo
+      {
+        source: '/capig/autoconfig',
+        destination: '/auth/confirm',
+        permanent: false,
+      },
+      {
+        source: '/capig/:path*',
+        destination: '/login',
+        permanent: false,
+      },
+      // Rutas de auth antiguas
+      {
+        source: '/auth/callback',
+        destination: '/auth/confirm',
+        permanent: false,
+      },
+    ]
+  },
+
   // ── Headers de caché HTTP para activos estáticos ──
   async headers() {
     return [
