@@ -18,7 +18,40 @@ const nextConfig = {
   // ── Redirects para rutas del proyecto anterior ─────────────────────────
   async redirects() {
     return [
-      // El redirect de email de Supabase del proyecto viejo
+      // ── Rutas del proyecto ANTERIOR indexadas por Google ────────────────
+      // 301 = permanente, le dice a Google que actualice el índice
+      {
+        source: '/gratis',
+        destination: '/#contacto',
+        permanent: true,
+      },
+      {
+        source: '/blog',
+        destination: '/empresa/blog',
+        permanent: true,
+      },
+      {
+        source: '/planes',
+        destination: '/#renting',
+        permanent: true,
+      },
+      {
+        source: '/precios',
+        destination: '/#renting',
+        permanent: true,
+      },
+      {
+        source: '/servicios',
+        destination: '/#servicios',
+        permanent: true,
+      },
+      {
+        source: '/contacto',
+        destination: '/#contacto',
+        permanent: true,
+      },
+
+      // ── Rutas de auth del proyecto anterior ─────────────────────────────
       {
         source: '/capig/autoconfig',
         destination: '/auth/confirm',
@@ -29,7 +62,6 @@ const nextConfig = {
         destination: '/login',
         permanent: false,
       },
-      // Rutas de auth antiguas
       {
         source: '/auth/callback',
         destination: '/auth/confirm',
