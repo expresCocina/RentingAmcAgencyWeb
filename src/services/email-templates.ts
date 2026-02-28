@@ -76,22 +76,36 @@ export function paymentReminderEmail(data: { businessName: string; repName: stri
   <div style="${containerStyle}">
     ${logoHtml}
     <div style="background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(234,88,12,0.08));border:1px solid rgba(245,158,11,0.3);border-radius:20px;padding:32px;">
-      <p style="font-size:12px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#f59e0b;margin:0 0 12px;">Recordatorio de Pago</p>
+      <p style="font-size:12px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#f59e0b;margin:0 0 12px;">⏰ Recordatorio de Pago</p>
       <h1 style="font-size:26px;font-weight:900;color:#fff;margin:0 0 16px;line-height:1.2;">
-        Tu pago vence en <span style="color:#f59e0b;">${data.daysLeft} días</span> ⏰
+        Tu pago vence en <span style="color:#f59e0b;">${data.daysLeft} ${data.daysLeft === 1 ? 'día' : 'días'}</span>
       </h1>
       <p style="color:#9ca3af;font-size:15px;line-height:1.6;margin:0 0 24px;">
-        Hola <strong style="color:#fff;">${data.repName}</strong>, te recordamos que el servicio de <strong style="color:#fff;">${data.businessName}</strong> vence el <strong style="color:#f59e0b;">${data.paymentDate}</strong>.
+        Hola <strong style="color:#fff;">${data.repName}</strong>, te recordamos que el servicio de <strong style="color:#fff;">${data.businessName}</strong> vence el <strong style="color:#f59e0b;">${data.paymentDate}</strong>. Realiza tu pago a tiempo para evitar la suspensión de tu sitio.
       </p>
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;margin-bottom:24px;">
-        <p style="margin:0 0 8px;font-size:12px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">Recuerda que si no pagas a tiempo</p>
-        <p style="margin:4px 0;color:#fbbf24;font-size:14px;">⚠️ Tu sitio web será suspendido automáticamente</p>
-        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">🌐 Dominio: ${data.domain}</p>
-        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">📅 Fecha de corte: ${data.paymentDate}</p>
+
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;margin-bottom:28px;">
+        <p style="margin:0 0 8px;font-size:11px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">Detalles del servicio</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">🌐 <strong>Dominio:</strong> ${data.domain}</p>
+        <p style="margin:4px 0;color:#fbbf24;font-size:14px;">📅 <strong>Fecha límite de pago:</strong> ${data.paymentDate}</p>
+        <p style="margin:4px 0;color:#fca5a5;font-size:14px;">⚠️ Si no pagas, tu sitio será suspendido automáticamente</p>
       </div>
-      <a href="https://amcagencyweb.com/dashboard" style="display:block;text-align:center;background:#f59e0b;color:#000;font-weight:900;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;padding:16px 32px;border-radius:100px;text-decoration:none;">
-        Realizar Pago →
+
+      <!-- BOTÓN PAGO PRINCIPAL -->
+      <a href="https://checkout.nequi.wompi.co/l/NzE29a"
+         style="display:block;text-align:center;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-weight:900;font-size:14px;letter-spacing:0.15em;text-transform:uppercase;padding:18px 32px;border-radius:100px;text-decoration:none;margin-bottom:14px;box-shadow:0 8px 24px rgba(245,158,11,0.35);">
+        💳 Pagar Ahora con Nequi / Wompi
       </a>
+
+      <!-- BOTÓN SECUNDARIO DASHBOARD -->
+      <a href="https://amcagencyweb.com/dashboard"
+         style="display:block;text-align:center;background:rgba(255,255,255,0.07);color:#d1d5db;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:13px 28px;border-radius:100px;text-decoration:none;border:1px solid rgba(255,255,255,0.12);">
+        Ver mi Panel →
+      </a>
+    </div>
+
+    <div style="margin-top:20px;text-align:center;">
+      <p style="color:#6b7280;font-size:12px;">¿Tienes dudas sobre tu pago? <a href="https://wa.me/573138537261?text=Hola!%20Tengo%20una%20duda%20sobre%20mi%20pago" style="color:#25d366;">Escríbenos por WhatsApp</a></p>
     </div>
     ${footerHtml}
   </div>
@@ -108,21 +122,30 @@ export function siteBlockedEmail(data: { businessName: string; repName: string; 
   <div style="${containerStyle}">
     ${logoHtml}
     <div style="background:linear-gradient(135deg,rgba(239,68,68,0.15),rgba(220,38,38,0.08));border:1px solid rgba(239,68,68,0.3);border-radius:20px;padding:32px;">
-      <p style="font-size:12px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#ef4444;margin:0 0 12px;">Sitio Suspendido</p>
+      <p style="font-size:12px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#ef4444;margin:0 0 12px;">🔒 Sitio Suspendido</p>
       <h1 style="font-size:26px;font-weight:900;color:#fff;margin:0 0 16px;line-height:1.2;">
-        Tu sitio ha sido <span style="color:#ef4444;">suspendido</span> 🔒
+        Tu sitio ha sido <span style="color:#ef4444;">suspendido</span> temporalmente
       </h1>
       <p style="color:#9ca3af;font-size:15px;line-height:1.6;margin:0 0 24px;">
-        Hola <strong style="color:#fff;">${data.repName}</strong>, lamentamos informarte que el sitio web de <strong style="color:#fff;">${data.businessName}</strong> ha sido suspendido por falta de pago.
+        Hola <strong style="color:#fff;">${data.repName}</strong>, el sitio web de <strong style="color:#fff;">${data.businessName}</strong> ha sido suspendido por falta de pago. <strong style="color:#fca5a5;">Tu sitio se reactivará automáticamente</strong> en minutos después de confirmar tu pago.
       </p>
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;margin-bottom:24px;">
-        <p style="margin:0 0 8px;font-size:12px;color:#6b7280;font-weight:700;text-transform:uppercase;">Para reactivar tu sitio</p>
-        <p style="margin:4px 0;color:#fca5a5;font-size:14px;">🌐 Dominio afectado: ${data.domain}</p>
-        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">✅ Realiza tu pago pendiente</p>
-        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">📞 Contáctanos y reactivamos en minutos</p>
+
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;margin-bottom:28px;">
+        <p style="margin:0 0 8px;font-size:11px;color:#6b7280;font-weight:700;text-transform:uppercase;">Detalles</p>
+        <p style="margin:4px 0;color:#fca5a5;font-size:14px;">🌐 Dominio suspendido: ${data.domain}</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">✅ Al pagar, notifícanos por WhatsApp para reactivación inmediata</p>
       </div>
-      <a href="https://wa.me/573138537261?text=Hola%2C%20quiero%20reactivar%20mi%20sitio%20${data.domain}" style="display:block;text-align:center;background:#ef4444;color:#fff;font-weight:900;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;padding:16px 32px;border-radius:100px;text-decoration:none;">
-        Reactivar Ahora →
+
+      <!-- BOTÓN PAGO PRINCIPAL -->
+      <a href="https://checkout.nequi.wompi.co/l/NzE29a"
+         style="display:block;text-align:center;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-weight:900;font-size:14px;letter-spacing:0.15em;text-transform:uppercase;padding:18px 32px;border-radius:100px;text-decoration:none;margin-bottom:14px;box-shadow:0 8px 24px rgba(239,68,68,0.4);">
+        💳 Pagar Ahora — Reactivar Sitio
+      </a>
+
+      <!-- BOTÓN WHATSAPP -->
+      <a href="https://wa.me/573138537261?text=Hola!%20Acabo%20de%20realizar%20el%20pago%20de%20${encodeURIComponent(data.businessName)}%20y%20necesito%20reactivar%20mi%20sitio%20${encodeURIComponent(data.domain)}"
+         style="display:block;text-align:center;background:#25d366;color:#fff;font-weight:800;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:13px 28px;border-radius:100px;text-decoration:none;">
+        💬 Notificar Pago por WhatsApp
       </a>
     </div>
     ${footerHtml}
