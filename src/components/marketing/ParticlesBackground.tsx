@@ -2,6 +2,7 @@
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { usePathname } from "next/navigation";
 
 // ── Nube de partículas conectadas ───────────────────────────────────
 function ParticleCloud() {
@@ -13,7 +14,6 @@ function ParticleCloud() {
         const colors = new Float32Array(COUNT * 3);
 
         for (let i = 0; i < COUNT; i++) {
-            // Distribuir en una esfera grande
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.acos(2 * Math.random() - 1);
             const r = 8 + Math.random() * 12;
@@ -22,14 +22,13 @@ function ParticleCloud() {
             positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta) * 0.5;
             positions[i * 3 + 2] = r * Math.cos(phi);
 
-            // Colores: mezcla de azul / índigo / blanco
             const t = Math.random();
             if (t < 0.5) {
-                colors[i * 3] = 0.23; colors[i * 3 + 1] = 0.51; colors[i * 3 + 2] = 0.98; // blue-500
+                colors[i * 3] = 0.23; colors[i * 3 + 1] = 0.51; colors[i * 3 + 2] = 0.98;
             } else if (t < 0.8) {
-                colors[i * 3] = 0.39; colors[i * 3 + 1] = 0.40; colors[i * 3 + 2] = 0.95; // indigo-500
+                colors[i * 3] = 0.39; colors[i * 3 + 1] = 0.40; colors[i * 3 + 2] = 0.95;
             } else {
-                colors[i * 3] = 0.7; colors[i * 3 + 1] = 0.8; colors[i * 3 + 2] = 1.0;   // blanco azulado
+                colors[i * 3] = 0.7; colors[i * 3 + 1] = 0.8; colors[i * 3 + 2] = 1.0;
             }
         }
         return { positions, colors };
@@ -44,39 +43,37 @@ function ParticleCloud() {
     return (
         <points ref={pointsRef}>
             <bufferGeometry>
-                <bufferAttribute
-                    attach="attributes-position"
-                    args={[positions, 3]}
-                />
-                <bufferAttribute
-                    attach="attributes-color"
-                    args={[colors, 3]}
-                />
+                <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+                <bufferAttribute attach="attributes-color" args={[colors, 3]} />
             </bufferGeometry>
-            <pointsMaterial
-                size={0.06}
-                vertexColors
-                transparent
-                opacity={0.7}
-                sizeAttenuation
-            />
+            <pointsMaterial size={0.06} vertexColors transparent opacity={0.7} sizeAttenuation />
         </points>
     );
 }
 
 // ── Componente exportado ─────────────────────────────────────────────
 export function ParticlesBackground() {
+    const pathname = usePathname();
+
+    // No mostrar en admin, dashboard, login o registro (interfieren con clicks)
+    const isAppRoute = pathname.startsWith('/admin') ||
+        pathname.startsWith('/dashboard') ||
+        pathname.startsWith('/login') ||
+        pathname.startsWith('/registro');
+
+    if (isAppRoute) return null;
+
     return (
         <div
-            className="fixed inset-0 pointer-events-none"
-            style={{ zIndex: 0 }}
+            className="fixed inset-0"
+            style={{ zIndex: 0, pointerEvents: 'none' }}
             aria-hidden="true"
         >
             <Canvas
                 camera={{ position: [0, 0, 1], fov: 75 }}
                 dpr={[1, 1.2]}
                 gl={{ antialias: false, alpha: true }}
-                style={{ background: "transparent" }}
+                style={{ background: "transparent", pointerEvents: "none" }}
             >
                 <ambientLight intensity={1} />
                 <ParticleCloud />
