@@ -263,3 +263,75 @@ export function leadConfirmationEmail(data: {
 </body>
 </html>`
 }
+
+// ── Email al usuario que solicitó el descuento ───────────────────────────────
+export function discountUserEmail(data: { name: string; email: string }): string {
+  return `
+<!DOCTYPE html><html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="${BASE_STYLE}">
+  <div style="${containerStyle}">
+    ${logoHtml}
+    <div style="background:linear-gradient(135deg,rgba(59,130,246,0.15),rgba(99,102,241,0.1));border:1px solid rgba(59,130,246,0.3);border-radius:24px;padding:36px;">
+      <p style="font-size:12px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#3b82f6;margin:0 0 12px;">🎁 Tu Código de Descuento</p>
+      <h1 style="font-size:28px;font-weight:900;color:#fff;margin:0 0 14px;line-height:1.2;">
+        ¡Hola <span style="color:#3b82f6;">${data.name}</span>! Tu 20% OFF está listo
+      </h1>
+      <p style="color:#9ca3af;font-size:15px;line-height:1.7;margin:0 0 26px;">
+        Gracias por suscribirte. Aquí está tu código exclusivo para obtener <strong style="color:#fff;">20% de descuento</strong> en cualquier plan de renting web.
+      </p>
+      <div style="background:rgba(59,130,246,0.1);border:2px dashed rgba(59,130,246,0.5);border-radius:18px;padding:28px;text-align:center;margin-bottom:26px;">
+        <p style="margin:0 0 6px;font-size:11px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;">Tu código exclusivo</p>
+        <p style="margin:0;font-size:48px;font-weight:900;letter-spacing:0.35em;color:#60a5fa;">AMC20</p>
+        <p style="margin:10px 0 0;font-size:12px;color:#4b5563;">Válido por 24 horas · Aplica a cualquier plan</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;margin-bottom:26px;">
+        <p style="margin:0 0 10px;font-size:12px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">¿Cómo usar tu descuento?</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">1️⃣ Lige tu plan en amcagencyweb.com</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">2️⃣ Contáctanos por WhatsApp</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">3️⃣ Menciona el código <strong style="color:#60a5fa;">AMC20</strong> al contratar</p>
+        <p style="margin:4px 0;color:#fbbf24;font-size:14px;">4️⃣ ¡Obtienes el 20% OFF en tu primer mes!</p>
+      </div>
+      <a href="https://amcagencyweb.com/#renting" style="display:block;text-align:center;background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;font-weight:900;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;padding:18px 32px;border-radius:100px;text-decoration:none;margin-bottom:12px;box-shadow:0 8px 24px rgba(59,130,246,0.3);">
+        🚀 Ver Planes y Precios →
+      </a>
+      <a href="https://wa.me/573138537261?text=Hola!%20Tengo%20el%20c%C3%B3digo%20AMC20%20y%20quiero%20contratar%20mi%20plan%20con%2020%25%20descuento" style="display:block;text-align:center;background:#25d366;color:#fff;font-weight:800;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:13px 28px;border-radius:100px;text-decoration:none;">
+        💬 Contratar por WhatsApp con Descuento
+      </a>
+    </div>
+    ${footerHtml}
+  </div>
+</body></html>`
+}
+
+// ── Email al admin cuando alguien solicita el descuento ─────────────────────
+export function discountAdminEmail(data: { name: string; email: string }): string {
+  return `
+<!DOCTYPE html><html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="${BASE_STYLE}">
+  <div style="${containerStyle}">
+    ${logoHtml}
+    <div style="background:linear-gradient(135deg,rgba(16,185,129,0.12),rgba(5,150,105,0.06));border:1px solid rgba(16,185,129,0.25);border-radius:20px;padding:32px;">
+      <p style="font-size:12px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#10b981;margin:0 0 12px;">🎯 Nuevo Lead — Popup Descuento 20%</p>
+      <h1 style="font-size:22px;font-weight:900;color:#fff;margin:0 0 14px;line-height:1.2;">
+        Alguien reclamó el código <span style="color:#10b981;">AMC20</span>
+      </h1>
+      <p style="color:#9ca3af;font-size:14px;line-height:1.6;margin:0 0 22px;">
+        Un visitante se suscribió por el popup de descuento. Ya tiene el código y podría contactarte para contratar.
+      </p>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;margin-bottom:22px;">
+        <p style="margin:0 0 8px;font-size:11px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">Datos del prospecto</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">👤 <strong>Nombre:</strong> ${data.name}</p>
+        <p style="margin:4px 0;color:#e5e7eb;font-size:14px;">📧 <strong>Email:</strong> <a href="mailto:${data.email}" style="color:#60a5fa;">${data.email}</a></p>
+        <p style="margin:4px 0;color:#fbbf24;font-size:14px;">🏷️ <strong>Código entregado:</strong> AMC20 (−20% primer mes)</p>
+        <p style="margin:4px 0;color:#34d399;font-size:14px;">📍 <strong>Fuente:</strong> Popup de descuento</p>
+      </div>
+      <a href="https://amcagencyweb.com/admin/leads" style="display:block;text-align:center;background:#10b981;color:#fff;font-weight:900;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;border-radius:100px;text-decoration:none;">
+        Ver en Panel de Leads →
+      </a>
+    </div>
+    ${footerHtml}
+  </div>
+</body></html>`
+}

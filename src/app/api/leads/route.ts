@@ -2,7 +2,12 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { Resend } from 'resend'
 import crypto from 'crypto'
-import { newLeadAdminEmail, leadConfirmationEmail } from '@/services/email-templates'
+import {
+    newLeadAdminEmail,
+    leadConfirmationEmail,
+    discountAdminEmail,
+    discountUserEmail,
+} from '@/services/email-templates'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const ADMIN_EMAIL = 'salcristhi5411@gmail.com'
@@ -54,7 +59,8 @@ async function fireFbLeadEvent(email: string | null, phone: string | null) {
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json()
-        const { name, email, phone, service, message } = body
+        const { name, email, phone, service, message, source } = body
+        const isDiscountPopup = String(source ?? '').trim() === 'discount_popup'
 
         if (!name) {
             return NextResponse.json({ error: 'El nombre es requerido' }, { status: 400 })
@@ -67,7 +73,7 @@ export async function POST(req: NextRequest) {
             phone: phone ? String(phone).slice(0, 50) : null,
             service: service ? String(service).slice(0, 100) : null,
             message: message ? String(message).slice(0, 2000) : null,
-            source: 'website_form',
+            source: isDiscountPopup ? 'discount_popup' : String(source ?? 'website_form'),
             status: 'new',
         })
 
@@ -78,19 +84,23 @@ export async function POST(req: NextRequest) {
 
         // ── Disparar en paralelo: emails + CAPI ──────────────────────────────
         const tasks = [
-            // 1. Notificación admin
+            // 1. Email al admin (discount-specific o genérico)
             resend.emails.send({
                 from: FROM_EMAIL,
                 to: ADMIN_EMAIL,
-                subject: `🔔 Nuevo Lead: ${name}`,
-                html: newLeadAdminEmail({
-                    name: String(name),
-                    email: email ? String(email) : null,
-                    phone: phone ? String(phone) : null,
-                    service: service ? String(service) : null,
-                    message: message ? String(message) : null,
-                    source: 'website_form',
-                }),
+                subject: isDiscountPopup
+                    ? `🏷️ Nuevo lead con código AMC20: ${name}`
+                    : `🔔 Nuevo Lead: ${name}`,
+                html: isDiscountPopup
+                    ? discountAdminEmail({ name: String(name), email: String(email ?? name) })
+                    : newLeadAdminEmail({
+                        name: String(name),
+                        email: email ? String(email) : null,
+                        phone: phone ? String(phone) : null,
+                        service: service ? String(service) : null,
+                        message: message ? String(message) : null,
+                        source: String(source ?? 'website_form'),
+                    }),
             }),
             // 2. Facebook CAPI
             fireFbLeadEvent(email ? String(email) : null, phone ? String(phone) : null),
@@ -101,12 +111,16 @@ export async function POST(req: NextRequest) {
                 resend.emails.send({
                     from: FROM_EMAIL,
                     to: String(email),
-                    subject: 'Recibimos tu solicitud — AMC Agency',
-                    html: leadConfirmationEmail({
-                        name: String(name),
-                        service: service ? String(service) : null,
-                        message: message ? String(message) : null,
-                    }),
+                    subject: isDiscountPopup
+                        ? '🎁 Tu código de descuento 20% — AMC Agency'
+                        : 'Recibimos tu solicitud — AMC Agency',
+                    html: isDiscountPopup
+                        ? discountUserEmail({ name: String(name), email: String(email) })
+                        : leadConfirmationEmail({
+                            name: String(name),
+                            service: service ? String(service) : null,
+                            message: message ? String(message) : null,
+                        }),
                 })
             )
         }
