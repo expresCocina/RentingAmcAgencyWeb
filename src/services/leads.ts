@@ -116,30 +116,24 @@ export async function captureLead(formData: FormData) {
       return { success: false, message: "Error técnico al guardar el lead." };
     }
 
-    // ── Disparar en paralelo: emails + Facebook CAPI ──────────────────────
-    Promise.allSettled([
-      // 1. Email al admin
+    // ── Emails + Facebook CAPI en paralelo (esperamos para no perder el contexto) ──
+    const results = await Promise.allSettled([
       resend.emails.send({
         from: FROM_EMAIL,
         to: ADMIN_EMAIL,
         subject: `🔔 Nuevo Lead: ${name}`,
         html: newLeadAdminEmail({ name, email, phone, service, message, source }),
       }),
-      // 2. Confirmación al prospecto
       resend.emails.send({
         from: FROM_EMAIL,
         to: email,
         subject: "Recibimos tu solicitud — AMC Agency",
         html: leadConfirmationEmail({ name, service, message }),
       }),
-      // 3. Evento Lead → Facebook CAPI
       fireFbLeadEvent({ email, phone, sourceUrl }),
-    ]).then((results) => {
-      results.forEach((r, i) => {
-        if (r.status === "rejected") {
-          console.error(`[captureLead] Task ${i} falló:`, r.reason);
-        }
-      });
+    ]);
+    results.forEach((r, i) => {
+      if (r.status === "rejected") console.error(`[captureLead] task ${i} falló:`, r.reason);
     });
 
     revalidatePath("/admin/leads");

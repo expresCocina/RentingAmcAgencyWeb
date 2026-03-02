@@ -125,7 +125,11 @@ export async function POST(req: NextRequest) {
             )
         }
 
-        Promise.allSettled(tasks).catch((e) => console.error('[api/leads tasks]', e))
+        const results = await Promise.allSettled(tasks)
+        results.forEach((r, i) => {
+            if (r.status === 'rejected') console.error(`[api/leads] task ${i} falló:`, r.reason)
+            else if (r.status === 'fulfilled') console.log(`[api/leads] task ${i} OK`)
+        })
 
         return NextResponse.json({ ok: true }, { status: 201 })
     } catch (err) {
