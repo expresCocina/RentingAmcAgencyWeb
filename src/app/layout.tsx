@@ -4,6 +4,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import Script from "next/script";
 import { ScrollToTop } from "@/components/marketing/ScrollToTop";
 import { WhatsAppButton } from "@/components/marketing/WhatsAppButton";
+import { ParticlesWrapper } from "@/components/marketing/ParticlesWrapper";
 
 const GA_ID = "G-EWKT9CG3FZ";
 const FB_PIXEL_ID = "780457111253195";
@@ -136,6 +137,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <LanguageProvider>
+          <ParticlesWrapper />
           {children}
           <ScrollToTop />
           <WhatsAppButton />

@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import {
     TrendingUp, Users, ShieldCheck, ShieldOff,
     CreditCard, Clock, AlertTriangle, UserPlus,
-    MessageSquare, RefreshCw, LogOut
+    MessageSquare, RefreshCw, LogOut,
+    type LucideIcon
 } from "lucide-react";
 import { getAuthHeaders } from "@/lib/auth-headers";
 import type { WaasMetrics } from "@/services/waas";
@@ -12,7 +13,7 @@ import type { WaasMetrics } from "@/services/waas";
 function StatCard({
     icon: Icon, label, value, color, sub
 }: {
-    icon: React.ElementType; label: string; value: string | number;
+    icon: LucideIcon; label: string; value: string | number;
     color: string; sub?: string;
 }) {
     return (

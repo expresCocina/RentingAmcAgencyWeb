@@ -14,9 +14,12 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@react-three/drei": "^10.7.7",
+        "@react-three/fiber": "^9.5.0",
         "@supabase/ssr": "^0.8.0",
         "@supabase/supabase-js": "^2.97.0",
         "@tailwindcss/postcss": "^4.2.0",
+        "@types/three": "^0.183.1",
         "autoprefixer": "^10.4.24",
         "framer-motion": "^12.34.2",
         "lucide-react": "^0.575.0",
@@ -25,7 +28,8 @@
         "react": "^19.2.4",
         "react-dom": "^19.2.4",
         "resend": "^6.9.2",
-        "tailwindcss": "^4.2.0"
+        "tailwindcss": "^4.2.0",
+        "three": "^0.183.2"
     },
     "devDependencies": {
         "@types/node": "^25.3.0",
