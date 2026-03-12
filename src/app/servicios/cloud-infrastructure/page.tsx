@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Navbar } from "@/components/marketing/Navbar";
 import { Footer } from "@/components/marketing/Footer";
@@ -8,6 +8,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { Server, Shield, Globe, Cpu, ArrowRight, X, Loader2, TrendingUp, Check, Activity } from "lucide-react";
 import { captureLead } from "@/services/leads";
+import { trackViewContent } from "@/lib/fbPixel";
 
 const getFeatures = (t: any) => [
   {
@@ -121,6 +122,9 @@ export default function CloudInfrastructurePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  // ── Facebook Pixel: ViewContent al entrar a esta página ────────────────────
+  useEffect(() => { trackViewContent("Cloud Infrastructure", "Servicios"); }, []);
 
   async function handleCheckout(formData: FormData) {
     setIsPending(true);

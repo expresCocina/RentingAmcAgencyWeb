@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Send, Loader2 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { captureLead } from "@/services/leads";
+import { trackLead } from "@/lib/fbPixel";
 
 export const ContactForm = () => {
   const { t } = useLanguage();
@@ -16,6 +17,10 @@ export const ContactForm = () => {
     const result = await captureLead(formData);
     if (result.success) {
       setMessage({ type: "success", text: result.message });
+      // ── Evento Lead: pixel browser + CAPI ───────────────────────────
+      const email = (formData.get("email") as string) ?? undefined;
+      const phone = (formData.get("phone") as string) ?? undefined;
+      trackLead(email || undefined, phone || undefined);
     } else {
       setMessage({ type: "error", text: result.message });
     }

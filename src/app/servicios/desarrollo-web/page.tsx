@@ -9,6 +9,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { motion, AnimatePresence, useInView, useMotionValue, useSpring } from "framer-motion";
 import { Code2, Zap, Search, ShieldCheck, ArrowRight, X, Loader2, TrendingUp, Check, Activity } from "lucide-react";
 import { captureLead } from "@/services/leads";
+import { trackViewContent } from "@/lib/fbPixel";
 
 const getFeatures = (t: any) => [
   {
@@ -141,6 +142,9 @@ export default function DesarrolloWebPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  // ── Facebook Pixel: ViewContent al entrar a esta página ────────────────────
+  useEffect(() => { trackViewContent("Desarrollo Web", "Servicios"); }, []);
 
   async function handleCheckout(formData: FormData) {
     setIsPending(true);

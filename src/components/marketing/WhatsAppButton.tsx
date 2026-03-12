@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle } from "lucide-react";
+import { trackContact } from "@/lib/fbPixel";
 
 const WA_NUMBER = "573138537261";
 const WA_MESSAGE = encodeURIComponent(
@@ -10,10 +10,13 @@ const WA_URL = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`;
 
 /**
  * WhatsAppButton — Botón flotante profesional de WhatsApp.
- * Aparece en la esquina inferior izquierda, con animación de entrada
- * y un pequeño pulso para llamar la atención.
+ * Dispara el evento Contact (Pixel + CAPI) al hacer clic.
  */
 export function WhatsAppButton() {
+    const handleClick = () => {
+        trackContact();
+    };
+
     return (
         <AnimatePresence>
             <motion.div
@@ -29,6 +32,7 @@ export function WhatsAppButton() {
                     href={WA_URL}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={handleClick}
                     aria-label="Contactar por WhatsApp"
                     title="Chatea con nosotros por WhatsApp"
                     className="relative flex items-center gap-2.5 bg-[#25d366] hover:bg-[#20b858] text-white font-black text-[11px] tracking-widest uppercase px-4 py-3 rounded-full shadow-2xl shadow-[#25d366]/40 hover:shadow-[#25d366]/60 hover:scale-105 transition-all duration-200"
