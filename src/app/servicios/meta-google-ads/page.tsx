@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { Navbar } from "@/components/marketing/Navbar";
 import { Footer } from "@/components/marketing/Footer";
+import { ServiceLeadForm } from "@/components/marketing/ServiceLeadForm";
 import { motion } from "framer-motion";
 import { TrendingUp, Target, DollarSign, BarChart3, Zap, Check, ArrowRight } from "lucide-react";
 import { trackViewContent } from "@/lib/fbPixel";
@@ -166,17 +167,24 @@ export default function MetaGoogleAdsPage() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  href="/#contacto"
+                <a
+                  href="#solicitar"
                   className="block text-center py-3 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 text-white font-black text-xs tracking-widest uppercase hover:opacity-90 transition-opacity"
                 >
                   Empezar ahora
-                </Link>
+                </a>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
+
+      <ServiceLeadForm
+        serviceName="Meta & Google Ads"
+        gradient="from-pink-500 to-rose-500"
+        focusColor="focus:border-pink-500 focus:bg-pink-500/5"
+        labelColor="text-pink-400"
+      />
 
       <Footer />
     </main>

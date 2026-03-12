@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 import { useEffect } from "react";
 import { Navbar } from "@/components/marketing/Navbar";
 import { Footer } from "@/components/marketing/Footer";
+import { ServiceLeadForm } from "@/components/marketing/ServiceLeadForm";
 import { motion } from "framer-motion";
 import { Share2, Image, Calendar, Users, TrendingUp, Check, ArrowRight } from "lucide-react";
 import { trackViewContent } from "@/lib/fbPixel";
@@ -146,7 +147,9 @@ export default function RedesSocialesPage() {
         </div>
       </section>
 
+      <ServiceLeadForm serviceName="Redes Sociales" gradient="from-purple-500 to-fuchsia-500" focusColor="focus:border-purple-500 focus:bg-purple-500/5" labelColor="text-purple-400" />
       <Footer />
     </main>
   );
 }
+

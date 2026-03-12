@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 import { useEffect } from "react";
 import { Navbar } from "@/components/marketing/Navbar";
 import { Footer } from "@/components/marketing/Footer";
+import { ServiceLeadForm } from "@/components/marketing/ServiceLeadForm";
 import { motion } from "framer-motion";
 import { Search, Globe, BarChart3, TrendingUp, Check, ArrowRight, FileText } from "lucide-react";
 import { trackViewContent } from "@/lib/fbPixel";
@@ -144,7 +145,9 @@ export default function SeoPage() {
         </div>
       </section>
 
+      <ServiceLeadForm serviceName="SEO & Posicionamiento" gradient="from-lime-500 to-green-500" focusColor="focus:border-lime-500 focus:bg-lime-500/5" labelColor="text-lime-400" />
       <Footer />
     </main>
   );
 }
+

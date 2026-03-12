@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 import { useEffect } from "react";
 import { Navbar } from "@/components/marketing/Navbar";
 import { Footer } from "@/components/marketing/Footer";
+import { ServiceLeadForm } from "@/components/marketing/ServiceLeadForm";
 import { motion } from "framer-motion";
 import { Mail, Zap, RefreshCw, BarChart3, Users, Check, ArrowRight } from "lucide-react";
 import { trackViewContent } from "@/lib/fbPixel";
@@ -156,7 +157,9 @@ export default function EmailMarketingPage() {
         </div>
       </section>
 
+      <ServiceLeadForm serviceName="Email Marketing" gradient="from-sky-400 to-blue-600" focusColor="focus:border-sky-500 focus:bg-sky-500/5" labelColor="text-sky-400" />
       <Footer />
     </main>
   );
 }
+
