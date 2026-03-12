@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Zap, Clock, Tag } from "lucide-react";
+import { trackLead } from "@/lib/fbPixel";
 
 const STORAGE_KEY = "amc_discount_dismissed";
 const DISCOUNT_CODE = "AMC20";
@@ -68,6 +69,7 @@ export function DiscountPopup() {
                 }),
             });
             setSuccess(true);
+            trackLead(email); // ── Facebook Pixel: Lead event
             sessionStorage.setItem(STORAGE_KEY, "1");
         } catch {
             // Mostrar éxito igual (no bloquear por errores de red)

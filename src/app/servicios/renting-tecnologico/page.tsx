@@ -8,7 +8,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { motion, AnimatePresence, useInView, useMotionValue, useSpring } from "framer-motion";
 import { TrendingUp, DollarSign, RefreshCw, ShieldCheck, ArrowRight, X, Loader2, Check, BarChart3 } from "lucide-react";
 import { captureLead } from "@/services/leads";
-import { trackViewContent } from "@/lib/fbPixel";
+import { trackViewContent, trackLead } from "@/lib/fbPixel";
 
 const getFeatures = (t: any) => [
   {
@@ -161,6 +161,7 @@ export default function RentingTecnologicoPage() {
 
     if (result.success) {
       setFeedback({ type: "success", text: t.renting.successMsg });
+      trackLead(); // ── Facebook Pixel: Lead event
       setTimeout(() => {
         setIsModalOpen(false);
         setFeedback(null);

@@ -9,7 +9,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { motion, AnimatePresence, useInView, useMotionValue, useSpring } from "framer-motion";
 import { Code2, Zap, Search, ShieldCheck, ArrowRight, X, Loader2, TrendingUp, Check, Activity } from "lucide-react";
 import { captureLead } from "@/services/leads";
-import { trackViewContent } from "@/lib/fbPixel";
+import { trackViewContent, trackLead } from "@/lib/fbPixel";
 
 const getFeatures = (t: any) => [
   {
@@ -153,6 +153,7 @@ export default function DesarrolloWebPage() {
 
     if (result.success) {
       setFeedback({ type: "success", text: t.webDev.successMsg });
+      trackLead(); // ── Facebook Pixel: Lead event
       setTimeout(() => {
         setIsModalOpen(false);
         setFeedback(null);

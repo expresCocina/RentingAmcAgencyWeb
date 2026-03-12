@@ -8,7 +8,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { Server, Shield, Globe, Cpu, ArrowRight, X, Loader2, TrendingUp, Check, Activity } from "lucide-react";
 import { captureLead } from "@/services/leads";
-import { trackViewContent } from "@/lib/fbPixel";
+import { trackViewContent, trackLead } from "@/lib/fbPixel";
 
 const getFeatures = (t: any) => [
   {
@@ -133,6 +133,7 @@ export default function CloudInfrastructurePage() {
 
     if (result.success) {
       setFeedback({ type: "success", text: t.cloudInfra.successMsg });
+      trackLead(); // ── Facebook Pixel: Lead event
       setTimeout(() => {
         setIsModalOpen(false);
         setFeedback(null);
