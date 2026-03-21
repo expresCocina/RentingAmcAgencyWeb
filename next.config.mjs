@@ -2,6 +2,7 @@
 const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
+  poweredByHeader: false,
 
   // ── Optimización de imágenes ──
   images: {
@@ -117,6 +118,8 @@ const nextConfig = {
     optimizePackageImports: [
       'framer-motion',
       'lucide-react',
+      '@radix-ui/react-dialog',
+      'react-icons',
     ],
   },
 };

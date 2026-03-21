@@ -1,12 +1,21 @@
-import "./globals.css";
+﻿import "./globals.css";
 import type { Metadata } from "next";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Script from "next/script";
+import dynamic from "next/dynamic";
 import { ScrollToTop } from "@/components/marketing/ScrollToTop";
 import { WhatsAppButton } from "@/components/marketing/WhatsAppButton";
-import { ParticlesWrapper } from "@/components/marketing/ParticlesWrapper";
-import { DiscountPopup } from "@/components/marketing/DiscountPopup";
 import { FbPageViewTracker } from "@/components/marketing/FbPageViewTracker";
+
+// Lazy: Particles y Popup no afectan el LCP — carga diferida
+const ParticlesWrapper = dynamic(
+  () => import("@/components/marketing/ParticlesWrapper").then(m => ({ default: m.ParticlesWrapper })),
+  { ssr: false }
+);
+const DiscountPopup = dynamic(
+  () => import("@/components/marketing/DiscountPopup").then(m => ({ default: m.DiscountPopup })),
+  { ssr: false }
+);
 
 const GA_ID = "G-EWKT9CG3FZ";
 const FB_PIXEL_ID = "780457111253195";
@@ -14,21 +23,21 @@ const FB_PIXEL_ID = "780457111253195";
 export const metadata: Metadata = {
   metadataBase: new URL("https://amcagencyweb.com"),
   title: {
-    default: "AMC Agency | Renting Web de Élite en Colombia",
+    default: "AMC Agency | Renting Web de Elite en Colombia",
     template: "%s | AMC Agency",
   },
   description:
-    "Agencia digital colombiana especializada en renting web, desarrollo con Next.js, SEO técnico, cloud infrastructure y marketing digital. Tu sitio web profesional desde $299.000/mes.",
+    "Agencia digital colombiana especializada en renting web, desarrollo con Next.js, SEO tecnico, cloud infrastructure y marketing digital. Tu sitio web profesional desde $490.000/mes.",
   keywords: [
     "agencia digital Colombia",
     "renting web Colombia",
-    "diseño web profesional",
+    "diseno web profesional",
     "desarrollo web Next.js",
     "SEO Colombia",
-    "marketing digital Bogotá",
+    "marketing digital Bogota",
     "hosting Colombia",
     "AMC Agency",
-    "páginas web para negocios",
+    "paginas web para negocios",
     "infraestructura cloud",
   ],
   authors: [{ name: "AMC Agency", url: "https://amcagencyweb.com" }],
@@ -44,9 +53,9 @@ export const metadata: Metadata = {
     locale: "es_CO",
     url: "https://amcagencyweb.com",
     siteName: "AMC Agency",
-    title: "AMC Agency | Renting Web de Élite en Colombia",
+    title: "AMC Agency | Renting Web de Elite en Colombia",
     description:
-      "Tu plataforma digital profesional desde $299.000/mes. Diseño, hosting, SEO y soporte 24/7.",
+      "Tu plataforma digital profesional desde $490.000/mes. Diseno, hosting, SEO y soporte 24/7.",
     images: [
       {
         url: "/og-image.jpg",
@@ -58,8 +67,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AMC Agency | Renting Web de Élite",
-    description: "Agencia digital colombiana. Tu web profesional desde $299k/mes.",
+    title: "AMC Agency | Renting Web de Elite",
+    description: "Agencia digital colombiana. Tu web profesional desde $490k/mes.",
     images: ["/og-image.jpg"],
   },
   alternates: {
@@ -72,9 +81,6 @@ export const metadata: Metadata = {
     ],
     apple: "/favicon.svg",
   },
-  verification: {
-    google: "google-site-verification",
-  },
 };
 
 export default function RootLayout({
@@ -85,21 +91,35 @@ export default function RootLayout({
   return (
     <html lang="es" className="dark">
       <head>
-        {/* ─── Preconnect — Dominios externos críticos ─── */}
+        {/* ─── Preconnect - solo dominios que realmente se usan ─── */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="preconnect" href="https://connect.facebook.net" />
         <link rel="dns-prefetch" href="https://connect.facebook.net" />
-        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
 
-        {/* ─── Google Analytics ─── */}
+        {/* ─── Preload fuente critica (Inter via Google Fonts) ─── */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
+          media="print"
+          // @ts-expect-error onload trick for non-blocking font load
+          onLoad="this.media='all'"
+        />
+
+        {/* ─── Google Analytics: carga diferida ─── */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -108,7 +128,7 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* ─── Facebook Pixel Base ─── */}
+        {/* ─── Facebook Pixel: afterInteractive para no bloquear LCP ─── */}
         <Script id="facebook-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)
@@ -123,16 +143,6 @@ export default function RootLayout({
             fbq('track', 'PageView');
           `}
         </Script>
-        <noscript>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            height="1"
-            width="1"
-            style={{ display: "none" }}
-            src={`https://www.facebook.com/tr?id=${FB_PIXEL_ID}&ev=PageView&noscript=1`}
-            alt=""
-          />
-        </noscript>
       </head>
       <body
         className="bg-[#050505] text-white antialiased selection:bg-blue-500/30"
