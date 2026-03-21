@@ -5,11 +5,11 @@ const dictionaries = {
   es: {
     nav: { services: "Servicios", projects: "Proyectos", renting: "Renting", quote: "Cotizar" },
     hero: {
-      badge: "Enterprise Digital Solutions", 
-      title1: "La Nueva Era de tu", 
+      badge: "Tu página web, tus redes y tu publicidad digital en manos de expertos — tú solo enfócate en vender.",
+      title1: "La Nueva Era de tu",
       title2: "Infraestructura Digital.",
-      description: "AMC Agency diseña, construye y gestiona plataformas de software de alto rendimiento para corporaciones globales bajo un modelo de renting inteligente.",
-      btnPrimary: "Ver Planes Enterprise", 
+      description: "Diseñamos, construimos y gestionamos tu presencia digital para que tu negocio consiga más clientes todos los días — sin preocuparte por nada técnico.",
+      btnPrimary: "Ver Planes Enterprise",
       btnSecondary: "Explorar Showcase"
     },
     stats: {
@@ -41,8 +41,8 @@ const dictionaries = {
         icon: "Zap"
       },
       security: { 
-        title: "Seguridad de Grado Militar", 
-        desc: "Protección DDoS avanzada, WAF, cifrado de extremo a extremo y cumplimiento normativo.",
+        title: "Sitio Seguro y Siempre Activo", 
+        desc: "Tu web protegida las 24 horas, sin caidas, sin hackeos y con respaldo automatico de toda tu informacion.",
         icon: "Shield"
       }
     },

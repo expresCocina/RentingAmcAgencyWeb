@@ -1,43 +1,43 @@
-"use client";
+﻿"use client";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { Reveal } from "./Reveal";
 
 const projects = [
   {
     title: "CRM Vida Digital",
-    category: "Software de Gestión",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop",
+    category: "Software de Gestion",
+    image: "/portafolio/crm-vida-digital.png",
     description: "Infraestructura SaaS optimizada para escalabilidad de leads.",
     link: "https://crm-vida-digitalcol.vercel.app",
   },
   {
     title: "Elegancia Atemporal",
     category: "Luxury E-commerce",
-    image: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=2680&auto=format&fit=crop",
-    description: "Experiencia premium de alta relojería y catálogo exclusivo.",
+    image: "/portafolio/elegancia-atemporal.png",
+    description: "Experiencia premium de alta relojeria y catalogo exclusivo.",
     link: "https://www.cycrelojeria.com",
   },
   {
-    title: "Lyon Visión CRM",
+    title: "Lyon Vision CRM",
     category: "HealthTech",
-    image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=2680&auto=format&fit=crop",
-    description: "Sistema clínico especializado para el sector óptico.",
+    image: "/portafolio/lyon-vision.png",
+    description: "Sistema clinico especializado para el sector optico.",
     link: "https://crmopticalyonvision.vercel.app",
   },
   {
     title: "Taller de Italia",
     category: "Landing Elite",
-    image: "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?q=80&w=2670&auto=format&fit=crop",
-    description: "Sastrería profesional: presencia digital con enfoque artesanal.",
+    image: "/portafolio/taller-italia.png",
+    description: "Sastreria profesional: presencia digital con enfoque artesanal.",
     link: "https://www.italiatelier.com",
   },
   {
     title: "Somos Turbo Brand",
     category: "Marketing Agency",
-    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2670&auto=format&fit=crop",
-    description: "Diseño disruptivo y optimización de rendimiento digital.",
+    image: "/portafolio/turbo-brand.png",
+    description: "Diseno disruptivo y optimizacion de rendimiento digital.",
     link: "https://www.turbobrandcol.com",
   },
 ];
@@ -63,11 +63,22 @@ const ProjectCard = ({ project }: { project: (typeof projects)[0] }) => {
       className="group relative h-[320px] sm:h-[380px] md:h-[450px] w-full rounded-[28px] md:rounded-[40px] bg-[#0a0a0a] border border-white/10 overflow-hidden cursor-pointer shadow-2xl"
       onClick={() => window.open(project.link, "_blank")}
     >
+      {/* Imagen con lazy loading */}
       <div className="absolute inset-0 z-0">
-        <Image src={project.image} alt={project.title} fill className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" />
+        <Image
+          src={project.image}
+          alt={project.title}
+          fill
+          loading="lazy"
+          className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent" />
       </div>
 
+      {/* Overlay oscuro en hover */}
+      <div className="absolute inset-0 z-10 bg-black/0 group-hover:bg-black/60 transition-all duration-400" />
+
+      {/* Contenido normal (badge arriba + titulo abajo) */}
       <div className="relative z-20 h-full p-6 md:p-8 flex flex-col justify-between" style={{ transform: "translateZ(50px)" }}>
         <div className="flex justify-between items-start">
           <span className="px-3 py-1 rounded-full border border-white/10 bg-black/40 backdrop-blur-md text-[9px] font-bold tracking-widest uppercase text-blue-400">
@@ -83,6 +94,15 @@ const ProjectCard = ({ project }: { project: (typeof projects)[0] }) => {
           <p className="text-gray-400 text-sm font-light max-w-[220px] md:max-w-[250px]">{project.description}</p>
         </div>
       </div>
+
+      {/* Overlay hover con info centrada */}
+      <div className="absolute inset-0 z-30 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-400 p-6">
+        <span className="text-[10px] font-black tracking-[0.25em] uppercase text-blue-400 mb-2">{project.category}</span>
+        <h3 className="text-2xl md:text-3xl font-black tracking-tighter text-white text-center mb-4">{project.title}</h3>
+        <button className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-black text-xs tracking-widest uppercase transition-colors shadow-xl shadow-blue-500/30">
+          Ver proyecto <ArrowRight size={14} />
+        </button>
+      </div>
     </motion.div>
   );
 };
@@ -92,7 +112,7 @@ export const Showcase = () => (
     <div className="max-w-7xl mx-auto">
       <Reveal>
         <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-12 md:mb-20 italic">
-          CASOS DE <span className="text-blue-500">ÉXITO</span>
+          CASOS DE <span className="text-blue-500">EXITO</span>
         </h2>
       </Reveal>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
