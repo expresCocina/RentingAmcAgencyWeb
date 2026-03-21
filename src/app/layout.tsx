@@ -1,21 +1,11 @@
-﻿import "./globals.css";
+import "./globals.css";
 import type { Metadata } from "next";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Script from "next/script";
-import dynamic from "next/dynamic";
 import { ScrollToTop } from "@/components/marketing/ScrollToTop";
 import { WhatsAppButton } from "@/components/marketing/WhatsAppButton";
 import { FbPageViewTracker } from "@/components/marketing/FbPageViewTracker";
-
-// Lazy: Particles y Popup no afectan el LCP — carga diferida
-const ParticlesWrapper = dynamic(
-  () => import("@/components/marketing/ParticlesWrapper").then(m => ({ default: m.ParticlesWrapper })),
-  { ssr: false }
-);
-const DiscountPopup = dynamic(
-  () => import("@/components/marketing/DiscountPopup").then(m => ({ default: m.DiscountPopup })),
-  { ssr: false }
-);
+import { ClientShell } from "@/components/marketing/ClientShell";
 
 const GA_ID = "G-EWKT9CG3FZ";
 const FB_PIXEL_ID = "780457111253195";
@@ -150,11 +140,10 @@ export default function RootLayout({
       >
         <LanguageProvider>
           <FbPageViewTracker />
-          <ParticlesWrapper />
+          <ClientShell />
           {children}
           <ScrollToTop />
           <WhatsAppButton />
-          <DiscountPopup />
         </LanguageProvider>
       </body>
     </html>
