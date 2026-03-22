@@ -66,6 +66,40 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.6,
         },
 
+        // ── Landing pages (Facebook Ads) ──
+        {
+            url: `${BASE_URL}/landing/agencia-digital`,
+            lastModified: now,
+            changeFrequency: 'weekly',
+            priority: 0.95,
+        },
+
+        // ── Marketing Digital ──
+        {
+            url: `${BASE_URL}/servicios/meta-google-ads`,
+            lastModified: now,
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        },
+        {
+            url: `${BASE_URL}/servicios/seo-posicionamiento`,
+            lastModified: now,
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        },
+        {
+            url: `${BASE_URL}/servicios/redes-sociales`,
+            lastModified: now,
+            changeFrequency: 'weekly',
+            priority: 0.85,
+        },
+        {
+            url: `${BASE_URL}/servicios/email-marketing`,
+            lastModified: now,
+            changeFrequency: 'weekly',
+            priority: 0.85,
+        },
+
         // ── Políticas ──
         {
             url: `${BASE_URL}/politicas/privacidad`,
