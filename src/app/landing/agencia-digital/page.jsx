@@ -3,6 +3,79 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
+// ─── Live iframe project card ──────────────────────────────────────
+function ProjectCard({ p, i }) {
+  const [loaded, setLoaded] = useState(false);
+  const [blocked, setBlocked] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: i * 0.1 }}
+      className="group relative h-64 md:h-72 rounded-3xl overflow-hidden border border-white/10 bg-[#111] cursor-pointer"
+      onClick={() => window.open(p.link, "_blank")}
+    >
+      {/* ── Preview en vivo ── */}
+      <div className="absolute inset-0 bg-white overflow-hidden">
+        {!blocked ? (
+          <>
+            {/* Skeleton */}
+            {!loaded && (
+              <div className="absolute inset-0 bg-[#111] flex flex-col items-center justify-center gap-3 z-10">
+                <div className="w-7 h-7 border-2 border-yellow-400/30 border-t-yellow-400 rounded-full animate-spin" />
+                <span className="text-gray-600 text-[10px] tracking-widest uppercase">Cargando preview...</span>
+              </div>
+            )}
+            <iframe
+              src={p.link}
+              title={p.title}
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin"
+              onLoad={() => setLoaded(true)}
+              onError={() => setBlocked(true)}
+              className="absolute top-0 left-0 border-0"
+              style={{
+                width: "300%", height: "300%",
+                transform: "scale(0.333)", transformOrigin: "top left",
+                pointerEvents: "none",
+                opacity: loaded ? 1 : 0,
+                transition: "opacity 0.5s ease",
+              }}
+            />
+          </>
+        ) : (
+          <Image src={p.img} alt={p.title} fill loading="lazy" className="object-cover opacity-60" />
+        )}
+        {/* Gradiente inferior */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent z-10 pointer-events-none" />
+      </div>
+
+      {/* Badge LIVE */}
+      {!blocked && (
+        <div className="absolute top-3 right-3 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10">
+          <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+          <span className="text-[9px] font-black tracking-widest uppercase text-green-400">Live</span>
+        </div>
+      )}
+
+      {/* Info inferior siempre visible */}
+      <div className="absolute bottom-0 left-0 right-0 p-5 z-20 group-hover:opacity-0 transition-opacity duration-300">
+        <p className="text-yellow-400 text-[9px] font-black tracking-widest uppercase mb-1">{p.category}</p>
+        <p className="text-white font-bold text-lg leading-tight">{p.title}</p>
+      </div>
+
+      {/* Overlay hover */}
+      <div className="absolute inset-0 z-30 bg-black/0 group-hover:bg-black/70 transition-all duration-300 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 gap-2 p-4">
+        <p className="text-yellow-400 text-[10px] font-black tracking-widest uppercase">{p.category}</p>
+        <p className="text-white text-xl font-black tracking-tight text-center">{p.title}</p>
+        <span className="text-sm text-white/80 mt-1 border border-white/20 px-4 py-1.5 rounded-full">Ver proyecto →</span>
+      </div>
+    </motion.div>
+  );
+}
+
 // ─── WhatsApp links ────────────────────────────────────────────────
 const WA_BASE = "https://wa.me/573138537261";
 const waLink = (msg) => `${WA_BASE}?text=${encodeURIComponent(msg)}`;
@@ -315,37 +388,7 @@ export default function LandingAgenciaDigital() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {projects.map((p, i) => (
-              <motion.a
-                key={i}
-                href={p.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="group relative h-64 md:h-72 rounded-3xl overflow-hidden border border-white/10 bg-[#111] block"
-              >
-                <Image
-                  src={p.img}
-                  alt={p.title}
-                  fill
-                  loading="lazy"
-                  className="object-cover opacity-70 group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 gap-2 p-4">
-                  <p className="text-yellow-400 text-[10px] font-black tracking-widest uppercase">{p.category}</p>
-                  <p className="text-white text-xl font-black tracking-tight text-center">{p.title}</p>
-                  <span className="text-sm text-white/80 mt-1">Ver proyecto →</span>
-                </div>
-                {/* Bottom info always visible */}
-                <div className="absolute bottom-0 left-0 right-0 p-5 group-hover:opacity-0 transition-opacity">
-                  <p className="text-yellow-400 text-[9px] font-black tracking-widest uppercase mb-1">{p.category}</p>
-                  <p className="text-white font-bold text-lg leading-tight">{p.title}</p>
-                </div>
-              </motion.a>
+              <ProjectCard key={i} p={p} i={i} />
             ))}
           </div>
         </div>
