@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     MessageSquare, Phone, Mail, RefreshCw, LogOut,
-    User, Tag, Clock, CheckCircle, XCircle, ArrowRight, Filter
+    User, Tag, Clock, CheckCircle, XCircle, ArrowRight, Filter, Trash2
 } from "lucide-react";
 import { getAuthHeaders } from "@/lib/auth-headers";
 import type { WaasLead } from "@/services/waas";
@@ -57,6 +57,31 @@ export default function LeadsPage() {
     };
 
     const markLost = async (id: string) => updateStatus(id, "lost");
+
+    // ── Eliminar lead ──────────────────────────────────────────────
+    const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+    const deleteLead = async (id: string) => {
+        if (confirmDelete !== id) {
+            // Primer clic: pedir confirmación
+            setConfirmDelete(id);
+            setTimeout(() => setConfirmDelete(null), 3000); // auto-cancelar en 3s
+            return;
+        }
+        // Segundo clic: eliminar
+        setUpdating(id);
+        try {
+            const headers = await getAuthHeaders();
+            await fetch("/api/waas/admin/leads", {
+                method: "DELETE",
+                headers: { ...headers, "Content-Type": "application/json" },
+                body: JSON.stringify({ id }),
+            });
+            setLeads(prev => prev.filter(l => l.id !== id));
+        } finally {
+            setUpdating(null);
+            setConfirmDelete(null);
+        }
+    };
 
     const filtered = filter === "all" ? leads : leads.filter(l => l.status === filter);
 
@@ -240,6 +265,21 @@ export default function LeadsPage() {
                                                         </button>
                                                     </>
                                                 )}
+
+                                                {/* ── Botón eliminar (papelera) ── */}
+                                                <button
+                                                    onClick={() => deleteLead(lead.id)}
+                                                    disabled={updating === lead.id}
+                                                    title={confirmDelete === lead.id ? "Clic de nuevo para confirmar" : "Eliminar lead"}
+                                                    className={`h-8 rounded-lg flex items-center justify-center gap-1.5 transition text-xs font-bold px-2 ${
+                                                        confirmDelete === lead.id
+                                                            ? "bg-red-500/20 border border-red-500/40 text-red-400 animate-pulse"
+                                                            : "w-8 text-gray-600 hover:text-red-400 hover:bg-red-500/10"
+                                                    }`}
+                                                >
+                                                    <Trash2 className="w-3.5 h-3.5" />
+                                                    {confirmDelete === lead.id && <span>¿Borrar?</span>}
+                                                </button>
                                             </div>
                                         </div>
                                     </motion.div>
