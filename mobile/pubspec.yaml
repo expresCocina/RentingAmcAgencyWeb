@@ -1,0 +1,59 @@
+name: amc_agency_app
+description: AMC Agency - Partner Tecnológico de Élite
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Navigation
+  go_router: ^13.2.0
+
+  # Typography
+  google_fonts: ^6.2.1
+
+  # External links (WhatsApp)
+  url_launcher: ^6.2.6
+
+  # Animations
+  flutter_animate: ^4.5.0
+
+  # Onboarding page indicator
+  smooth_page_indicator: ^1.1.0
+
+  # Icons (WhatsApp icon)
+  font_awesome_flutter: ^10.7.0
+
+  # Preferences (track onboarding shown)
+  shared_preferences: ^2.3.2
+
+  # Supabase client
+  supabase_flutter: ^2.8.4
+
+  # HTTP client (API calls to Next.js backend)
+  http: ^1.2.1
+
+  # Internationalization (date & number formatting)
+  intl: ^0.19.0
+
+  # WebView para mostrar sitios en vivo en el portafolio
+  webview_flutter: ^4.10.0
+
+  # Cupertino Icons
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
