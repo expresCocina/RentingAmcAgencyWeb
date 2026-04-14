@@ -1,83 +1,102 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * Proxy transparente para mostrar sitios externos en iframes.
- * SOLO se usa para sitios con X-Frame-Options (ventas.emision.co, turbobrandcol.com).
- * Los demás sitios usan iframe directo.
+ * Proxy avanzado para sitios con X-Frame-Options.
+ * - Descarga CSS de los sitios externos y lo inlinea en el HTML
+ * - Inyecta <base href> para otros recursos
+ * - Solo activo para dominios en whitelist
  */
+
+const ALLOWED = [
+  'ventas.emision.co',
+  'www.turbobrandcol.com',
+  'turbobrandcol.com',
+];
+
+const FETCH_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+  Accept: 'text/html,application/xhtml+xml,*/*;q=0.8',
+  'Accept-Language': 'es-CO,es;q=0.9,en;q=0.8',
+  'Accept-Encoding': 'identity',
+  'Cache-Control': 'no-cache',
+};
+
+async function fetchText(url: string): Promise<string | null> {
+  try {
+    const r = await fetch(url, {
+      headers: { ...FETCH_HEADERS, Accept: 'text/css,*/*;q=0.1' },
+      signal: AbortSignal.timeout(8_000),
+    });
+    if (!r.ok) return null;
+    return await r.text();
+  } catch {
+    return null;
+  }
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const targetUrl = searchParams.get('url');
 
-  if (!targetUrl) {
-    return new NextResponse('Missing url parameter', { status: 400 });
-  }
+  if (!targetUrl) return new NextResponse('Missing url', { status: 400 });
 
-  // Whitelist de dominios — solo los que bloquean iframes
-  const allowedDomains = [
-    'ventas.emision.co',
-    'www.turbobrandcol.com',
-    'turbobrandcol.com',
-  ];
+  let parsed: URL;
+  try { parsed = new URL(targetUrl); }
+  catch { return new NextResponse('Invalid URL', { status: 400 }); }
 
-  let parsedUrl: URL;
-  try {
-    parsedUrl = new URL(targetUrl);
-  } catch {
-    return new NextResponse('Invalid URL', { status: 400 });
-  }
-
-  const hostname = parsedUrl.hostname;
-  if (!allowedDomains.includes(hostname)) {
+  if (!ALLOWED.includes(parsed.hostname)) {
     return new NextResponse('Domain not allowed', { status: 403 });
   }
 
   try {
-    const response = await fetch(targetUrl, {
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'es-CO,es;q=0.9,en;q=0.8',
-        'Accept-Encoding': 'identity', // Sin gzip para poder manipular el HTML
-        Referer: `https://${hostname}/`,
-        'Cache-Control': 'no-cache',
-      },
-      redirect: 'follow', // Seguir redirects
+    // 1. Descargar HTML principal
+    const htmlRes = await fetch(targetUrl, {
+      headers: FETCH_HEADERS,
+      redirect: 'follow',
       signal: AbortSignal.timeout(12_000),
     });
 
-    const contentType = response.headers.get('content-type') ?? 'text/html';
-    if (!contentType.includes('text/html')) {
-      return new NextResponse('Only HTML is proxied', { status: 415 });
-    }
+    if (!htmlRes.ok) throw new Error(`HTTP ${htmlRes.status}`);
 
-    let html = await response.text();
+    let html = await htmlRes.text();
 
-    // Base URL del sitio para resolver recursos relativos
-    const siteOrigin = `${parsedUrl.protocol}//${parsedUrl.host}`;
-    const finalUrl = response.url || targetUrl;
+    const finalUrl = htmlRes.url || targetUrl;
     const finalOrigin = (() => {
-      try { return new URL(finalUrl).origin; } catch { return siteOrigin; }
+      try { return new URL(finalUrl).origin; } catch { return parsed.origin; }
     })();
-    const baseHref = `${finalOrigin}/`;
 
-    const baseTag = `<base href="${baseHref}">`;
-
-    // Inyectar <base> solo si no existe ya uno
-    if (!html.includes('<base ') && !html.includes('<BASE ')) {
-      // Intentar ponerlo después de <head> o <HEAD>
-      if (html.includes('<head>')) {
-        html = html.replace('<head>', `<head>${baseTag}`);
-      } else if (html.includes('<head ')) {
-        html = html.replace(/<head[^>]*>/, (match) => `${match}${baseTag}`);
-      } else {
-        // Si no hay head, añadir al principio del body
-        html = baseTag + html;
-      }
+    // 2. Extraer todas las <link rel="stylesheet"> y sus hrefs
+    const cssLinkRe = /<link[^>]+rel=["']stylesheet["'][^>]*href=["']([^"']+)["'][^>]*>/gi;
+    const styleHrefs: string[] = [];
+    let m: RegExpExecArray | null;
+    while ((m = cssLinkRe.exec(html)) !== null) {
+      styleHrefs.push(m[1]);
     }
 
-    // Eliminar meta refresh para evitar redireccionamientos dentro del iframe
+    // 3. Descargar cada CSS en paralelo e inlinear
+    const cssTexts = await Promise.all(
+      styleHrefs.map(async (href) => {
+        const absUrl = href.startsWith('http') ? href : `${finalOrigin}${href.startsWith('/') ? '' : '/'}${href}`;
+        const css = await fetchText(absUrl);
+        return css ? `/* ${href} */\n${css}` : null;
+      })
+    );
+
+    // 4. Reemplazar <link stylesheet> con <style> inlineados
+    let cssIndex = 0;
+    html = html.replace(/<link[^>]+rel=["']stylesheet["'][^>]*>/gi, () => {
+      const css = cssTexts[cssIndex++];
+      return css ? `<style>${css}</style>` : '';
+    });
+
+    // 5. Inyectar <base href> para recursos no-CSS (imágenes, JS, fuentes)
+    const baseTag = `<base href="${finalOrigin}/">`;
+    if (!html.includes('<base ')) {
+      html = html.replace(/<head[^>]*>/i, (match) => `${match}${baseTag}`);
+      if (!html.includes('<base ')) html = baseTag + html;
+    }
+
+    // 6. Eliminar meta refresh
     html = html.replace(/<meta[^>]*http-equiv=["']?refresh["']?[^>]*>/gi, '');
 
     return new NextResponse(html, {
@@ -85,19 +104,18 @@ export async function GET(req: NextRequest) {
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
         'Cache-Control': 'public, max-age=120, stale-while-revalidate=600',
-        // ✅ Sin X-Frame-Options → nuestro servidor no bloquea el iframe
       },
     });
   } catch (err) {
-    console.error('[site-preview proxy] Error fetching:', targetUrl, err);
+    console.error('[site-preview] Error:', targetUrl, err);
+    // Devolver HTML de error que no dispara onError del iframe
     return new NextResponse(
-      `<html><body style="background:#111;color:#666;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">
-        <p style="font-size:12px">No se pudo cargar la previsualización</p>
+      `<html><body style="background:#080B12;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;font-family:sans-serif">
+        <div style="text-align:center;color:#3B556D">
+          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase">Cargando preview...</div>
+        </div>
       </body></html>`,
-      {
-        status: 200, // 200 para que el iframe no dispare onError
-        headers: { 'Content-Type': 'text/html; charset=utf-8' },
-      }
+      { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
     );
   }
 }
