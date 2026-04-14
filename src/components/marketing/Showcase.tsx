@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ExternalLink, ArrowRight, Wifi } from "lucide-react";
@@ -6,15 +6,17 @@ import Image from "next/image";
 import { Reveal } from "./Reveal";
 
 const projects = [
-  { title: "CRM Vida Digital", category: "Software de Gestion", image: "/portafolio/crm-vida-digital.png", description: "Infraestructura SaaS optimizada para escalabilidad de leads.", link: "https://crm-vida-digitalcol.vercel.app" },
-  { title: "Elegancia Atemporal", category: "Luxury E-commerce", image: "/portafolio/elegancia-atemporal.png", description: "Experiencia premium de alta relojeria y catalogo exclusivo.", link: "https://www.cycrelojeria.com" },
-  { title: "Lyon Vision CRM", category: "HealthTech", image: "/portafolio/lyon-vision.png", description: "Sistema clinico especializado para el sector optico.", link: "https://crmopticalyonvision.vercel.app" },
-  { title: "Taller de Italia", category: "Landing Elite", image: "/portafolio/taller-italia.png", description: "Sastreria profesional: presencia digital con enfoque artesanal.", link: "https://www.italiatelier.com" },
-  { title: "Somos Turbo Brand", category: "Marketing Agency", image: "/portafolio/turbo-brand.png", description: "Diseno disruptivo y optimizacion de rendimiento digital.", link: "https://www.turbobrandcol.com" },
+  { title: "CRM Vida Digital",    category: "Software de Gestion",       image: "/portafolio/crm-vida-digital.png",    description: "Infraestructura SaaS optimizada para escalabilidad de leads.",       link: "https://crm-vida-digitalcol.vercel.app",    allowIframe: true  },
+  { title: "Elegancia Atemporal", category: "Luxury E-commerce",          image: "/portafolio/elegancia-atemporal.png", description: "Experiencia premium de alta relojeria y catalogo exclusivo.",       link: "https://www.cycrelojeria.com",               allowIframe: true  },
+  { title: "Lyon Vision CRM",     category: "HealthTech",                 image: "/portafolio/lyon-vision.png",         description: "Sistema clinico especializado para el sector optico.",            link: "https://crmopticalyonvision.vercel.app",     allowIframe: true  },
+  { title: "Taller de Italia",    category: "Landing Elite",              image: "/portafolio/taller-italia.png",       description: "Sastreria profesional: presencia digital con enfoque artesanal.", link: "https://www.italiatelier.com",               allowIframe: true  },
+  { title: "E-Misión",            category: "SaaS · Facturación DIAN",   image: "/portafolio/emision.png",             description: "Facturación electrónica DIAN para PYMEs colombianas.",           link: "https://ventas.emision.co",              allowIframe: true  },
+  { title: "Somos Turbo Brand",   category: "Marketing Agency",           image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1200&auto=format&fit=crop", description: "Diseno disruptivo y optimizacion de rendimiento digital.", link: "https://www.turbobrandcol.com",              allowIframe: false },
 ];
 
+
 const ProjectCard = ({ project }: { project: (typeof projects)[0] }) => {
-  const [iframeBlocked, setIframeBlocked] = useState(false);
+  const [iframeBlocked, setIframeBlocked] = useState(!project.allowIframe);
   const [loaded, setLoaded] = useState(false);
 
   const mouseX = useMotionValue(0);
@@ -70,26 +72,26 @@ const ProjectCard = ({ project }: { project: (typeof projects)[0] }) => {
             />
           </>
         ) : (
-          /* Fallback a imagen si el iframe es bloqueado */
+          /* Fallback imagen cuando iframe está bloqueado */
           <Image
             src={project.image}
             alt={project.title}
             fill
             loading="lazy"
-            className="object-cover opacity-60"
+            className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
           />
         )}
         {/* Gradiente inferior siempre presente */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent z-10 pointer-events-none" />
       </div>
 
-      {/* === BADGE LIVE === */}
-      {!iframeBlocked && (
-        <div className="absolute top-4 right-4 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10">
-          <Wifi size={10} className="text-green-400 animate-pulse" />
-          <span className="text-[9px] font-black tracking-widest uppercase text-green-400">Live</span>
-        </div>
-      )}
+      {/* === BADGE LIVE / PREVIEW === */}
+      <div className="absolute top-4 right-4 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10">
+        <Wifi size={10} className={`${!iframeBlocked ? 'text-green-400 animate-pulse' : 'text-gray-500'}`} />
+        <span className={`text-[9px] font-black tracking-widest uppercase ${!iframeBlocked ? 'text-green-400' : 'text-gray-500'}`}>
+          {!iframeBlocked ? 'Live' : 'Preview'}
+        </span>
+      </div>
 
       {/* === INFO INFERIOR === */}
       <div className="absolute bottom-0 left-0 right-0 z-20 p-5 md:p-7" style={{ transform: "translateZ(30px)" }}>
@@ -111,6 +113,7 @@ const ProjectCard = ({ project }: { project: (typeof projects)[0] }) => {
     </motion.div>
   );
 };
+
 
 export const Showcase = () => (
   <section id="proyectos" className="py-20 md:py-32 px-4 md:px-6">

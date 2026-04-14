@@ -19,6 +19,16 @@ const projects = [
     featured: true,
   },
   {
+    title: "E-Misión · Facturación",
+    category: "SaaS · Facturación Electrónica",
+    desc: "Plataforma de ventas y facturación electrónica DIAN para empresas colombianas. UX ultra-simplificado para emisión de facturas en segundos.",
+    img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=1200&auto=format&fit=crop",
+    tags: ["Facturación DIAN", "Next.js", "SaaS"],
+    link: "https://ventas.emision.co",
+    color: "from-green-500 to-emerald-600",
+    featured: false,
+  },
+  {
     title: "Elegancia Atemporal",
     category: "Luxury E-commerce",
     desc: "Tienda online de relojes de lujo con catálogo interactivo, integración de pagos y experiencia premium alineada con la identidad de la marca.",
@@ -59,6 +69,7 @@ const projects = [
     featured: false,
   },
 ];
+
 
 const techIcons = [
   { icon: <Globe className="w-4 h-4" />, label: "Next.js 15" },
