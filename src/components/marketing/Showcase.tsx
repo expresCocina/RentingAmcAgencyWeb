@@ -6,12 +6,12 @@ import Image from "next/image";
 import { Reveal } from "./Reveal";
 
 const projects = [
-  { title: "CRM Vida Digital",    category: "Software de Gestion",       image: "/portafolio/crm-vida-digital.png",    description: "Infraestructura SaaS optimizada para escalabilidad de leads.",       link: "https://crm-vida-digitalcol.vercel.app",    allowIframe: true  },
-  { title: "Elegancia Atemporal", category: "Luxury E-commerce",          image: "/portafolio/elegancia-atemporal.png", description: "Experiencia premium de alta relojeria y catalogo exclusivo.",       link: "https://www.cycrelojeria.com",               allowIframe: true  },
-  { title: "Lyon Vision CRM",     category: "HealthTech",                 image: "/portafolio/lyon-vision.png",         description: "Sistema clinico especializado para el sector optico.",            link: "https://crmopticalyonvision.vercel.app",     allowIframe: true  },
-  { title: "Taller de Italia",    category: "Landing Elite",              image: "/portafolio/taller-italia.png",       description: "Sastreria profesional: presencia digital con enfoque artesanal.", link: "https://www.italiatelier.com",               allowIframe: true  },
-  { title: "E-Misión",            category: "SaaS · Facturación DIAN",   image: "/portafolio/emision.png",             description: "Facturación electrónica DIAN para PYMEs colombianas.",           link: "https://ventas.emision.co",              allowIframe: true  },
-  { title: "Somos Turbo Brand",   category: "Marketing Agency",           image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1200&auto=format&fit=crop", description: "Diseno disruptivo y optimizacion de rendimiento digital.", link: "https://www.turbobrandcol.com",              allowIframe: false },
+  { title: "CRM Vida Digital",    category: "Software de Gestion",       image: "/portafolio/crm-vida-digital.png",    description: "Infraestructura SaaS optimizada para escalabilidad de leads.",       link: "https://crm-vida-digitalcol.vercel.app",    iframeUrl: "/api/site-preview?url=https%3A%2F%2Fcrm-vida-digitalcol.vercel.app",    allowIframe: true  },
+  { title: "Elegancia Atemporal", category: "Luxury E-commerce",          image: "/portafolio/elegancia-atemporal.png", description: "Experiencia premium de alta relojeria y catalogo exclusivo.",       link: "https://www.cycrelojeria.com",               iframeUrl: "/api/site-preview?url=https%3A%2F%2Fwww.cycrelojeria.com",               allowIframe: true  },
+  { title: "Lyon Vision CRM",     category: "HealthTech",                 image: "/portafolio/lyon-vision.png",         description: "Sistema clinico especializado para el sector optico.",            link: "https://crmopticalyonvision.vercel.app",     iframeUrl: "/api/site-preview?url=https%3A%2F%2Fcrmopticalyonvision.vercel.app",     allowIframe: true  },
+  { title: "Taller de Italia",    category: "Landing Elite",              image: "/portafolio/taller-italia.png",       description: "Sastreria profesional: presencia digital con enfoque artesanal.", link: "https://www.italiatelier.com",               iframeUrl: "/api/site-preview?url=https%3A%2F%2Fwww.italiatelier.com",               allowIframe: true  },
+  { title: "E-Misión",            category: "SaaS · Facturación DIAN",   image: "/portafolio/emision.png",             description: "Facturación electrónica DIAN para PYMEs colombianas.",           link: "https://ventas.emision.co",                 iframeUrl: "/api/site-preview?url=https%3A%2F%2Fventas.emision.co",                  allowIframe: true  },
+  { title: "Somos Turbo Brand",   category: "Marketing Agency",           image: "/portafolio/turbo-brand.png",         description: "Diseno disruptivo y optimizacion de rendimiento digital.",        link: "https://www.turbobrandcol.com",              iframeUrl: "/api/site-preview?url=https%3A%2F%2Fwww.turbobrandcol.com",              allowIframe: true  },
 ];
 
 
@@ -53,10 +53,9 @@ const ProjectCard = ({ project }: { project: (typeof projects)[0] }) => {
               </div>
             )}
             <iframe
-              src={project.link}
+              src={project.iframeUrl ?? project.link}
               title={project.title}
               loading="lazy"
-              sandbox="allow-scripts allow-same-origin"
               onLoad={() => setLoaded(true)}
               onError={() => setIframeBlocked(true)}
               className="absolute top-0 left-0 border-0"
