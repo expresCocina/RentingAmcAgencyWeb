@@ -2,10 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Proxy transparente para mostrar sitios externos en iframes.
- * Elimina X-Frame-Options y CSP frame-ancestors del sitio destino,
- * inyecta <base href> para que los recursos relativos resuelvan correctamente.
- *
- * Uso: /api/site-preview?url=https://ventas.emision.co
+ * SOLO se usa para sitios con X-Frame-Options (ventas.emision.co, turbobrandcol.com).
+ * Los demás sitios usan iframe directo.
  */
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -15,17 +13,11 @@ export async function GET(req: NextRequest) {
     return new NextResponse('Missing url parameter', { status: 400 });
   }
 
-  // Whitelist de dominios permitidos
+  // Whitelist de dominios — solo los que bloquean iframes
   const allowedDomains = [
     'ventas.emision.co',
     'www.turbobrandcol.com',
     'turbobrandcol.com',
-    'www.cycrelojeria.com',
-    'cycrelojeria.com',
-    'www.italiatelier.com',
-    'italiatelier.com',
-    'crmopticalyonvision.vercel.app',
-    'crm-vida-digitalcol.vercel.app',
   ];
 
   let parsedUrl: URL;
@@ -36,7 +28,7 @@ export async function GET(req: NextRequest) {
   }
 
   const hostname = parsedUrl.hostname;
-  if (!allowedDomains.some((d) => hostname === d || hostname.endsWith(`.${d}`))) {
+  if (!allowedDomains.includes(hostname)) {
     return new NextResponse('Domain not allowed', { status: 403 });
   }
 
@@ -44,52 +36,68 @@ export async function GET(req: NextRequest) {
     const response = await fetch(targetUrl, {
       headers: {
         'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
-        Accept:
-          'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         'Accept-Language': 'es-CO,es;q=0.9,en;q=0.8',
+        'Accept-Encoding': 'identity', // Sin gzip para poder manipular el HTML
+        Referer: `https://${hostname}/`,
         'Cache-Control': 'no-cache',
       },
-      signal: AbortSignal.timeout(10_000),
+      redirect: 'follow', // Seguir redirects
+      signal: AbortSignal.timeout(12_000),
     });
 
     const contentType = response.headers.get('content-type') ?? 'text/html';
-
     if (!contentType.includes('text/html')) {
-      // Para recursos no-HTML (CSS, imágenes, JS) no los proxiamos aquí
       return new NextResponse('Only HTML is proxied', { status: 415 });
     }
 
     let html = await response.text();
 
-    // Construye la base URL del sitio original para resolver recursos relativos
-    const baseOrigin = `${parsedUrl.protocol}//${parsedUrl.host}`;
-    const baseTag = `<base href="${baseOrigin}/" target="_top">`;
+    // Base URL del sitio para resolver recursos relativos
+    const siteOrigin = `${parsedUrl.protocol}//${parsedUrl.host}`;
+    const finalUrl = response.url || targetUrl;
+    const finalOrigin = (() => {
+      try { return new URL(finalUrl).origin; } catch { return siteOrigin; }
+    })();
+    const baseHref = `${finalOrigin}/`;
 
-    // Inyecta <base> justo después de <head> (o al inicio si no hay <head>)
-    if (html.includes('<head>')) {
-      html = html.replace('<head>', `<head>${baseTag}`);
-    } else if (html.includes('<HEAD>')) {
-      html = html.replace('<HEAD>', `<HEAD>${baseTag}`);
-    } else {
-      html = baseTag + html;
+    const baseTag = `<base href="${baseHref}">`;
+
+    // Inyectar <base> solo si no existe ya uno
+    if (!html.includes('<base ') && !html.includes('<BASE ')) {
+      // Intentar ponerlo después de <head> o <HEAD>
+      if (html.includes('<head>')) {
+        html = html.replace('<head>', `<head>${baseTag}`);
+      } else if (html.includes('<head ')) {
+        html = html.replace(/<head[^>]*>/, (match) => `${match}${baseTag}`);
+      } else {
+        // Si no hay head, añadir al principio del body
+        html = baseTag + html;
+      }
     }
 
-    // Elimina meta refresh para evitar redireccionamientos no deseados
+    // Eliminar meta refresh para evitar redireccionamientos dentro del iframe
     html = html.replace(/<meta[^>]*http-equiv=["']?refresh["']?[^>]*>/gi, '');
 
-    // Respuesta sin cabeceras de bloqueo de frames
     return new NextResponse(html, {
       status: 200,
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'public, max-age=60, stale-while-revalidate=300',
-        // ✅ NO seteamos X-Frame-Options ni CSP con frame-ancestors
-        // para que sea embebible en nuestro propio iframe
+        'Cache-Control': 'public, max-age=120, stale-while-revalidate=600',
+        // ✅ Sin X-Frame-Options → nuestro servidor no bloquea el iframe
       },
     });
   } catch (err) {
-    console.error('[site-preview proxy] Error:', err);
-    return new NextResponse('Failed to fetch site', { status: 502 });
+    console.error('[site-preview proxy] Error fetching:', targetUrl, err);
+    return new NextResponse(
+      `<html><body style="background:#111;color:#666;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">
+        <p style="font-size:12px">No se pudo cargar la previsualización</p>
+      </body></html>`,
+      {
+        status: 200, // 200 para que el iframe no dispare onError
+        headers: { 'Content-Type': 'text/html; charset=utf-8' },
+      }
+    );
   }
 }
