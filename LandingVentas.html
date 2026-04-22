@@ -1,0 +1,2113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consigue Clientes en Automático | Renting Digital AMC Agency</title>
+<meta name="description" content="Tu plataforma digital profesional. Sistema que atrae, atiende y cierra ventas por ti: Web + Bot IA + CRM. 50% para iniciar y saldo contra entrega.">
+<meta name="keywords" content="agencia digital Colombia, renting web Colombia, diseño web profesional, automatización de ventas, chatbot IA, CRM, Meta Ads, AMC Agency, páginas web para negocios">
+<meta name="author" content="AMC Agency Web">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://amcagencyweb.com/ventas">
+<meta property="og:site_name" content="AMC Agency">
+<meta property="og:title" content="Renting Digital | Consigue nuevos clientes en automático">
+<meta property="og:description" content="Tu plataforma digital profesional. Sistema que atrae, atiende y cierra ventas por ti: Web + Bot IA + CRM. Funcionando en 7 días.">
+<meta property="og:image" content="https://amcagencyweb.com/og-image.jpg">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AMC Agency | Renting Web de Elite">
+<meta name="twitter:description" content="Tu plataforma digital profesional desde $450.000/mes. Diseño, hosting, SEO y soporte.">
+<meta name="twitter:image" content="https://amcagencyweb.com/og-image.jpg">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="https://amcagencyweb.com/favicon.svg">
+<link rel="apple-touch-icon" href="https://amcagencyweb.com/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080b12;
+    --bg2: #0d1120;
+    --bg3: #111827;
+    --border: rgba(255,255,255,0.06);
+    --cyan: #00e5ff;
+    --cyan2: #00bfea;
+    --blue: #3b6ef8;
+    --accent: #00e5ff;
+    --text: #f0f4ff;
+    --muted: #7c8ba1;
+    --card: #0f1623;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ---- NOISE TEXTURE OVERLAY ---- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 5%;
+    background: rgba(8,11,18,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .logo span { color: var(--cyan); }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 32px;
+  }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  nav ul a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: var(--cyan);
+    color: #080b12 !important;
+    font-weight: 700 !important;
+    padding: 9px 22px;
+    border-radius: 6px;
+    transition: opacity 0.2s !important;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ---- HERO ---- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 5% 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 600px;
+    background: radial-gradient(ellipse at center, rgba(0,229,255,0.12) 0%, rgba(59,110,248,0.06) 40%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    border: 1px solid rgba(0,229,255,0.25);
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .eyebrow-dot {
+    width: 6px; height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    max-width: 820px;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  h1 .highlight {
+    color: var(--cyan);
+    position: relative;
+  }
+
+  .hero-sub {
+    margin-top: 24px;
+    font-size: clamp(1rem, 2vw, 1.18rem);
+    color: var(--muted);
+    max-width: 580px;
+    font-weight: 300;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .hero-actions {
+    margin-top: 40px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--cyan);
+    color: #080b12;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 14px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 30px rgba(0,229,255,0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(0,229,255,0.45);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--text);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 14px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .hero-stats {
+    margin-top: 64px;
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.7s 0.4s ease both;
+  }
+
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--cyan);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- SECTION COMMONS ---- */
+  section { position: relative; z-index: 1; }
+
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 5%;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .section-sub {
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin: 14px auto 0 auto;
+    max-width: 560px;
+    font-weight: 300;
+  }
+
+  /* ---- LOGOS STRIP ---- */
+  .trust-strip {
+    padding: 24px 5%;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+  .trust-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .trust-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .trust-chips {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .trust-chip {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ---- SERVICES ---- */
+  .services {
+    padding: 100px 5%;
+  }
+
+  .services-header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .service-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: default;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .service-card:hover {
+    border-color: rgba(0,229,255,0.2);
+    transform: translateY(-4px);
+  }
+  .service-card:hover::before { opacity: 1; }
+
+  .service-card.featured {
+    border-color: rgba(0,229,255,0.25);
+    background: linear-gradient(135deg, rgba(0,229,255,0.05) 0%, var(--card) 60%);
+  }
+  .service-card.featured::before { opacity: 1; }
+
+  .service-icon {
+    width: 52px;
+    height: 52px;
+    background: rgba(0,229,255,0.1);
+    border: 1px solid rgba(0,229,255,0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+  }
+
+  .service-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .service-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+
+  .service-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .service-features li {
+    font-size: 0.85rem;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .service-features li::before {
+    content: '✦';
+    color: var(--cyan);
+    font-size: 0.65rem;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  /* ---- HOW IT WORKS ---- */
+  .how {
+    padding: 100px 5%;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .how-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 40px;
+  }
+
+  .step {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 36px;
+    position: relative;
+  }
+
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 44px;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, rgba(0,229,255,0.3), transparent);
+  }
+
+  .step-num {
+    width: 40px;
+    height: 40px;
+    background: rgba(0,229,255,0.1);
+    border: 1px solid rgba(0,229,255,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--cyan);
+    flex-shrink: 0;
+  }
+
+  .step-body h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+
+  .step-body p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .how-visual {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .how-visual::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(0,229,255,0.12) 0%, transparent 70%);
+  }
+
+  .metric-row {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .metric {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .metric-label {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .metric-val {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--cyan);
+  }
+
+  .metric-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .metric-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    border-radius: 2px;
+    transition: width 1.5s ease;
+  }
+
+  .how-title-block { max-width: 460px; }
+
+  /* ---- PRICING ---- */
+  .pricing {
+    padding: 100px 5%;
+    text-align: center;
+  }
+
+  .pricing-header {
+    margin-bottom: 64px;
+  }
+
+  .plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  .plan {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 28px;
+    text-align: left;
+    position: relative;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .plan:hover {
+    transform: translateY(-4px);
+  }
+
+  .plan.popular {
+    border-color: rgba(0,229,255,0.4);
+    background: linear-gradient(160deg, rgba(0,229,255,0.06) 0%, var(--card) 60%);
+  }
+
+  .popular-badge {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--cyan);
+    color: #080b12;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .plan-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .plan-price {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2.4rem;
+    line-height: 1;
+    color: var(--text);
+  }
+  .plan-price sup {
+    font-size: 1.1rem;
+    vertical-align: top;
+    margin-top: 6px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .plan-price span {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+
+  .plan-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 12px 0 24px;
+    line-height: 1.5;
+  }
+
+  .plan-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 24px;
+  }
+
+  .plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .plan-features li {
+    font-size: 0.87rem;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .plan-features li.active { color: var(--text); }
+
+  .check {
+    color: var(--cyan);
+    font-size: 0.8rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .btn-plan {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 13px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .btn-plan-outline {
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .btn-plan-outline:hover {
+    border-color: rgba(0,229,255,0.3);
+    background: rgba(0,229,255,0.05);
+  }
+
+  .btn-plan-solid {
+    background: var(--cyan);
+    color: #080b12;
+    box-shadow: 0 0 24px rgba(0,229,255,0.25);
+  }
+  .btn-plan-solid:hover {
+    box-shadow: 0 0 40px rgba(0,229,255,0.4);
+    transform: translateY(-1px);
+  }
+
+  /* ---- TESTIMONIALS ---- */
+  .testimonials {
+    padding: 100px 5%;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+  }
+
+  .testimonials-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .testi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+  }
+
+  .testi-quote {
+    font-size: 2rem;
+    color: var(--cyan);
+    opacity: 0.4;
+    font-family: Georgia, serif;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+
+  .testi-text {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+
+  .testi-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .testi-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: #080b12;
+    flex-shrink: 0;
+  }
+
+  .testi-name {
+    font-weight: 600;
+    font-size: 0.88rem;
+  }
+
+  .testi-role {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  /* ---- FAQ ---- */
+  .faq {
+    padding: 100px 5%;
+  }
+
+  .faq-inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .faq-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .faq-q {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    gap: 16px;
+    transition: color 0.2s;
+    user-select: none;
+  }
+
+  .faq-q:hover { color: var(--cyan); }
+
+  .faq-icon {
+    font-size: 1.2rem;
+    color: var(--cyan);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .faq-a {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+  }
+
+  .faq-item.open .faq-a {
+    max-height: 300px;
+    padding-bottom: 20px;
+  }
+
+  .faq-item.open .faq-icon {
+    transform: rotate(45deg);
+  }
+
+  /* ---- CTA FINAL ---- */
+  .final-cta {
+    padding: 120px 5%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+  }
+
+  .final-cta-glow {
+    position: absolute;
+    bottom: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(0,229,255,0.1) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .final-cta h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    max-width: 700px;
+    margin: 0 auto 24px;
+  }
+
+  .final-cta p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 480px;
+    margin: 0 auto 40px;
+  }
+
+  .whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #25D366;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 16px 36px;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 0 40px rgba(37,211,102,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .whatsapp-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 60px rgba(37,211,102,0.45);
+  }
+
+  /* ---- FOOTER ---- */
+  footer {
+    padding: 40px 5%;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: gap;
+    gap: 16px;
+  }
+
+  footer p {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  footer a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.2s;
+  }
+  footer a:hover { color: var(--cyan); }
+
+  /* ---- FLOATING WA ---- */
+  .float-wa {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 56px;
+    height: 56px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    box-shadow: 0 4px 24px rgba(37,211,102,0.4);
+    transition: transform 0.2s;
+    text-decoration: none;
+  }
+  .float-wa:hover { transform: scale(1.1); }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 768px) {
+    nav ul { display: none; }
+    .how-inner { grid-template-columns: 1fr; gap: 48px; }
+    .plans-grid { grid-template-columns: 1fr; max-width: 400px; }
+    .hero-stats { gap: 28px; }
+    footer { flex-direction: column; text-align: center; }
+  }
+
+  /* ---- REVEAL ANIMATION ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+  /* ---- CHATBOT MOCKUP & NEW HERO ---- */
+  .hero-content-wrapper {
+    max-width: 1200px; width: 100%; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; position: relative; z-index: 10;
+  }
+  .hero-text-col { text-align: left; }
+  .hero-visual-col {
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    top: 100px;
+    align-self: flex-start;
+    z-index: 5;
+  }
+  .hero h1, .hero-sub { text-align: left; }
+  .hero-actions { justify-content: flex-start; margin-top: 32px; }
+  
+  @media (max-width: 900px) {
+    .hero-content-wrapper { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+    .hero-text-col { display: flex; flex-direction: column; align-items: center; }
+    .hero h1, .hero-sub { text-align: center; }
+    .hero-actions { justify-content: center; }
+    .hero-visual-col { display: none; }
+  }
+
+  /* ──── PHONE MOCKUP — ULTRA REALISTIC ──── */
+  .phone-frame {
+    width: 280px;
+    height: 560px;
+    background: #1a1a1a;
+    border-radius: 48px;
+    border: 10px solid #2a2a2a;
+    box-shadow:
+      0 0 0 2px #3a3a3a,
+      0 30px 80px rgba(0,0,0,0.6),
+      0 0 60px rgba(0,229,255,0.12),
+      inset 0 0 0 1px rgba(255,255,255,0.08);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: floatMockup 6s ease-in-out infinite;
+  }
+  /* Botón de volumen izquierdo */
+  .phone-frame::before {
+    content: '';
+    position: absolute;
+    left: -12px; top: 90px;
+    width: 4px; height: 32px;
+    background: #2a2a2a;
+    border-radius: 2px 0 0 2px;
+    box-shadow: 0 40px 0 #2a2a2a, 0 -2px 0 #3a3a3a;
+  }
+  /* Botón power derecho */
+  .phone-frame::after {
+    content: '';
+    position: absolute;
+    right: -12px; top: 110px;
+    width: 4px; height: 48px;
+    background: #2a2a2a;
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* Pill/notch superior */
+  .phone-notch {
+    width: 90px; height: 26px;
+    background: #1a1a1a;
+    border-radius: 0 0 18px 18px;
+    margin: 0 auto;
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    z-index: 10;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .phone-notch-camera {
+    width: 10px; height: 10px;
+    background: #111;
+    border-radius: 50%;
+    border: 2px solid #2a2a2a;
+    box-shadow: inset 0 0 3px rgba(0,200,255,0.3);
+  }
+
+  /* Status bar */
+  .phone-status {
+    background: #111b21;
+    padding: 28px 16px 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.65rem;
+    color: #fff;
+    font-weight: 600;
+    font-family: -apple-system, sans-serif;
+    flex-shrink: 0;
+  }
+  .status-time { font-size: 0.75rem; font-weight: 700; }
+  .status-icons { display: flex; align-items: center; gap: 4px; }
+  .status-icon { font-size: 0.7rem; }
+
+  /* WhatsApp Header */
+  .mockup-header {
+    background: #1f2c34;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .header-back { color: #00a884; font-size: 1.1rem; font-weight: 300; cursor: pointer; }
+  .mockup-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cyan), #3b82f6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .header-info { flex: 1; }
+  .mockup-header-title { font-weight: 600; font-size: 0.88rem; color: #fff; }
+  .mockup-header-status { font-size: 0.68rem; color: #00a884; }
+  .header-actions { display: flex; gap: 14px; color: #8696a0; font-size: 1rem; }
+
+  /* Chat body — WhatsApp wallpaper */
+  .mockup-body {
+    flex: 1;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    background-color: #0b141a;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(0,100,80,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(0,50,100,0.08) 0%, transparent 50%);
+  }
+  .mockup-body::-webkit-scrollbar { display: none; }
+
+  /* Chat bubbles */
+  .chat-bubble {
+    max-width: 82%;
+    padding: 7px 10px 16px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    opacity: 0;
+    animation: chatPop 0.35s forwards;
+    position: relative;
+    word-break: break-word;
+  }
+  .bubble-in {
+    background: #202c33;
+    color: #e9edef;
+    align-self: flex-start;
+    border-top-left-radius: 2px;
+  }
+  .bubble-in::before {
+    content: '';
+    position: absolute;
+    left: -7px; top: 0;
+    border: 7px solid transparent;
+    border-right-color: #202c33;
+    border-top-color: #202c33;
+    border-radius: 0 0 0 2px;
+  }
+  .bubble-out {
+    background: #005c4b;
+    color: #e9edef;
+    align-self: flex-end;
+    border-top-right-radius: 2px;
+  }
+  .bubble-out::after {
+    content: '';
+    position: absolute;
+    right: -7px; top: 0;
+    border: 7px solid transparent;
+    border-left-color: #005c4b;
+    border-top-color: #005c4b;
+    border-radius: 0 0 2px 0;
+  }
+  /* Timestamp & ticks */
+  .bubble-meta {
+    position: absolute;
+    bottom: 4px; right: 8px;
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.45);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .bubble-out .bubble-meta { color: #53bdeb; }
+  .tick-read { color: #53bdeb; font-size: 0.65rem; }
+
+  /* Date separator */
+  .chat-date-sep {
+    text-align: center;
+    font-size: 0.65rem;
+    color: #8696a0;
+    background: rgba(0,0,0,0.3);
+    padding: 3px 10px;
+    border-radius: 8px;
+    margin: 4px auto;
+    width: fit-content;
+  }
+
+  /* CTA button inside chat */
+  .chat-cta-btn {
+    display: block;
+    margin: 8px 0 4px auto;
+    background: linear-gradient(135deg, #00a884, #00c49a);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 10px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    max-width: 82%;
+    opacity: 0;
+    animation: chatPop 0.4s 13s forwards;
+    box-shadow: 0 4px 12px rgba(0,168,132,0.4);
+    transition: transform 0.2s;
+  }
+  .chat-cta-btn:hover { transform: scale(1.03); }
+
+  /* Typing indicator */
+  .typing-indicator {
+    display: inline-flex;
+    gap: 4px;
+    padding: 10px 14px 10px;
+    background: #202c33;
+    border-radius: 8px;
+    border-top-left-radius: 2px;
+    align-self: flex-start;
+    opacity: 0;
+    position: relative;
+  }
+  .typing-indicator::before {
+    content: '';
+    position: absolute;
+    left: -7px; top: 0;
+    border: 7px solid transparent;
+    border-right-color: #202c33;
+    border-top-color: #202c33;
+  }
+  .typing-dot {
+    width: 7px; height: 7px;
+    background: #8696a0;
+    border-radius: 50%;
+    animation: typing 1.2s infinite ease-in-out both;
+  }
+  .typing-dot:nth-child(1) { animation-delay: 0s; }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
+  @keyframes chatPop { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+  /* Bottom input bar */
+  .mockup-input {
+    background: #1f2c34;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .input-field {
+    flex: 1;
+    background: #2a3942;
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-size: 0.75rem;
+    color: #8696a0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .input-cursor {
+    display: inline-block;
+    width: 1px; height: 14px;
+    background: #00a884;
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+  .input-send {
+    width: 36px; height: 36px;
+    background: #00a884;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    color: #fff;
+  }
+
+  .b1 { animation-delay: 0.8s; }
+  .b2 { animation-delay: 2.5s; }
+  .t1 { animation-delay: 3.2s; animation: chatPop 0.35s 3.2s forwards, hideTyping 0.1s 5.2s forwards; }
+  .b3 { animation-delay: 5.2s; }
+  .b4 { animation-delay: 7s; }
+  .t2 { animation-delay: 7.8s; animation: chatPop 0.35s 7.8s forwards, hideTyping 0.1s 9.8s forwards; }
+  .b5 { animation-delay: 9.8s; }
+  .b6 { animation-delay: 11.5s; }
+  @keyframes hideTyping { to { display: none; width: 0; height: 0; opacity: 0; margin: 0; padding: 0; } }
+
+  /* ---- EXIT INTENT POPUP ---- */
+  .exit-modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s;
+  }
+  .exit-modal-overlay.active { opacity: 1; visibility: visible; }
+  .exit-modal-content {
+    background: var(--card); border: 1px solid rgba(0,229,255,0.4); border-radius: 24px; width: 90%; max-width: 500px; padding: 40px; text-align: center; position: relative; transform: translateY(30px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 30px 60px rgba(0,229,255,0.1);
+  }
+  .exit-modal-overlay.active .exit-modal-content { transform: translateY(0); }
+  .exit-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
+  .exit-close:hover { color: #fff; }
+  .exit-tag { display: inline-block; background: rgba(0,229,255,0.15); color: var(--cyan); padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 20px; }
+  .exit-title { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; margin-bottom: 16px; line-height: 1.1; }
+  .exit-desc { color: var(--text); font-size: 1rem; margin-bottom: 28px; line-height: 1.6; }
+</style>
+
+<!-- Google Tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18074599274"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18074599274');
+  gtag('config', 'G-EWKT9CG3FZ');
+</script>
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+// Listo: Usando el Pixel ID real del proyecto
+fbq('init', '780457111253195'); 
+fbq('track', 'PageView', { source: 'landing_renting_ventas' });
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=780457111253195&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://www.amcagencyweb.com" class="logo" style="display:inline-flex; align-items:center; gap:8px;">
+    <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" rx="10" fill="#050505" />
+      <rect x="0.5" y="0.5" width="39" height="39" rx="9.5" stroke="#3b82f6" stroke-opacity="0.4" />
+      <path d="M20 8L30 32H25.5L23.5 27H16.5L14.5 32H10L20 8Z" fill="white" />
+      <path d="M17.8 23H22.2L20 17L17.8 23Z" fill="#3b82f6" />
+      <rect x="14" y="21" width="12" height="1.5" rx="0.75" fill="#3b82f6" opacity="0.3" />
+      <circle cx="32" cy="9" r="3.5" fill="#3b82f6" />
+      <circle cx="32" cy="9" r="2" fill="#60a5fa" />
+    </svg>
+    AMC<span style="color:#3b82f6;font-size:0.6em;letter-spacing:0.1em;font-weight:400;margin-left:2px;">AGENCY</span>
+  </a>
+  <ul>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#como-funciona">Cómo funciona</a></li>
+    <li><a href="#planes">Planes</a></li>
+    <li><a href="https://wa.me/573138537261" class="nav-cta" style="font-weight:900; letter-spacing:0.05em; padding:10px 24px; font-size:1rem;">¡Hablar por WhatsApp!</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="urgency-banner" style="background:var(--cyan);color:#000;text-align:center;padding:8px;font-weight:700;font-size:0.85rem;z-index:200;position:relative;">⚡ Solo <span id="cupos-restantes">4</span> cupos disponibles este mes — <a href="#planes" style="color:#000;text-decoration:underline;">Ver planes y precios</a></div>
+  
+  <div class="hero-content-wrapper container" style="margin-top:40px;">
+    <div class="hero-text-col">
+      <div class="eyebrow"><span class="eyebrow-dot"></span>Sistema probado · +50 negocios ya lo usan</div>
+      <h1>Consigue nuevos clientes<br>cada semana. <span class="highlight">Sin contratar más personal.</span></h1>
+      <p class="hero-sub">Te instalamos un sistema que atrae, atiende y cierra ventas por ti: Web + Bot IA + CRM. Funcionando en 7 días. Pagas 50% para iniciar, saldo al entregar y luego un bajo mantenimiento mensual.</p>
+      
+      <div class="hero-actions">
+        <a href="https://wa.me/573138537261?text=Hola!%20Quiero%20que%20me%20instalen%20el%20sistema%20para%20conseguir%20m%C3%A1s%20clientes." class="btn-primary" style="font-size:1.05rem; padding:16px 28px; display:inline-flex; align-items:center; justify-content:center; gap:10px; font-weight:900; box-shadow:0 0 30px rgba(37,211,102,0.35);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Quiero Clientes Esta Semana
+        </a>
+        <a href="#como-funciona" class="btn-secondary" style="font-size:1.05rem; padding:16px 28px; font-weight:700;">¿Cómo funciona? →</a>
+      </div>
+
+      <div class="hero-stats" style="justify-content: flex-start; margin-top: 40px;">
+        <div class="stat"><div class="stat-num">+50</div><div class="stat-label">Negocios activos</div></div>
+        <div class="stat"><div class="stat-num">7d</div><div class="stat-label">Para estar listo</div></div>
+        <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Bot trabajando</div></div>
+      </div>
+    </div>
+
+    <!-- DERECHA: MOCKUP CHATBOT -->
+    <div class="hero-visual-col">
+      <div class="phone-frame">
+        <!-- Notch/Pill superior -->
+        <div class="phone-notch">
+          <div class="phone-notch-camera"></div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="phone-status">
+          <span class="status-time" id="phoneTime">6:42</span>
+          <div class="status-icons">
+            <span class="status-icon">&#9679;&#9679;&#9679;&#9679;</span>
+            <span class="status-icon">&#x1F4F6;</span>
+            <span class="status-icon">&#x1F50B;</span>
+          </div>
+        </div>
+
+        <!-- WhatsApp Header -->
+        <div class="mockup-header">
+          <span class="header-back">&#8249;</span>
+          <div class="mockup-avatar">&#x1F916;</div>
+          <div class="header-info">
+            <div class="mockup-header-title">Bot AMC</div>
+            <div class="mockup-header-status">en l&#237;nea</div>
+          </div>
+          <div class="header-actions">
+            <span>&#9742;</span>
+            <span>&#8942;</span>
+          </div>
+        </div>
+
+        <!-- Chat Body -->
+        <div class="mockup-body" id="chatDemoBody">
+          <!-- Inyectado via JS aleatoriamente -->
+        </div>
+
+        <!-- Input Bar -->
+        <div class="mockup-input">
+          <span style="color:#8696a0; font-size:1.1rem;">&#9786;</span>
+          <div class="input-field">
+            <span style="color:#8696a0; font-size:0.75rem;">Escribe un mensaje</span>
+            <span class="input-cursor"></span>
+          </div>
+          <span style="color:#8696a0; font-size:1rem;">&#128247;</span>
+          <div class="input-send">&#10148;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar" style="display:flex; justify-content:center; gap:32px; padding:24px 5%; background:rgba(255,255,255,0.02); border-top:1px solid var(--border); border-bottom:1px solid var(--border); flex-wrap:wrap;">
+  <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; color:var(--text);"><span style="color:var(--cyan);">✅</span> 50% para iniciar, 50% contra entrega</div>
+  <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; color:var(--text);"><span style="color:var(--cyan);">⚡</span> Sistema activo en 7 días</div>
+  <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; color:var(--text);"><span style="color:var(--cyan);">🛡️</span> Cancela cuando quieras</div>
+  <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; color:var(--text);"><span style="color:var(--cyan);">🤖</span> Bot activo 24/7 sin descanso</div>
+</div>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="trust-inner">
+    <span class="trust-label">Tecnología que usamos</span>
+    <div class="trust-chips">
+      <span class="trust-chip">Next.js</span>
+      <span class="trust-chip">Supabase</span>
+      <span class="trust-chip">Meta Cloud API</span>
+      <span class="trust-chip">Vercel</span>
+      <span class="trust-chip">n8n Automation</span>
+      <span class="trust-chip">Make.com</span>
+      <span class="trust-chip">WhatsApp Business</span>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="servicios">
+  <div class="container">
+    <div class="services-header reveal">
+      <span class="section-label">El sistema completo</span>
+      <h2 class="section-title">Todo lo que necesitas para<br>conseguir clientes en automático</h2>
+      <p class="section-sub">No es solo una página web. Es un sistema conectado que trabaja solo para atraer, atender y cerrar clientes mientras tú te enfocas en tu negocio.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card reveal">
+        <div class="service-icon">🌐</div>
+        <div class="service-name">Web que Vende Sola</div>
+        <p class="service-desc">Tu sitio web actual probablemente no convierte. El nuestro está diseñado para que cada visitante se convierta en un prospecto. Rápida, profesional y conectada a tus campañas.</p>
+        <ul class="service-features">
+          <li>Diseño a medida de tu marca</li>
+          <li>Carga en menos de 2 segundos</li>
+          <li>SEO para que Google te encuentre</li>
+          <li>Formularios que capturan leads</li>
+        </ul>
+      </div>
+
+      <div class="service-card featured reveal">
+        <div class="service-icon">🤖</div>
+        <div class="service-name">Bot AMC — Tu Vendedor 24/7</div>
+        <p class="service-desc">Atiende cada mensaje en segundos, califica si el cliente puede comprar y agenda citas automáticamente. Sin contratar más personal. Sin perder ni un lead por responder tarde.</p>
+        <ul class="service-features">
+          <li>Responde WhatsApp en segundos</li>
+          <li>Califica y filtra leads automáticamente</li>
+          <li>Agenda citas sin intervención humana</li>
+          <li>Funciona mientras tú duermes</li>
+          <li>Traspasa a humano cuando es necesario</li>
+        </ul>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">🗂️</div>
+        <div class="service-name">CRM — Sin Leads Perdidos</div>
+        <p class="service-desc">¿Cuántos clientes potenciales se te han ido por no dar seguimiento? Con nuestro CRM ves cada prospecto, en qué etapa está y cuándo contactarlo. Todo desde el celular.</p>
+        <ul class="service-features">
+          <li>Pipeline visual de ventas</li>
+          <li>Historial completo por cliente</li>
+          <li>Recordatorios automáticos</li>
+          <li>Reportes de conversión en tiempo real</li>
+        </ul>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">🎯</div>
+        <div class="service-name">Campañas que Generan Leads</div>
+        <p class="service-desc">Conectamos tu sistema a Facebook e Instagram Ads para que el dinero que inviertes en publicidad llegue a personas que sí pueden comprarte. Con seguimiento de cada peso invertido.</p>
+        <ul class="service-features">
+          <li>Estrategia de Meta Ads incluida</li>
+          <li>Pixel + CAPI configurados</li>
+          <li>Landing pages de alta conversión</li>
+          <li>Reporte de CPL (costo por lead)</li>
+        </ul>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">⚡</div>
+        <div class="service-name">Todo Automatizado</div>
+        <p class="service-desc">Cuando un lead llega, el sistema lo registra en el CRM, el bot lo atiende, le envía información y agenda la cita. Todo sin que tengas que hacer nada. Eso es vender en piloto automático.</p>
+        <ul class="service-features">
+          <li>Flujo lead → atención → cita automática</li>
+          <li>Notificaciones a tu equipo en tiempo real</li>
+          <li>Integración con Google Calendar</li>
+          <li>Reportes automáticos cada semana</li>
+        </ul>
+      </div>
+
+      <div class="service-card reveal" style="background: linear-gradient(135deg, rgba(59,110,248,0.08), var(--card)); border-color: rgba(59,110,248,0.2);">
+        <div class="service-icon" style="background: rgba(59,110,248,0.12); border-color: rgba(59,110,248,0.25);">📊</div>
+        <div class="service-name">Resultados Visibles</div>
+        <p class="service-desc">Cada mes te enviamos un reporte con cuántos leads llegaron, cuántos se convirtieron y cuánto costó cada cliente. Sin letra pequeña. Sin excusas. Solo números reales.</p>
+        <ul class="service-features">
+          <li>Dashboard con métricas en vivo</li>
+          <li>Reporte ejecutivo mensual</li>
+          <li>KPIs de campañas activas</li>
+          <li>Costo por lead y por cliente</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="como-funciona">
+  <div class="how-inner container">
+    <div class="how-title-block reveal">
+      <span class="section-label">Proceso simple</span>
+      <h2 class="section-title">De cero a recibir clientes<br>en menos de 7 días</h2>
+      <p class="section-sub">Sin reuniones eternas. Sin tecnicismos. Nosotros hacemos todo el trabajo pesado.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <h4>Diagnóstico gratuito (30 min)</h4>
+            <p>Hablamos, entendemos tu negocio y te decimos exactamente qué sistema necesitas y cuántos clientes puedes esperar.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <h4>Lo instalamos en 7 días</h4>
+            <p>Mientras tú atiendes tu negocio, nosotros configuramos tu web, bot, CRM y automatizaciones. Tú no mueves un dedo.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <h4>Empiezas a recibir leads</h4>
+            <p>El sistema arranca. El bot atiende, el CRM registra, y tú solo cierras ventas. Sin depender de nadie para responder mensajes.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-body">
+            <h4>Optimizamos cada mes</h4>
+            <p>Revisamos qué funciona, qué mejorar y ajustamos para que cada mes lleguen más clientes al mismo costo o menor.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="how-visual reveal">
+      <div style="font-family:'Syne',sans-serif; font-size:0.75rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:24px;">Resultados promedio · primeros 60 días</div>
+      <div class="metric-row">
+        <div class="metric">
+          <div class="metric-header"><span class="metric-label">Tiempo de respuesta a leads</span><span class="metric-val">-94%</span></div>
+          <div class="metric-bar"><div class="metric-fill" style="width:94%"></div></div>
+        </div>
+        <div class="metric">
+          <div class="metric-header"><span class="metric-label">Leads nuevos por mes</span><span class="metric-val">+180%</span></div>
+          <div class="metric-bar"><div class="metric-fill" style="width:80%"></div></div>
+        </div>
+        <div class="metric">
+          <div class="metric-header"><span class="metric-label">Tasa de conversión a venta</span><span class="metric-val">+65%</span></div>
+          <div class="metric-bar"><div class="metric-fill" style="width:65%"></div></div>
+        </div>
+        <div class="metric">
+          <div class="metric-header"><span class="metric-label">Horas ahorradas al mes</span><span class="metric-val">+120h</span></div>
+          <div class="metric-bar"><div class="metric-fill" style="width:88%"></div></div>
+        </div>
+        <div class="metric">
+          <div class="metric-header"><span class="metric-label">Clientes que renuevan</span><span class="metric-val">98%</span></div>
+          <div class="metric-bar"><div class="metric-fill" style="width:98%"></div></div>
+        </div>
+      </div>
+      <div style="margin-top:28px; padding-top:24px; border-top:1px solid var(--border); display:flex; gap:12px; align-items:center;">
+        <div style="width:36px; height:36px; background:rgba(0,229,255,0.12); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0;">✦</div>
+        <p style="font-size:0.82rem; color:var(--muted); line-height:1.5;">&ldquo;En el primer mes el bot atendió 340 mensajes solo. Yo solo cerré los que estaban listos para comprar.&rdquo;</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="planes">
+  <div class="container">
+    <div class="pricing-header reveal">
+      <span class="section-label">Planes Renting Digital</span>
+      <h2 class="section-title">Elige tu plan.<br>Cancela cuando quieras.</h2>
+      <p class="section-sub" style="margin:14px auto 0;">Sin contratos de permanencia. Sin sorpresas. Actualiza o cancela en cualquier momento.</p>
+    </div>
+    <div class="plans-grid">
+
+      <!-- STARTER -->
+      <div class="plan reveal">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price dynamic-price" data-base="450000"><sup>$</sup>450.000<span> COP</span></div>
+        <div style="font-size:0.8rem; color:var(--muted); margin-bottom:12px;">+ <span class="dynamic-price" data-base="75000">$75.000 COP</span> / mes mantenimiento</div>
+        <p class="plan-desc">Para negocios que están arrancando su presencia digital.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="active"><span class="check">✔</span> Landing Page profesional</li>
+          <li class="active"><span class="check">✔</span> Chatbot básico WhatsApp</li>
+          <li class="active"><span class="check">✔</span> CRM hasta 200 contactos</li>
+          <li class="active"><span class="check">✔</span> 1 flujo de automatización</li>
+          <li class="active"><span class="check">✔</span> Soporte por WhatsApp</li>
+          <li style="opacity:0.35;"><span class="check">—</span> Dashboard analítico</li>
+          <li style="opacity:0.35;"><span class="check">—</span> Chat Center multiagente</li>
+        </ul>
+        <a href="https://wa.me/573138537261?text=Hola!%20Me%20interesa%20el%20plan%20Starter%20de%20Renting%20Digital." class="btn-plan btn-plan-outline" style="font-size:1.05rem; padding:14px; font-weight:800;">👉 Contratar Plan Starter</a>
+      </div>
+
+      <!-- GROWTH (POPULAR) -->
+      <div class="plan popular reveal">
+        <div class="popular-badge">⭐ Más popular</div>
+        <div class="plan-name">Growth</div>
+        <div class="plan-price dynamic-price" data-base="750000"><sup>$</sup>750.000<span> COP</span></div>
+        <div style="font-size:0.8rem; color:var(--muted); margin-bottom:12px;">+ <span class="dynamic-price" data-base="75000">$75.000 COP</span> / mes mantenimiento</div>
+        <p class="plan-desc">Para negocios listos para escalar sus ventas digitales. (Recuperas tu inversión rápido)</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="active"><span class="check">✔</span> Página Web completa</li>
+          <li class="active"><span class="check">✔</span> Chatbot IA + Chat Center</li>
+          <li class="active"><span class="check">✔</span> CRM hasta 2.000 contactos</li>
+          <li class="active"><span class="check">✔</span> 5 flujos de automatización</li>
+          <li class="active"><span class="check">✔</span> Dashboard analítico</li>
+          <li class="active"><span class="check">✔</span> SEO básico incluido</li>
+          <li class="active"><span class="check">✔</span> Soporte prioritario</li>
+        </ul>
+        <a href="https://wa.me/573138537261?text=Hola!%20Me%20interesa%20el%20plan%20Growth%20de%20Renting%20Digital." class="btn-plan btn-plan-solid" style="font-size:1.1rem; padding:16px; font-weight:900; box-shadow:0 0 20px rgba(59,130,246,0.4);">🚀 Contratar Plan Growth</a>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="plan reveal">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">A Medida</div>
+        <div style="font-size:0.8rem; color:var(--muted); margin-bottom:12px;">Solución 100% personalizada</div>
+        <p class="plan-desc">Infraestructura digital completa para empresas en expansión con altos volúmenes.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="active"><span class="check">✔</span> Web + Landing Pages ilimitadas</li>
+          <li class="active"><span class="check">✔</span> Bot IA avanzado + multicanal</li>
+          <li class="active"><span class="check">✔</span> CRM ilimitado + integraciones</li>
+          <li class="active"><span class="check">✔</span> Automatizaciones ilimitadas</li>
+          <li class="active"><span class="check">✔</span> SEO + campañas Meta Ads</li>
+          <li class="active"><span class="check">✔</span> Gerente de cuenta dedicado</li>
+          <li class="active"><span class="check">✔</span> Reportes ejecutivos mensuales</li>
+        </ul>
+        <a href="https://wa.me/573138537261?text=Hola!%20Represento%20a%20una%20empresa%20y%20quiero%20una%20cotización%20del%20plan%20Enterprise." class="btn-plan btn-plan-outline" style="font-size:1.05rem; padding:14px; font-weight:800;">👉 Solicitar Cotización</a>
+      </div>
+
+    </div>
+    <p style="margin-top:32px; font-size:0.82rem; color:var(--muted);">¿Necesitas algo personalizado? <a href="https://wa.me/573138537261" style="color:var(--cyan); text-decoration:none;">Hablemos →</a></p>
+  </div>
+</section>
+
+<!-- PORTAFOLIO -->
+<section class="portfolio" id="portafolio" style="padding:100px 5%; border-top:1px solid var(--border); background:var(--bg2);">
+  <div class="container">
+    <div class="testimonials-header reveal">
+      <span class="section-label">Portafolio</span>
+      <h2 class="section-title">Negocios reales.<br>Resultados reales.</h2>
+      <p class="section-sub" style="margin:16px auto 0;">Casos de éxito que ya operan en piloto automático con nosotros.</p>
+    </div>
+    <div class="testi-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+      
+      <a href="https://crm-vida-digitalcol.vercel.app" target="_blank" class="testi-card reveal flex" style="text-decoration:none; display:flex; flex-direction:column; padding:0; overflow:hidden; border:1px solid var(--border);">
+        <div style="height:250px; position:relative; border-bottom:1px solid var(--border); background-color:#111; overflow:hidden;">
+          <iframe src="https://crm-vida-digitalcol.vercel.app" loading="lazy" sandbox="allow-scripts allow-same-origin" style="position:absolute; top:0; left:0; width:300%; height:300%; transform:scale(0.333); transform-origin:top left; pointer-events:none; border:none; opacity:0.9;"></iframe>
+          <div style="position:absolute; top:12px; right:12px; z-index:30; display:flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px; background:rgba(0,0,0,0.7); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.1);">
+            <span style="width:6px; height:6px; background:#4ade80; border-radius:50%; box-shadow:0 0 10px #4ade80;"></span>
+            <span style="font-size:0.55rem; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; color:#4ade80;">Live preview</span>
+          </div>
+          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(10,10,10,0.8), transparent); pointer-events:none;"></div>
+        </div>
+        <div style="padding:24px; position:relative; z-index:40; background:var(--card);">
+          <div style="font-size:0.75rem; color:var(--cyan); font-weight:700; text-transform:uppercase; margin-bottom:8px;">Software de Gestión</div>
+          <h3 style="font-size:1.2rem; color:var(--text); margin-bottom:0;">CRM Vida Digital</h3>
+        </div>
+      </a>
+
+      <a href="https://www.cycrelojeria.com" target="_blank" class="testi-card reveal flex" style="text-decoration:none; display:flex; flex-direction:column; padding:0; overflow:hidden; border:1px solid var(--border);">
+        <div style="height:250px; position:relative; border-bottom:1px solid var(--border); background-color:#111; overflow:hidden;">
+          <iframe src="https://www.cycrelojeria.com" loading="lazy" sandbox="allow-scripts allow-same-origin" style="position:absolute; top:0; left:0; width:300%; height:300%; transform:scale(0.333); transform-origin:top left; pointer-events:none; border:none; opacity:0.9;"></iframe>
+          <div style="position:absolute; top:12px; right:12px; z-index:30; display:flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px; background:rgba(0,0,0,0.7); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.1);">
+            <span style="width:6px; height:6px; background:#4ade80; border-radius:50%; box-shadow:0 0 10px #4ade80;"></span>
+            <span style="font-size:0.55rem; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; color:#4ade80;">Live preview</span>
+          </div>
+          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(10,10,10,0.8), transparent); pointer-events:none;"></div>
+        </div>
+        <div style="padding:24px; position:relative; z-index:40; background:var(--card);">
+          <div style="font-size:0.75rem; color:var(--cyan); font-weight:700; text-transform:uppercase; margin-bottom:8px;">E-commerce de Lujo</div>
+          <h3 style="font-size:1.2rem; color:var(--text); margin-bottom:0;">Elegancia Atemporal</h3>
+        </div>
+      </a>
+
+      <a href="https://crmopticalyonvision.vercel.app" target="_blank" class="testi-card reveal flex" style="text-decoration:none; display:flex; flex-direction:column; padding:0; overflow:hidden; border:1px solid var(--border);">
+        <div style="height:250px; position:relative; border-bottom:1px solid var(--border); background-color:#111; overflow:hidden;">
+          <iframe src="https://crmopticalyonvision.vercel.app" loading="lazy" sandbox="allow-scripts allow-same-origin" style="position:absolute; top:0; left:0; width:300%; height:300%; transform:scale(0.333); transform-origin:top left; pointer-events:none; border:none; opacity:0.9;"></iframe>
+          <div style="position:absolute; top:12px; right:12px; z-index:30; display:flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px; background:rgba(0,0,0,0.7); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.1);">
+            <span style="width:6px; height:6px; background:#4ade80; border-radius:50%; box-shadow:0 0 10px #4ade80;"></span>
+            <span style="font-size:0.55rem; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; color:#4ade80;">Live preview</span>
+          </div>
+          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(10,10,10,0.8), transparent); pointer-events:none;"></div>
+        </div>
+        <div style="padding:24px; position:relative; z-index:40; background:var(--card);">
+          <div style="font-size:0.75rem; color:var(--cyan); font-weight:700; text-transform:uppercase; margin-bottom:8px;">HealthTech / Óptica</div>
+          <h3 style="font-size:1.2rem; color:var(--text); margin-bottom:0;">Lyon Visión CRM</h3>
+        </div>
+      </a>
+      
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" style="background:var(--bg);">
+  <div class="container">
+    <div class="testimonials-header reveal">
+      <span class="section-label">Resultados reales</span>
+      <h2 class="section-title">Negocios que ya reciben<br>clientes en automático</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-quote">“</div>
+        <p class="testi-text">Teníamos una web antigua que nadie veía. AMC instaló el sistema completo y en 30 días ya agendábamos citas online. <strong>Nuestras ventas subieron un 40%.</strong></p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:#2563eb; color:#fff; border:none;">C</div>
+          <div>
+            <div class="testi-name">Carlos M.</div>
+            <div class="testi-role">Óptica Lyon Visión, Neiva</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-quote">“</div>
+        <p class="testi-text">El bot atiende solos los mensajes de WhatsApp mientras yo duermo. <strong>En el primer mes cerré 23 clientes nuevos</strong> sin contratar a nadie más.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:#db2777; color:#fff; border:none;">V</div>
+          <div>
+            <div class="testi-name">Valentina R.</div>
+            <div class="testi-role">Taller de Italia, Bogotá</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-quote">“</div>
+        <p class="testi-text">Antes gastaba en pauta y no sabía si funcionaba. Ahora veo cada lead que llega, cuánto costó y si convirtió. <strong>El CPL bajoó a menos de la mitad.</strong></p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:#9333ea; color:#fff; border:none;">A</div>
+          <div>
+            <div class="testi-name">Andrés P.</div>
+            <div class="testi-role">Turbo Brand, Medellín</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="faq-inner">
+    <div class="faq-header reveal">
+      <span class="section-label">Preguntas frecuentes</span>
+      <h2 class="section-title">¿Todavía tienes dudas?<br>Normal. Aquí las resolvemos.</h2>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">¿Cuánto tiempo tarda en estar todo listo? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Entre 5 y 7 días hábiles. Empezamos con una llamada de 30 minutos, nosotros configuramos todo y en menos de una semana ya tienes tu sistema recibiendo leads.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Cómo es la forma de pago? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Se abona el 50% para iniciar el proyecto y el 50% restante cuando te entregamos todo funcionando (aprox. 7 días). Es un pago único por toda la instalación. A partir de ahí, solo pagas una mensualidad fija por el mantenimiento y el uso del sistema.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Qué pasa si quiero cancelar? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Cancelas en cualquier momento con 15 días de aviso. Sin penalidades, sin contratos eternos, sin letras pequeñas. Si no estás satisfecho, no tiene sentido que sigas.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Necesito saber de tecnología? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Para nada. Nosotros instalamos, configuramos y entrenamos el bot. Tú solo necesitas tu celular para ver los reportes y cerrar ventas. Nada más.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Esto funciona para mi tipo de negocio? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Trabajamos con clínicas, restaurantes, tiendas online, servicios profesionales, inmobiliarias, talleres y más. Si tu negocio recibe mensajes o clientes por WhatsApp o redes sociales, el sistema funciona.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿En qué se diferencia de contratar una agencia tradicional? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Las agencias cobran proyectos de $5M+ y desaparecen. Con nosotros pagas mensual, tienes soporte humano 24/7 y el sistema mejora cada mes con los datos reales de tu negocio.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="final-cta-glow"></div>
+  <span class="section-label" style="display:block; margin-bottom:16px;">⚡ Últimos cupos disponibles</span>
+  <h2>Cada día sin este sistema<br>es un cliente que pierde otra empresa.</h2>
+  <p>Agenda una llamada gratuita de 30 minutos. Te mostramos exactamente cómo funciona el sistema para tu negocio y cuántos clientes puedes esperar el primer mes.</p>
+  <a href="https://wa.me/573138537261?text=Hola!%20Quiero%20agendar%20mi%20llamada%20gratuita%20de%2030%20minutos%20con%20AMC%20Agency." class="whatsapp-btn">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Agendar Llamada Gratuita Ahora
+  </a>
+  <p style="margin-top:16px; font-size:0.8rem; color:rgba(255,255,255,0.5);">Sin compromiso · Sin tarjeta · Respuesta en menos de 5 minutos</p>
+</section>
+
+<!-- EXIT INTENT MODAL -->
+<div class="exit-modal-overlay" id="exitModal">
+  <div class="exit-modal-content">
+    <button class="exit-close" id="closeExitModal">&times;</button>
+    <span class="exit-tag">🎁 RECURSO GRATUITO</span>
+    <h3 class="exit-title">¡Espera! No te vayas con las manos vacías.</h3>
+    <p class="exit-desc">Llévate gratis nuestra <strong>Guía de WhatsApp Business</strong>: Descubre cómo configurar respuestas automáticas y aumentar tu cierre de ventas en un 40%.</p>
+    <a href="https://wa.me/573138537261?text=Hola!%20Quiero%20la%20guía%20gratuita%20de%20WhatsApp%20Business." class="btn-primary" style="display:inline-flex; width:100%; justify-content:center; box-sizing:border-box; font-size:1.1rem; box-shadow:0 0 25px rgba(0,229,255,0.4);">
+      👉 Descargar Guía por WhatsApp
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 <strong>AMC Agency Web</strong> · Neiva, Huila, Colombia · <a href="https://www.amcagencyweb.com">amcagencyweb.com</a></p>
+  <div style="display:flex; gap:20px;">
+    <a href="https://www.amcagencyweb.com">Sitio principal</a>
+    <a href="https://wa.me/573138537261">WhatsApp</a>
+    <a href="#planes">Planes</a>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/573138537261?text=Hola!%20Vi%20la%20página%20de%20Renting%20Digital%20y%20tengo%20una%20consulta." class="float-wa" title="Chatea por WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+  // Dynamic Pricing by Country
+  async function updatePrices() {
+    try {
+      // 1. Detect user country and currency
+      const geoRes = await fetch('https://ipapi.co/json/');
+      const geoData = await geoRes.json();
+      const userCurrency = geoData.currency || 'USD';
+      
+      if (userCurrency === 'COP') return; // Default is already COP
+
+      // 2. Get exchange rate from COP to user's currency
+      const rateRes = await fetch('https://open.er-api.com/v6/latest/COP');
+      const rateData = await rateRes.json();
+      const rate = rateData.rates[userCurrency] || rateData.rates['USD'];
+      const finalCurrency = rateData.rates[userCurrency] ? userCurrency : 'USD';
+
+      // 3. Update DOM
+      document.querySelectorAll('.dynamic-price').forEach(el => {
+        const basePrice = parseInt(el.getAttribute('data-base'));
+        const converted = basePrice * rate;
+        
+        // Format nicely
+        const formatter = new Intl.NumberFormat(geoData.languages ? geoData.languages.split(',')[0] : 'en-US', {
+          style: 'currency',
+          currency: finalCurrency,
+          maximumFractionDigits: finalCurrency === 'USD' || finalCurrency === 'EUR' ? 2 : 0
+        });
+
+        if (el.tagName === 'DIV' && el.classList.contains('plan-price')) {
+          // Large price block
+          el.innerHTML = `<sup>$</sup>${formatter.format(converted).replace('$', '').trim()}<span> ${finalCurrency}</span>`;
+        } else {
+          // Small inline text
+          el.innerHTML = `${formatter.format(converted)} ${finalCurrency}`;
+        }
+      });
+    } catch (e) {
+      console.log('Error updating dynamic pricing:', e);
+    }
+  }
+
+  updatePrices();
+
+  // Scroll reveal
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Exit Intent Logic
+  let exitModalTriggered = false;
+  document.addEventListener('mouseout', (e) => {
+    if (e.clientY < 5 && !exitModalTriggered && !sessionStorage.getItem('exitShown')) {
+      document.getElementById('exitModal').classList.add('active');
+      exitModalTriggered = true;
+      sessionStorage.setItem('exitShown', 'true');
+    }
+  });
+  
+  document.getElementById('closeExitModal').addEventListener('click', () => {
+    document.getElementById('exitModal').classList.remove('active');
+  });
+
+  // Close modal if clicked outside
+  document.getElementById('exitModal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('exitModal')) {
+      document.getElementById('exitModal').classList.remove('active');
+    }
+  });
+
+  // Randomize Chatbot Demo — Escenarios 100% coherentes con AMC Agency
+  const chatScenarios = [
+    {
+      // Escenario 1: Cliente quiere una página web profesional
+      in1: "Hola, necesito una página web para mi negocio.",
+      out1: "¡Hola! Soy Bot AMC 👋 Te ayudo. ¿Tienes sitio web actualmente o empezamos desde cero?",
+      in2: "Desde cero. Tengo una ferretería y quiero vender online.",
+      out2: "Perfecto. Nuestro plan incluye diseño, dominio, hosting y SEO desde $490.000/mes. ¿Te agendo una llamada gratuita con un asesor hoy?",
+      in3: "Sí, por favor. A las 3pm si tienen.",
+      out3: "¡Listo! Llamada agendada para hoy a las 3:00 PM. Un asesor de AMC Agency te contactará. 🗓️"
+    },
+    {
+      // Escenario 2: Cliente quiere un chatbot para WhatsApp
+      in1: "Buenas, ¿hacen bots para WhatsApp Business?",
+      out1: "¡Buenas! Sí, somos especialistas en eso 🤖 ¿Tu negocio recibe muchos mensajes que no puedes atender a tiempo?",
+      in2: "Exacto, tenemos como 60 al día y perdemos ventas.",
+      out2: "Con nuestro Bot AMC atiendes los 60 en segundos: califica leads, responde preguntas frecuentes y agenda citas automáticamente. ¿Quieres una demo en vivo?",
+      in3: "Claro, ¿cómo funciona la demo?",
+      out3: "Te envío el enlace ahora. Es gratis y sin compromiso. Un experto te muestra todo en 20 minutos. 🚀"
+    },
+    {
+      // Escenario 3: Cliente interesado en el CRM para gestionar sus leads
+      in1: "Hola, tengo muchos leads en hojas de Excel y es un caos.",
+      out1: "¡Hola! Entiendo perfectamente ese dolor 😅 Nuestro CRM centraliza todos tus leads, historial y seguimientos en un solo lugar.",
+      in2: "¿Funciona desde el celular también?",
+      out2: "Sí, 100% desde tu celular. Puedes ver el pipeline de ventas, enviar mensajes y ver reportes de conversión en tiempo real. ¿Te muestro una captura del panel?",
+      in3: "Me interesa. ¿Cuánto cuesta?",
+      out3: "Está incluido en el plan Growth desde $750.000. Te paso con un asesor para ajustarlo a tu número de contactos. 📊"
+    },
+    {
+      // Escenario 4: Cliente que quiere escalar sus ventas con Meta Ads
+      in1: "Hola, quiero hacer publicidad en Facebook e Instagram para mi restaurante.",
+      out1: "¡Hola! Con gusto te ayudamos 🎯 ¿Ya has hecho anuncios antes o es la primera vez?",
+      in2: "Lo intenté solo pero gasté $300.000 y no tuve resultados.",
+      out2: "Eso pasa sin una estrategia correcta. Nosotros creamos la campaña, el copy, las audiencias y el píxel de seguimiento. Solo pagas tu inversión en Meta. ¿Quieres una auditoría de tu cuenta gratis?",
+      in3: "Sí, eso me interesa mucho.",
+      out3: "¡Genial! Escríbenos al WhatsApp y en 24h te entregamos un diagnóstico completo sin costo. 📣"
+    },
+    {
+      // Escenario 5: Cliente quiere automatizar su proceso de ventas completo
+      in1: "¿Pueden integrar mi CRM con WhatsApp y mi web al mismo tiempo?",
+      out1: "¡Sí! Eso es exactamente lo que hacemos con nuestro plan de Renting Digital 🔗 Todo conectado: web, bot, CRM y analítica.",
+      in2: "¿Y si un cliente llena un formulario en la web, el bot lo contacta solo?",
+      out2: "Exactamente. El flujo es: cliente llena el form → CRM lo registra → Bot AMC lo contacta en segundos → El lead queda en tu pipeline listo para cerrar. 🤝",
+      in3: "Eso es lo que necesito. ¿Cómo empezamos?",
+      out3: "Un asesor puede mostrarte el sistema completo en una llamada de 30 minutos. ¿Te la agendo ahora mismo? 📅"
+    }
+  ];
+  
+  const pick = chatScenarios[Math.floor(Math.random() * chatScenarios.length)];
+  const chatBody = document.getElementById('chatDemoBody');
+  
+  // Update phone clock in real time
+  function updatePhoneClock() {
+    const now = new Date();
+    const h = now.getHours().toString().padStart(2, '0');
+    const m = now.getMinutes().toString().padStart(2, '0');
+    const el = document.getElementById('phoneTime');
+    if(el) el.textContent = `${h}:${m}`;
+  }
+  updatePhoneClock();
+  setInterval(updatePhoneClock, 30000);
+
+  // Generate realistic timestamps for the chat
+  function getTime(offsetMin = 0) {
+    const now = new Date(Date.now() - offsetMin * 60000);
+    return `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+  }
+
+  if(chatBody) {
+    chatBody.innerHTML = `
+      <div class="chat-date-sep">Hoy</div>
+      <div class="chat-bubble bubble-in b1">${pick.in1}<span class="bubble-meta">${getTime(5)}</span></div>
+      <div class="chat-bubble bubble-out b2">${pick.out1}<span class="bubble-meta">${getTime(4)} <span class="tick-read">✓✓</span></span></div>
+      <div class="typing-indicator t1"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
+      <div class="chat-bubble bubble-in b3">${pick.in2}<span class="bubble-meta">${getTime(3)}</span></div>
+      <div class="chat-bubble bubble-out b4">${pick.out2}<span class="bubble-meta">${getTime(2)} <span class="tick-read">✓✓</span></span></div>
+      <div class="typing-indicator t2"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
+      <div class="chat-bubble bubble-in b5">${pick.in3}<span class="bubble-meta">${getTime(1)}</span></div>
+      <div class="chat-bubble bubble-out b6">${pick.out3}<span class="bubble-meta">${getTime(0)} <span class="tick-read">✓✓</span></span></div>
+      <a href="https://wa.me/573138537261?text=Hola!%20Quiero%20probar%20el%20Bot%20AMC%20para%20mi%20negocio." class="chat-cta-btn" target="_blank">
+        💬 Probar Bot AMC para mi negocio
+      </a>
+    `;
+    
+    // Auto-scroll as animation progresses
+    let step = 0;
+    const scrollInterval = setInterval(() => {
+      chatBody.scrollTop = chatBody.scrollHeight;
+      step++;
+      if(step > 18) clearInterval(scrollInterval);
+    }, 800);
+  }
+
+  // Analytics & Pixel Click Tracking
+  document.addEventListener('DOMContentLoaded', () => {
+    const trackingLinks = document.querySelectorAll('a[href*="wa.me"]');
+    trackingLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (typeof fbq === 'function') {
+          fbq('track', 'Lead', { content_name: 'Clic en WhatsApp', source: 'landing_renting_ventas' });
+        }
+        if (typeof gtag === 'function') {
+          gtag('event', 'generate_lead', { event_category: 'Contacto', event_label: 'WhatsApp', source: 'landing_renting_ventas' });
+        }
+      });
+    });
+  });
+
+  // Sticky Phone — baja con el scroll
+  (function() {
+    const phoneCol = document.querySelector('.hero-visual-col');
+    if (!phoneCol) return;
+
+    const NAV_H = 72;
+    const MARGIN = 24;
+
+    function onScroll() {
+      const scrollY = window.scrollY;
+      const vpH = window.innerHeight;
+      const phoneH = phoneCol.offsetHeight;
+
+      if (scrollY > NAV_H) {
+        // Calcular posición vertical máxima para no salirse de la pantalla
+        const topPos = Math.min(MARGIN + NAV_H, vpH - phoneH - MARGIN);
+        phoneCol.style.position = 'fixed';
+        phoneCol.style.top = Math.max(topPos, NAV_H + MARGIN) + 'px';
+        phoneCol.style.right = '4%';
+        phoneCol.style.zIndex = '50';
+        phoneCol.style.width = '300px';
+      } else {
+        phoneCol.style.position = '';
+        phoneCol.style.top = '';
+        phoneCol.style.right = '';
+        phoneCol.style.zIndex = '';
+        phoneCol.style.width = '';
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+  })();
+</script>
+</body>
+</html>
