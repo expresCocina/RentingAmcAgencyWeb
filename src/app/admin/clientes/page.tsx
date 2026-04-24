@@ -41,6 +41,7 @@ export default function AdminClientesPage() {
     const [showCreate, setShowCreate] = useState(false);
     const [creating, setCreating] = useState(false);
     const [createError, setCreateError] = useState("");
+    const [fetchError, setFetchError] = useState("");
 
     // Estado para edición de precio
     const [editingPrice, setEditingPrice] = useState<string | null>(null);
@@ -61,14 +62,24 @@ export default function AdminClientesPage() {
 
     const fetchClients = useCallback(async () => {
         setLoading(true);
+        setFetchError("");
         try {
             const headers = await getAuthHeaders();
+            if (!Object.keys(headers).length) {
+                setFetchError('No hay sesión activa. Por favor recarga la página o inicia sesión de nuevo.');
+                return;
+            }
             const res = await fetch("/api/waas/admin/clients", { headers });
             if (res.ok) {
                 const data = await res.json();
                 setClients(data);
                 setFiltered(data);
+            } else {
+                const errData = await res.json().catch(() => ({}));
+                setFetchError(`Error ${res.status}: ${errData.error ?? 'No autorizado. Verifica que el ADMIN_EMAIL esté configurado en Vercel.'}`);
             }
+        } catch (e) {
+            setFetchError('Error de red al conectar con el servidor.');
         } finally {
             setLoading(false);
         }
@@ -335,6 +346,15 @@ export default function AdminClientesPage() {
                             {loading ? (
                                 <div className="flex items-center justify-center py-16">
                                     <span className="w-6 h-6 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+                                </div>
+                            ) : fetchError ? (
+                                <div className="text-center py-16 px-6">
+                                    <div className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-bold mb-3">
+                                        <span>⚠️</span> Error de autenticación
+                                    </div>
+                                    <p className="text-gray-500 text-xs mt-2 max-w-sm mx-auto">{fetchError}</p>
+                                    <p className="text-gray-600 text-xs mt-3">Verifica que <code className="bg-white/5 px-1 rounded">ADMIN_EMAIL</code> esté configurado en Vercel con el valor: <code className="bg-white/5 px-1 rounded text-blue-400">contact@amcagencyweb.com</code></p>
+                                    <button onClick={fetchClients} className="mt-4 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white text-xs font-bold transition">Reintentar</button>
                                 </div>
                             ) : filtered.length === 0 ? (
                                 <div className="text-center py-16 text-gray-600">
